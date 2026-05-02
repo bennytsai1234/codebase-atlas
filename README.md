@@ -5,6 +5,21 @@ navigable engineering map. It creates project docs, module summaries,
 dependency and impact notes, and follow-up workflows for bugs, features, and
 optimizations.
 
+## Installation
+
+Clone the skill anywhere your agent can read:
+
+```bash
+git clone https://github.com/bennytsai1234/codebase-atlas.git
+```
+
+Then point your coding agent at the cloned folder and ask it to read
+`SKILL.md` before working:
+
+```text
+Read /path/to/codebase-atlas/SKILL.md and use the Codebase Atlas skill for this repo.
+```
+
 ## Usage
 
 Ask the agent to read this skill and choose the setup options first:

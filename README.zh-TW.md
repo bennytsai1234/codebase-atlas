@@ -2,6 +2,20 @@
 
 Codebase Atlas 是一個不綁特定 Agent 的 skill，用來把 repository 轉成可導航的工程地圖。它會建立專案文檔、模組摘要、依賴與影響範圍說明，以及後續 bug、feature、optimization 的工作流。
 
+## 安裝方式
+
+把 skill clone 到任何 Agent 可以讀取的位置：
+
+```bash
+git clone https://github.com/bennytsai1234/codebase-atlas.git
+```
+
+接著請你的 coding agent 讀取 clone 下來的 `SKILL.md`：
+
+```text
+請讀取 /path/to/codebase-atlas/SKILL.md，並使用 Codebase Atlas skill 處理這個 repo。
+```
+
 ## 使用方式
 
 請 Agent 先讀這個 skill，並在掃描前先詢問設定：
