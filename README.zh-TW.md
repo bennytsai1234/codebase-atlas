@@ -1,60 +1,139 @@
 # Codebase Atlas
 
-Codebase Atlas 是一個不綁特定 Agent 的 skill，用來把 repository 轉成可導航的工程地圖。它會建立專案文檔、模組摘要、依賴與影響範圍說明，以及後續 bug、feature、optimization 的工作流。
+把一個程式碼庫轉成可長期使用的工程地圖，讓人和程式代理都能讀。
+
+Codebase Atlas 是一個不綁特定程式代理的技能。它會根據真實程式碼倉庫的掃描結果，建立專案索引、模組文檔、依賴與影響範圍說明，以及後續錯誤修復、功能開發、優化整理的工作流。
+
+它的目標很簡單：不要讓每一次新的程式代理任務都重新從零探索同一個程式碼庫。
+
+## 為什麼需要它
+
+程式代理很會搜尋程式碼，但每次開始任務時通常沒有共享的專案記憶。結果就是反覆探索、改動範圍過大、模組邊界不清楚，也常常不確定完成後該不該提交或推送。
+
+Codebase Atlas 會把第一次完整掃描整理成可以版本化的文檔：
+
+- 高層模組地圖
+- 每個模組的責任、依賴與影響範圍
+- 已知風險與常見修改入口
+- 錯誤修復、功能開發、優化整理的後續工作流
+- 完成工作後是否提交 / 推送的交付規則
+
+地圖建好之後，後續工作就從產出的工作流文檔開始，而不是每次重新執行這個技能。
+
+## 會產生什麼
+
+獨立專案模式：
+
+```text
+docs/
+  <project>_index.md
+  <project>/
+    <module>.md
+  <project>_bug_workflow.md
+  <project>_feature_workflow.md
+  <project>_optimization_workflow.md
+```
+
+參考資料輔助模式：
+
+```text
+docs/
+  <project>_<reference>_index.md
+  <project>_<reference>/
+    <module>.md
+  <project>_<reference>_bug_workflow.md
+  <project>_<reference>_optimization_workflow.md
+```
+
+只有在你明確要求功能對齊時，才會產生功能對齊用的工作流文檔。
+
+## 核心特點
+
+- **初始化一次，後續重複使用**：先建立地圖，之後普通開發改用產出的工作流文檔。
+- **不綁特定程式代理**：任何能讀 Markdown 的程式代理都可以使用。
+- **支援兩種模式**：可以只分析目標專案，也可以搭配參考程式碼倉庫、規格、API 文件或產品資料。
+- **避免需求膨脹**：參考資料預設只用來借鏡架構、流程與責任切分，不會自動變成功能清單。
+- **支援雙語輸出**：產出的文檔可以使用英文或繁體中文。
+- **內建交付規則**：可指定後續工作流完成後不提交、只提交，或提交並推送。
 
 ## 安裝方式
 
-把 skill clone 到任何 Agent 可以讀取的位置：
+把技能複製到任何程式代理可以讀取的位置：
 
 ```bash
 git clone https://github.com/bennytsai1234/codebase-atlas.git
 ```
 
-接著請你的 coding agent 讀取 clone 下來的 `SKILL.md`：
+接著請你的程式代理讀取複製下來的 `SKILL.md`：
 
 ```text
-請讀取 /path/to/codebase-atlas/SKILL.md，並使用 Codebase Atlas skill 處理這個 repo。
+請讀取 /path/to/codebase-atlas/SKILL.md，並使用 Codebase Atlas 技能處理這個程式碼倉庫。
 ```
 
-## 使用方式
+## 快速開始
 
-請 Agent 先讀這個 skill，並在掃描前先詢問設定：
+請程式代理先讀這個技能，並在掃描前先詢問設定：
 
 ```text
-請使用 Codebase Atlas skill 處理這個 repo。
+請使用 Codebase Atlas 技能處理這個程式碼倉庫。
 開始掃描前，請先問我：
 1. 產出要使用英文還是繁體中文？
 2. 這次要使用「獨立專案模式（standalone，不使用參考資料）」，
    還是「參考資料輔助模式（reference-assisted，使用參考資料）」？
-3. 後續每次依照 workflow 完成工作後，要「不 commit」、「只 commit」，
-   還是「commit 並 push」？
+3. 後續每次依照工作流完成工作後，要「不提交」、「只提交」，
+   還是「提交並推送」？
 ```
 
-如果選擇「參考資料輔助模式」，請在 Agent 開始完整掃描前提供參考資料的路徑、URL 或檔案。
+如果選擇「參考資料輔助模式」，請在程式代理開始完整掃描前提供參考資料的路徑、URL 或檔案。
 
-只有要重建時才再次執行：
+## 怎麼選模式
 
-```text
-請使用 Codebase Atlas skill 重新掃描整個 repo，並依照目前程式碼重建 atlas。
-```
+如果目標程式碼倉庫本身就是唯一事實來源，使用**獨立專案模式**。
+
+如果目標程式碼倉庫需要搭配以下資料理解，使用**參考資料輔助模式**：
+
+- 另一個程式碼庫
+- 舊版實作
+- 設計文件或產品文件
+- API 文件
+- 截圖或行為說明
+- 遷移或相容性資料
+
+參考資料輔助模式預設只借鏡架構、責任邊界、流程設計、穩定化策略和診斷方式。它不會把目標專案缺少的功能自動當成錯誤。
 
 ## 後續開發
 
-atlas 建立完成後，普通開發不要再次執行 Codebase Atlas。請改用產出的 workflow docs：
+地圖建立完成後，普通開發不要再次執行 Codebase Atlas。請改用產出的工作流文檔：
 
 ```text
-請讀取 docs/<project>_bug_workflow.md，並依照它修復這個 bug：...
+請讀取 docs/<project>_bug_workflow.md，並依照它修復這個錯誤：...
 請讀取 docs/<project>_feature_workflow.md，並依照它實作這個功能：...
 請讀取 docs/<project>_optimization_workflow.md，並依照它優化這個區塊：...
 ```
 
+只有要完整重建地圖時才再次執行：
+
+```text
+請使用 Codebase Atlas 技能重新掃描整個程式碼倉庫，並依照目前程式碼重建地圖。
+```
+
+## 跟類似工具有什麼不同
+
+Codebase Atlas 不是即時程式碼搜尋工具、編輯器規則檔，也不是一次性的文件生成提示詞。
+
+它的重點是建立可長期使用的專案上下文：
+
+- 一般程式碼倉庫地圖通常只是模型當次使用的上下文；Codebase Atlas 會產生可以提交和重複使用的文檔。
+- 一般專案規則通常只告訴程式代理怎麼做事；Codebase Atlas 會先整理真實程式碼倉庫，再建立跟模組地圖綁定的工作流。
+- 一般文件生成提示詞常常產完文件就結束；Codebase Atlas 還會建立後續程式代理應該遵循的工作流。
+
 ## 內容結構
 
-- `SKILL.md`：主要 Agent 指令。
+- `SKILL.md`：主要程式代理指令。
 - `references/`：模式說明與輸出規格。
-- `assets/templates/`：產生 atlas docs 用的 Markdown 模板。
+- `assets/templates/`：產生地圖文檔用的 Markdown 模板。
 
-這個 package 不綁特定 Agent runtime。任何 coding agent 都可以透過讀取 `SKILL.md`、相關 reference files 和 templates 來使用。
+這個套件不綁特定程式代理執行環境。任何程式代理都可以透過讀取 `SKILL.md`、相關參考文件和模板來使用。
 
 ## 授權
 
