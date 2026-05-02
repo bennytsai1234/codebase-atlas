@@ -16,6 +16,7 @@
 {{BEHAVIOR_STEP_NUMBER}}. Keep user-visible behavior unchanged unless the user requested otherwise.
 {{VERIFY_STEP_NUMBER}}. Verify upstream and downstream behavior still works.
 {{DOC_STEP_NUMBER}}. Update atlas docs if structure, ownership, or risk changed.
+{{DELIVERY_STEP_NUMBER}}. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
 ## Pre-Edit Summary
 
@@ -27,3 +28,7 @@ When user confirmation is expected, summarize:
 - Behavior before and after
 - Explicit non-goals
 - Tests or checks to run
+
+## Delivery Policy
+
+{{DELIVERY_POLICY}}

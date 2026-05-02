@@ -25,6 +25,19 @@ a map, not a full architecture book.
 - The bundled templates are English starting shapes, not mandatory English
   output.
 
+## Delivery Policy
+
+- During atlas initialization, ask what future workflow runs should do after
+  work is complete: no commit, commit only, or commit and push.
+- Record the selected policy in the index and every workflow document.
+- For commit-only workflows, require a focused commit after validation.
+- For commit-and-push workflows, require validation, a focused commit, and a push
+  to the confirmed target remote/branch.
+- If the target remote or branch is unclear during a future workflow run, the
+  workflow must ask before pushing.
+- For no-commit workflows, explicitly leave changes uncommitted and summarize
+  validation status.
+
 ## Standalone Output
 
 ```text
@@ -60,6 +73,7 @@ Include:
   follow-up work.
 - Rebuild semantics: running Codebase Atlas again means a full codebase rescan
   and index/module-doc rebuild from current project reality.
+- Delivery policy for future workflow runs.
 - Module list with links.
 - 2-4 line summary per module.
 - A clear statement of the reference boundary when in reference-assisted mode.
@@ -99,3 +113,5 @@ Each workflow must tell future agents how to:
 - Summarize planned changes before broad edits when user confirmation is
   expected.
 - Update affected atlas docs if structure or ownership changes.
+- Finish according to the recorded delivery policy: no commit, commit only, or
+  commit and push.

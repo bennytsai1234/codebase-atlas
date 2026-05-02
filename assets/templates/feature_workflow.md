@@ -17,6 +17,7 @@
 5. Implement through the owning module's established patterns.
 6. Verify the new behavior and update atlas docs when ownership, APIs, or flows
    changed.
+7. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
 ## Pre-Edit Summary
 
@@ -28,3 +29,7 @@ When user confirmation is expected, summarize:
 - Implementation approach
 - Behavior after completion
 - Tests or checks to run
+
+## Delivery Policy
+
+{{DELIVERY_POLICY}}

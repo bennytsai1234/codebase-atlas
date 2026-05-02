@@ -16,6 +16,7 @@
 5. Keep the fix concentrated in the owning module. Boundary changes require a
    clear reason.
 6. Verify the bug is fixed and update atlas docs if ownership or flows changed.
+7. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
 ## Pre-Edit Summary
 
@@ -27,3 +28,7 @@ When user confirmation is expected, summarize:
 - Files likely to change
 - Behavior before and after
 - Tests or checks to run
+
+## Delivery Policy
+
+{{DELIVERY_POLICY}}

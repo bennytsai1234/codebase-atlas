@@ -52,6 +52,16 @@ Also resolve the output language:
 - Keep code identifiers, file paths, command names, API names, and product names
   unchanged even when the surrounding prose is translated.
 
+Also resolve the workflow delivery policy:
+
+- Ask what future workflow runs should do after the work is complete:
+  no commit, commit only, or commit and push.
+- If the user or project rules already specify a commit/push policy, use it.
+- If the user chooses commit and push, the generated workflow docs must require
+  the agent to confirm the target branch/remote when they are not obvious.
+- Record this policy in the generated index and every workflow doc so future
+  work follows the same completion rule.
+
 ## Mode Decision
 
 - Use **standalone mode** when the target project is the only source of truth.
@@ -65,8 +75,8 @@ Also resolve the output language:
 
 ## Core Workflow
 
-1. Resolve the atlas mode and output language using the First Question rules
-   above.
+1. Resolve the atlas mode, output language, and workflow delivery policy using
+   the First Question rules above.
 2. Ground in the target project. Inspect manifests,
    entrypoints, source roots, tests, build/config files, existing docs, and
    major package boundaries with fast search tools.

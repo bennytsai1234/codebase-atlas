@@ -29,6 +29,7 @@ Use the Codebase Atlas skill for this repo.
 Before scanning, ask me:
 1. Should the output be English or Traditional Chinese?
 2. Should this be standalone or reference-assisted?
+3. After each generated workflow finishes, should it do no commit, commit only, or commit and push?
 ```
 
 For reference-assisted mode, provide the reference path, URL, or artifact before

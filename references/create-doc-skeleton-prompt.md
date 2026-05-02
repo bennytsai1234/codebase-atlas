@@ -24,6 +24,7 @@ Inputs to resolve from the user request and repo context:
 - `rebuild`: true only when the user explicitly asks to rebuild, refresh,
   regenerate, or rescan the atlas.
 - `output_language`: `English` or `Traditional Chinese`.
+- `delivery_policy`: `no commit`, `commit only`, or `commit and push`.
 
 Before scanning the full repo, resolve `mode`:
 
@@ -42,9 +43,19 @@ Also resolve `output_language`:
 - Keep code identifiers, file paths, command names, API names, and product names
   unchanged.
 
+Also resolve `delivery_policy` for the generated workflow docs:
+
+- If the user or project rules already specify whether completed work should be
+  committed or pushed, use that policy.
+- If unclear, ask whether future workflow runs should end with no commit,
+  commit only, or commit and push.
+- If `delivery_policy` is `commit and push`, note that future agents must verify
+  the target branch and remote before pushing.
+
 Follow this process:
 
-1. Resolve the atlas mode, output language, and any required reference material.
+1. Resolve the atlas mode, output language, delivery policy, and any required
+   reference material.
 2. Inspect the target repo before creating files. Use manifests, entrypoints,
    source roots, tests, build/config files, and existing docs to infer modules.
 3. If `mode` is reference-assisted, inspect the reference after understanding the
@@ -73,7 +84,10 @@ Follow this process:
    - `optimization_workflow.md`
 7. Replace template placeholders with concrete names, module links, summaries,
    workflow filenames, and reference-boundary language. Translate template
-   headings and prose when `output_language` is Traditional Chinese.
+   headings and prose when `output_language` is Traditional Chinese. Replace
+   `{{DELIVERY_POLICY}}` with the selected completion rule. In optimization
+   workflow docs, replace `{{DELIVERY_STEP_NUMBER}}` with the next sequential
+   step number after `{{DOC_STEP_NUMBER}}`.
 8. Before writing each file, check whether it already exists:
    - If missing, create it.
    - If present, preserve useful content and update only what the atlas needs.
@@ -95,4 +109,6 @@ Output requirements:
 - State in the generated index that Codebase Atlas is normally run once;
   future work should follow the generated workflows, and running it again means a
   full codebase rescan and atlas rebuild.
+- State the selected delivery policy in the generated index and every workflow
+  doc.
 - After writing, summarize created and updated files plus any remaining TODOs.

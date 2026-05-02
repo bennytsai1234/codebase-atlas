@@ -26,6 +26,8 @@ git clone https://github.com/bennytsai1234/codebase-atlas.git
 1. 產出要使用英文還是繁體中文？
 2. 這次要使用「獨立專案模式（standalone，不使用參考資料）」，
    還是「參考資料輔助模式（reference-assisted，使用參考資料）」？
+3. 後續每次依照 workflow 完成工作後，要「不 commit」、「只 commit」，
+   還是「commit 並 push」？
 ```
 
 如果選擇「參考資料輔助模式」，請在 Agent 開始完整掃描前提供參考資料的路徑、URL 或檔案。

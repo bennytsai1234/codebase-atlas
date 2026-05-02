@@ -11,6 +11,7 @@
 - Run Codebase Atlas again only for an explicit rebuild/refresh/rescan; that
   means scanning the full codebase again and rebuilding this index from current
   project reality.
+- Workflow delivery policy: {{DELIVERY_POLICY}}
 {{REFERENCE_BOUNDARY}}
 
 ## Module List
