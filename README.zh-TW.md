@@ -2,7 +2,9 @@
 
 把一個程式碼庫轉成可長期使用的工程地圖，讓人和程式代理都能讀。
 
-Codebase Atlas 是一個不綁特定程式代理的技能。它會根據真實程式碼倉庫的掃描結果，建立專案索引、模組文檔、依賴與影響範圍說明，以及後續錯誤修復、功能開發、優化整理的工作流。
+Codebase Atlas 是一個不綁特定程式代理的技能。它會根據真實程式碼倉庫的掃描結果，建立專案索引、模組文檔、依賴與影響範圍說明，以及後續錯誤修復、功能開發、優化整理、調查、重構、驗證的工作流。
+
+這個套件刻意維持純文字設計：Markdown 指令、Markdown 參考資料，以及 Markdown 模板。它不需要輔助腳本，也不需要特定程式代理的 UI metadata。
 
 它的目標很簡單：不要讓每一次新的程式代理任務都重新從零探索同一個程式碼庫。
 
@@ -15,7 +17,7 @@ Codebase Atlas 會把第一次完整掃描整理成可以版本化的文檔：
 - 高層模組地圖
 - 每個模組的責任、依賴與影響範圍
 - 已知風險與常見修改入口
-- 錯誤修復、功能開發、優化整理的後續工作流
+- 錯誤修復、功能開發、優化整理、調查、重構、驗證的後續工作流
 - 完成工作後是否提交 / 推送的交付規則
 
 地圖建好之後，後續工作就從產出的工作流文檔開始，而不是每次重新執行這個技能。
@@ -32,6 +34,9 @@ docs/
   <project>_bug_workflow.md
   <project>_feature_workflow.md
   <project>_optimization_workflow.md
+  <project>_investigation_workflow.md
+  <project>_refactor_workflow.md
+  <project>_validation_workflow.md
 ```
 
 參考資料輔助模式：
@@ -43,6 +48,9 @@ docs/
     <module>.md
   <project>_<reference>_bug_workflow.md
   <project>_<reference>_optimization_workflow.md
+  <project>_<reference>_investigation_workflow.md
+  <project>_<reference>_refactor_workflow.md
+  <project>_<reference>_validation_workflow.md
 ```
 
 只有在你明確要求功能對齊時，才會產生功能對齊用的工作流文檔。
@@ -109,6 +117,9 @@ git clone https://github.com/bennytsai1234/codebase-atlas.git
 請讀取 docs/<project>_bug_workflow.md，並依照它修復這個錯誤：...
 請讀取 docs/<project>_feature_workflow.md，並依照它實作這個功能：...
 請讀取 docs/<project>_optimization_workflow.md，並依照它優化這個區塊：...
+請讀取 docs/<project>_investigation_workflow.md，並依照它調查這個行為：...
+請讀取 docs/<project>_refactor_workflow.md，並依照它重構這個區塊：...
+請讀取 docs/<project>_validation_workflow.md，並依照它驗證這個變更：...
 ```
 
 只有要完整重建地圖時才再次執行：

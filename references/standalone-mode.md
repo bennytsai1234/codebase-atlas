@@ -16,6 +16,9 @@ Inspect the target project in this order:
    background jobs, tooling, and tests.
 5. Recent or existing docs under `docs/`, `architecture/`, `adr/`, or equivalent.
 
+Apply the scan boundaries from `references/doc-output-contract.md`; generated,
+vendored, cache, and dependency directories should not define source modules.
+
 ## Module Split
 
 Create 6-20 modules. Prefer boundaries that match how engineers would change the
@@ -35,11 +38,14 @@ reasons.
 
 - Keep each module doc focused on navigation, ownership, dependencies, and risk.
 - Mention representative files and entrypoints, not every file.
+- Make index summaries routing-oriented: include symptoms, task types, or entry
+  conditions that should lead future work to each module.
 - Record known uncertainty explicitly instead of inventing architecture.
 - Include test commands only when they are discoverable from the repo.
 - Use the selected output language and the target project's terminology.
 
 ## Workflows
 
-Generate bug, feature, and optimization workflows. Each workflow must require
-future work to locate the owning module in the atlas before editing code.
+Generate bug, feature, optimization, investigation, refactor, and validation
+workflows. Each workflow must require future work to locate the owning module or
+boundary in the atlas before editing code or reporting findings.

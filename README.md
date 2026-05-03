@@ -6,7 +6,11 @@ agents can use.
 Codebase Atlas is an agent-neutral skill for initializing project documentation
 from a real repository scan. It creates a module index, focused module notes,
 dependency and impact summaries, and practical workflows for future bug fixes,
-features, and optimizations.
+features, optimizations, investigations, refactors, and validations.
+
+The package is text-only by design: Markdown instructions, Markdown references,
+and Markdown templates. It does not require helper scripts or agent-specific UI
+metadata.
 
 The goal is simple: stop rediscovering the same codebase from scratch every
 time an agent starts a new task.
@@ -23,7 +27,8 @@ Codebase Atlas turns the first deep scan of a repository into versionable docs:
 - a high-level module map
 - per-module ownership and dependency notes
 - known risks and common change entry points
-- follow-up workflows for bug, feature, and optimization work
+- follow-up workflows for bug, feature, optimization, investigation, refactor,
+  and validation work
 - a recorded delivery policy for whether future work should commit or push
 
 After the atlas exists, future work starts from the generated workflow docs
@@ -41,6 +46,9 @@ docs/
   <project>_bug_workflow.md
   <project>_feature_workflow.md
   <project>_optimization_workflow.md
+  <project>_investigation_workflow.md
+  <project>_refactor_workflow.md
+  <project>_validation_workflow.md
 ```
 
 Reference-assisted project:
@@ -52,6 +60,9 @@ docs/
     <module>.md
   <project>_<reference>_bug_workflow.md
   <project>_<reference>_optimization_workflow.md
+  <project>_<reference>_investigation_workflow.md
+  <project>_<reference>_refactor_workflow.md
+  <project>_<reference>_validation_workflow.md
 ```
 
 Feature-parity workflow docs are generated only when you explicitly ask for
@@ -127,6 +138,9 @@ development. Use the generated workflow docs instead:
 Read docs/<project>_bug_workflow.md and follow it to fix this bug: ...
 Read docs/<project>_feature_workflow.md and follow it to implement this feature: ...
 Read docs/<project>_optimization_workflow.md and follow it to optimize this area: ...
+Read docs/<project>_investigation_workflow.md and follow it to investigate this behavior: ...
+Read docs/<project>_refactor_workflow.md and follow it to refactor this area: ...
+Read docs/<project>_validation_workflow.md and follow it to validate this change: ...
 ```
 
 Run Codebase Atlas again only when you want a full rebuild:

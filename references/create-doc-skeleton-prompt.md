@@ -26,31 +26,9 @@ Inputs to resolve from the user request and repo context:
 - `output_language`: `English` or `Traditional Chinese`.
 - `delivery_policy`: `no commit`, `commit only`, or `commit and push`.
 
-Before scanning the full repo, resolve `mode`:
-
-- If the user already specified standalone or reference-assisted mode, continue.
-- If the mode is missing, ask whether this is a standalone project or whether
-  reference material should be used.
-- If reference-assisted mode is selected, ask for the reference path, URL, or
-  artifact before proceeding.
-- If standalone mode is selected, continue without reference material.
-
-Also resolve `output_language`:
-
-- If the user or project rules specify English or Traditional Chinese, use it.
-- If the language is unclear, ask whether generated docs should be written in
-  English or Traditional Chinese.
-- Keep code identifiers, file paths, command names, API names, and product names
-  unchanged.
-
-Also resolve `delivery_policy` for the generated workflow docs:
-
-- If the user or project rules already specify whether completed work should be
-  committed or pushed, use that policy.
-- If unclear, ask whether future workflow runs should end with no commit,
-  commit only, or commit and push.
-- If `delivery_policy` is `commit and push`, note that future agents must verify
-  the target branch and remote before pushing.
+Resolve `mode`, `output_language`, and `delivery_policy` using
+`references/doc-output-contract.md`. If `mode` is `reference-assisted`, get the
+reference path, URL, or artifact before scanning the full repo.
 
 Follow this process:
 
@@ -58,6 +36,7 @@ Follow this process:
    reference material.
 2. Inspect the target repo before creating files. Use manifests, entrypoints,
    source roots, tests, build/config files, and existing docs to infer modules.
+   Apply the scan boundaries in `references/doc-output-contract.md`.
 3. If `mode` is reference-assisted, inspect the reference after understanding the
    target. Keep the target as the primary subject.
 4. Read `references/doc-output-contract.md` and the correct mode guide.
@@ -68,11 +47,17 @@ Follow this process:
      - `docs/<project>_bug_workflow.md`
      - `docs/<project>_feature_workflow.md`
      - `docs/<project>_optimization_workflow.md`
+     - `docs/<project>_investigation_workflow.md`
+     - `docs/<project>_refactor_workflow.md`
+     - `docs/<project>_validation_workflow.md`
    - Reference-assisted:
      - `docs/<project>_<reference>_index.md`
      - `docs/<project>_<reference>/<module>.md`
      - `docs/<project>_<reference>_bug_workflow.md`
      - `docs/<project>_<reference>_optimization_workflow.md`
+     - `docs/<project>_<reference>_investigation_workflow.md`
+     - `docs/<project>_<reference>_refactor_workflow.md`
+     - `docs/<project>_<reference>_validation_workflow.md`
      - Add `docs/<project>_<reference>_feature_workflow.md` only when
        `feature_parity` is true.
 6. Use the bundled templates in `assets/templates/` as starting shapes:
@@ -82,12 +67,17 @@ Follow this process:
    - `bug_workflow.md`
    - `feature_workflow.md`
    - `optimization_workflow.md`
-7. Replace template placeholders with concrete names, module links, summaries,
-   workflow filenames, and reference-boundary language. Translate template
-   headings and prose when `output_language` is Traditional Chinese. Replace
-   `{{DELIVERY_POLICY}}` with the selected completion rule. In optimization
-   workflow docs, replace `{{DELIVERY_STEP_NUMBER}}` with the next sequential
-   step number after `{{DOC_STEP_NUMBER}}`.
+   - `investigation_workflow.md`
+   - `refactor_workflow.md`
+   - `validation_workflow.md`
+7. Replace template placeholders with concrete names, module links, module
+   summaries, workflow links, workflow filenames, and reference-boundary
+   language. Translate template headings and prose when `output_language` is
+   Traditional Chinese. Replace `{{DELIVERY_POLICY}}` with the selected
+   completion rule. For optimization workflow docs, replace `{{REFERENCE_STEP}}`
+   with either a Markdown numbered step that compares useful reference patterns
+   before choosing an optimization direction, including its trailing newline, or
+   an empty string.
 8. Before writing each file, check whether it already exists:
    - If missing, create it.
    - If present, preserve useful content and update only what the atlas needs.
@@ -109,6 +99,13 @@ Output requirements:
 - State in the generated index that Codebase Atlas is normally run once;
   future work should follow the generated workflows, and running it again means a
   full codebase rescan and atlas rebuild.
+- Write routing-oriented module summaries in the index. Each module summary
+  should help a future agent decide when to start there based on symptoms, task
+  types, or entry conditions.
 - State the selected delivery policy in the generated index and every workflow
   doc.
+- In reference-assisted mode, generate investigation, refactor, validation, bug,
+  and optimization workflows by default. Generate the feature workflow only when
+  `feature_parity` is true.
+- Apply the final validation checklist in `references/doc-output-contract.md`.
 - After writing, summarize created and updated files plus any remaining TODOs.

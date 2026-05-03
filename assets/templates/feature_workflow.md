@@ -10,24 +10,29 @@
 ## Workflow
 
 1. Preserve the user's original request.
-2. Open `{{INDEX_FILE}}` and find the natural owning module.
-3. Read the owning module doc and any boundary module docs.
-4. Define the feature boundary: included behavior, excluded behavior, interfaces,
+1. Open `{{INDEX_FILE}}` and find the natural owning module.
+1. Read the owning module doc and any boundary module docs.
+1. Define the feature boundary: included behavior, excluded behavior, interfaces,
    state, persistence, external systems, and user-visible changes.
-5. Implement through the owning module's established patterns.
-6. Verify the new behavior and update atlas docs when ownership, APIs, or flows
+1. If the feature crosses modules, choose the primary module by the module that
+   owns the new behavior or state lifecycle. Treat other modules as boundary
+   modules with explicit interface responsibilities.
+1. Implement through the owning module's established patterns.
+1. Verify the new behavior and update atlas docs when ownership, APIs, or flows
    changed.
-7. Finish according to this delivery policy: {{DELIVERY_POLICY}}
+1. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
 ## Pre-Edit Summary
 
-When user confirmation is expected, summarize:
+When user confirmation is expected, summarize this and wait if the user or
+project rules require confirmation before edits:
 
 - Original request
-- Owning module and boundary modules
+- Primary owning module and boundary modules
 - Included and excluded scope
 - Implementation approach
-- Behavior after completion
+- Behavior before and after, including user-visible behavior and internal
+  responsibility split
 - Tests or checks to run
 
 ## Delivery Policy

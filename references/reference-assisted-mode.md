@@ -14,6 +14,9 @@ API docs, product screenshots, specs, or a prior implementation.
 4. Compare responsibility boundaries, data flow, state lifecycle, error handling,
    validation, diagnostics, test strategy, and operational safeguards.
 
+Apply the scan boundaries from `references/doc-output-contract.md` to both the
+target and any repository-like reference material.
+
 ## Reference Boundary
 
 By default, the reference is not a backlog. Use it for:
@@ -43,9 +46,12 @@ compatibility, migration equivalence, or feature alignment.
   API names, and product names.
 - Keep the target project as the primary subject.
 - Record useful reference patterns as possible guidance, not required changes.
+- Include representative target change entry points and known risks so future
+  work can move from the atlas into code without rediscovering the module.
 - Include `Do Not Do` sections to prevent accidental feature creep.
 
 ## Workflows
 
-Generate bug and optimization workflows by default. Add a feature workflow only
-for explicit feature parity or reference-driven feature expansion requests.
+Generate bug, optimization, investigation, refactor, and validation workflows by
+default. Add a feature workflow only for explicit feature parity or
+reference-driven feature expansion requests.

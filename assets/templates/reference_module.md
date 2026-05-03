@@ -16,6 +16,16 @@
 
 - TODO: Capture reference patterns that may help boundary, flow, or stability.
 
+## Target Change Entry Points
+
+- TODO: Name the first target files, symbols, routes, commands, or tests to
+  inspect for typical changes in this module.
+
+## Known Risks
+
+- TODO: Note fragile assumptions, missing tests, complex state, migration risk,
+  or reference gaps that future work must account for.
+
 ## Do Not Do
 
 - TODO: State which reference behaviors are out of scope or not requirements.
