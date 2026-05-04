@@ -19,14 +19,16 @@ Inputs to resolve from the user request and repo context:
 - `reference_name`: required only for reference-assisted mode.
 - `output_dir`: default to `docs/`.
 - `modules`: 6-20 stable module slugs derived from the target repo.
-- `feature_parity`: true only when the user explicitly asks to align features
-  with the reference.
+- `feature_parity`: false by default; true only when the user explicitly asks
+  to align features with the reference, enable feature parity, preserve
+  compatibility, support migration equivalence, or drive feature expansion from
+  the reference.
 - `rebuild`: true only when the user explicitly asks to rebuild, refresh,
   regenerate, or rescan the atlas.
 - `output_language`: `English` or `Traditional Chinese`.
 - `delivery_policy`: `no commit`, `commit only`, or `commit and push`.
 
-Resolve `mode`, `output_language`, and `delivery_policy` using
+Resolve `mode`, `output_language`, `delivery_policy`, and `feature_parity` using
 `references/doc-output-contract.md`. If `mode` is `reference-assisted`, get the
 reference path, URL, or artifact before scanning the full repo.
 

@@ -14,10 +14,31 @@ Resolve these before scanning the whole repo:
 - `mode`: `standalone` or `reference-assisted`.
 - `output_language`: `English` or `Traditional Chinese`.
 - `delivery_policy`: `no commit`, `commit only`, or `commit and push`.
+- `feature_parity`: `disabled` by default, or `enabled` only when the user
+  explicitly wants parity, compatibility, migration equivalence, or
+  reference-driven feature expansion.
 
-Infer decisions from the user request and project rules when possible. Ask only
-for missing decisions. If `mode` is `reference-assisted`, get the reference
-path, URL, or artifact before the full scan.
+Before asking, briefly explain what Codebase Atlas will do: scan the target
+repo, create durable Markdown docs under `docs/`, produce a module index and
+module notes, and generate workflow docs for future work. State that generated
+workflows should be used for ordinary follow-up work, while rerunning Codebase
+Atlas means a full atlas rebuild.
+
+Infer decisions from the user request and project rules only when they are
+explicit or clearly documented. If the user request only names the target repo
+and says to use Codebase Atlas, ask all initial decisions before the full scan:
+
+1. Should the output be English or Traditional Chinese?
+1. Should this be standalone mode, or reference-assisted mode? If
+   reference-assisted, get the reference path, URL, or artifact.
+1. After each generated workflow finishes, should it do no commit, commit only,
+   or commit and push?
+1. In reference-assisted mode, should feature parity workflow docs be enabled?
+   Default to disabled unless the user explicitly wants parity, compatibility,
+   migration equivalence, or reference-driven feature expansion.
+
+If `mode` is `reference-assisted`, get the reference path, URL, or artifact
+before the full scan and resolve whether `feature_parity` is enabled.
 
 ## Naming
 
@@ -101,8 +122,9 @@ docs/
   <project>_<reference>_validation_workflow.md
 ```
 
-Add `<project>_<reference>_feature_workflow.md` only when the user explicitly
-asks for feature parity or reference-driven feature expansion.
+Add `<project>_<reference>_feature_workflow.md` only when `feature_parity` is
+enabled because the user explicitly asks for feature parity, compatibility,
+migration equivalence, or reference-driven feature expansion.
 
 ## Index Document
 
@@ -192,8 +214,7 @@ Before finishing an atlas initialization or rebuild, check the Markdown directly
 - Each workflow records the same delivery policy as the index.
 - Reference-assisted output includes investigation, refactor, validation, bug,
   and optimization workflows by default, and includes a feature workflow only
-  when feature parity or reference-driven feature expansion was explicitly
-  requested.
+  when `feature_parity` was explicitly enabled.
 - Module docs use the required sections for the selected mode.
 - Reference-assisted module docs include target change entry points and known
   risks in addition to reference counterparts and useful patterns.

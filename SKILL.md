@@ -1,6 +1,6 @@
 ---
 name: codebase-atlas
-description: Use only when the user asks to initialize, create, rebuild, refresh, regenerate, or rescan a compact repository atlas and workflow docs under docs/ for future code navigation. Supports standalone and reference-assisted scans.
+description: Use only when the user asks to initialize, create, rebuild, refresh, regenerate, or rescan a compact repository atlas and workflow docs under docs/ for future code navigation. Supports standalone and reference-assisted scans. Before a full scan, explain what Codebase Atlas will create and resolve output language, atlas mode, workflow delivery policy, and feature parity workflow preference.
 ---
 
 # Codebase Atlas
@@ -18,6 +18,34 @@ docs instead of running this skill again.
 This skill is intentionally text-only and generic. Do not add helper scripts,
 runtime-specific agent metadata, or product-specific assumptions to the skill
 itself. Create and update atlas files by editing Markdown directly.
+
+## Opening Briefing
+
+Before scanning the whole repo, briefly explain what this skill does in the
+user's language:
+
+- It scans the target repository and creates durable Markdown docs under
+  `docs/`.
+- It produces a module index, per-module ownership/dependency notes, known
+  risks, common change entry points, and workflow docs for future work.
+- After the atlas exists, ordinary bug, feature, optimization, investigation,
+  refactor, and validation work should use the generated workflow docs instead
+  of rerunning Codebase Atlas.
+- In reference-assisted mode, the reference is guidance for boundaries, flows,
+  failure handling, and stabilization. It is not a feature backlog unless the
+  user explicitly asks for feature parity.
+
+If the user's request only says to use Codebase Atlas for a target repo, for
+example "use Codebase Atlas to process reader", do not start the full scan yet.
+Ask for the missing initial decisions first:
+
+1. Output language: English or Traditional Chinese.
+1. Atlas mode: standalone, or reference-assisted with the reference path, URL,
+   or artifact.
+1. Workflow delivery policy: no commit, commit only, or commit and push.
+1. In reference-assisted mode, whether to enable feature parity workflow docs.
+   Default to no unless the user explicitly wants parity, compatibility,
+   migration equivalence, or reference-driven feature expansion.
 
 ## Usage Model
 
@@ -44,10 +72,15 @@ resolve the initial decisions it defines:
 - atlas mode: standalone or reference-assisted
 - output language: English or Traditional Chinese
 - workflow delivery policy: no commit, commit only, or commit and push
+- feature parity workflow: disabled by default; enabled only for explicit
+  parity, compatibility, migration-equivalence, or reference-driven feature
+  expansion work
 
-Infer these from the user request and project rules when possible. Ask only for
-missing decisions. If reference-assisted mode is selected, get the reference
-path, URL, or artifact before the full scan.
+Infer these from an explicit user request or project rules when they are clear.
+If the user only names the skill and target repo, treat these decisions as
+missing and ask before scanning. If reference-assisted mode is selected, get the
+reference path, URL, or artifact before the full scan and ask whether feature
+parity workflow docs should be enabled.
 
 ## Mode Decision
 
@@ -57,13 +90,17 @@ path, URL, or artifact before the full scan.
 - In reference-assisted mode, treat the reference as guidance for boundaries,
   flows, failure handling, and stabilization by default. Do not turn it into a
   feature-parity backlog unless the user explicitly asks for feature parity.
+- Generate feature parity workflow docs in reference-assisted mode only when the
+  user enables feature parity or asks for parity, compatibility, migration
+  equivalence, or reference-driven feature expansion.
 - If the user expects a reference but no path or artifact is available, ask for
   that missing reference. Otherwise continue in standalone mode.
 
 ## Core Workflow
 
-1. Read `references/doc-output-contract.md`, then resolve the atlas mode, output
-   language, workflow delivery policy, and any required reference material.
+1. Read `references/doc-output-contract.md`, give the opening briefing, then
+   resolve the atlas mode, output language, workflow delivery policy, feature
+   parity workflow preference, and any required reference material.
 1. Ground in the target project. Inspect manifests,
    entrypoints, source roots, tests, build/config files, existing docs, and
    major package boundaries with fast search tools. Apply the scan boundaries in

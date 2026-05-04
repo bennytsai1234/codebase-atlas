@@ -15,6 +15,31 @@ metadata.
 The goal is simple: stop rediscovering the same codebase from scratch every
 time an agent starts a new task.
 
+## What The Agent Should Do First
+
+When a user only says something like:
+
+```text
+Use the Codebase Atlas skill to process the reader repository.
+```
+
+the agent should not begin the full scan immediately. It should first explain,
+briefly, that Codebase Atlas will scan the target repo and create durable
+Markdown docs under `docs/`: a module index, per-module notes, dependency and
+impact summaries, known risks, common change entry points, and workflow docs for
+future work.
+
+Then it should ask:
+
+1. Should the output be English or Traditional Chinese?
+2. Should this be standalone mode, or reference-assisted mode? If
+   reference-assisted, what reference path, URL, or artifact should be used?
+3. After each generated workflow finishes, should it do no commit, commit only,
+   or commit and push?
+4. In reference-assisted mode, should feature parity workflow docs be enabled?
+   The default is no unless the goal is parity, compatibility, migration
+   equivalence, or reference-driven feature expansion.
+
 ## Why This Exists
 
 Coding agents are good at searching code, but they often start each task with no
@@ -65,8 +90,10 @@ docs/
   <project>_<reference>_validation_workflow.md
 ```
 
-Feature-parity workflow docs are generated only when you explicitly ask for
-feature parity.
+Feature-parity workflow docs are not enabled by default. In reference-assisted
+mode, the agent should ask whether to enable them, and generate them only when
+you explicitly want parity, compatibility, migration equivalence, or
+reference-driven feature expansion.
 
 ## Key Ideas
 
@@ -99,18 +126,16 @@ Read /path/to/codebase-atlas/SKILL.md and use the Codebase Atlas skill for this 
 
 ## Quick Start
 
-Ask the agent to read the skill and choose the setup options first:
+Ask the agent to read the skill and process a repository:
 
 ```text
-Use the Codebase Atlas skill for this repo.
-Before scanning, ask me:
-1. Should the output be English or Traditional Chinese?
-2. Should this be standalone or reference-assisted?
-3. After each generated workflow finishes, should it do no commit, commit only, or commit and push?
+Use the Codebase Atlas skill to process the reader repository.
 ```
 
-For reference-assisted mode, provide the reference path, URL, or artifact before
-the agent starts the full scan.
+The skill should explain what it will create and ask for output language, atlas
+mode, delivery policy, and feature parity workflow preference before the full
+scan. For reference-assisted mode, provide the reference path, URL, or artifact
+before the agent starts the scan.
 
 ## Choosing A Mode
 
