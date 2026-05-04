@@ -8,6 +8,14 @@ Codebase Atlas is a systematic protocol designed to solve the common issues of "
 
 Through this system, developers can establish a complete "navigation layer" for AI agents, enabling them to understand module boundaries, dependencies, potential risks, and mandatory engineering standards before they start modifying code.
 
+## Why Codebase Atlas?
+
+### Better Than Simple Prompting
+Simple prompting is transient and speculative. When you ask an AI to "find where to change X," it performs a shallow search that is forgotten in the next session. Codebase Atlas is **grounded and persistent**. It creates a physical map of your codebase that anchors the AI's reasoning, ensuring that every task starts with a deep understanding of the project's architecture rather than a lucky guess.
+
+### Better Than Heavy Infrastructure
+While heavy code intelligence systems (such as graph-based parsing engines or external databases) are powerful, they are often overkill for 90% of development tasks. Codebase Atlas offers a **"just enough" approach**: a lightweight, text-based protocol that provides the essential architectural boundaries and workflows an agent needs without the overhead of complex maintenance, specialized servers, or invasive indexing.
+
 ## Core Value: The "Initialize Once, Reuse Often" Strategy
 
 Current AI tools typically rediscover the codebase in every session, causing significant waste of computational resources and tokens. Codebase Atlas advocates a strategic separation of roles:
