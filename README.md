@@ -1,201 +1,79 @@
 # Codebase Atlas
 
-Turn a codebase into a durable engineering map that both humans and coding
-agents can use.
+**A precise navigation protocol for AI agents and an engineering architecture governance system for human engineers.**
 
-Codebase Atlas is an agent-neutral skill for initializing project documentation
-from a real repository scan. It creates a module index, focused module notes,
-dependency and impact summaries, and practical workflows for future bug fixes,
-features, optimizations, investigations, refactors, and validations.
+## Vision
 
-The package is text-only by design: Markdown instructions, Markdown references,
-and Markdown templates. It does not require helper scripts or agent-specific UI
-metadata.
+Codebase Atlas is a systematic protocol designed to solve the common issues of "context loss" and "architectural drift" encountered by AI agents when working with large and complex codebases. It is not merely a documentation generator, but an engineering solution that transforms project intelligence from volatile conversation context into durable, versionable assets.
 
-The goal is simple: stop rediscovering the same codebase from scratch every
-time an agent starts a new task.
+Through this system, developers can establish a complete "navigation layer" for AI agents, enabling them to understand module boundaries, dependencies, potential risks, and mandatory engineering standards before they start modifying code.
 
-## What The Agent Should Do First
+## Core Value
 
-When a user only says something like:
+### 1. Reducing Architectural Hallucinations
+AI agents, when lacking a global perspective, often make changes that break module encapsulation or introduce circular dependencies. Codebase Atlas forces the AI to read a defined "map" before starting a task, ensuring all changes align with the intended design.
 
-```text
-Use the Codebase Atlas skill to process the reader repository.
-```
+### 2. Intelligence Persistence and Leverage
+Current AI tools typically rediscover the codebase in every session, causing significant waste of computational resources and tokens. Codebase Atlas advocates a "one-time deep initialization" strategy, solidifying the analysis results of the **strongest available model** so that subsequent daily tasks can receive high-quality guidance at a lower cost.
 
-the agent should not begin the full scan immediately. It should first explain,
-briefly, that Codebase Atlas will scan the target repo and create durable
-Markdown docs under `docs/`: a module index, per-module notes, dependency and
-impact summaries, known risks, common change entry points, and workflow docs for
-future work.
+### 3. Engineering Governance and Workflow Standardization
+The system produces not just static documentation, but dynamic workflow guides for different development scenarios (e.g., Bug Fix, Feature Expansion, System Refactoring), embedding the team's engineering standards directly into the AI's execution path.
 
-Then it should ask:
+## Operating Model
 
-1. Should the output be English or Traditional Chinese?
-2. Should this be standalone mode, or reference-assisted mode? If
-   reference-assisted, what reference path, URL, or artifact should be used?
-3. After each generated workflow finishes, should it do no commit, commit only,
-   or commit and push?
-4. In reference-assisted mode, should feature parity workflow docs be enabled?
-   The default is no unless the goal is parity, compatibility, migration
-   equivalence, or reference-driven feature expansion.
+Codebase Atlas follows a "Initialize Once, Reuse Often" mechanism:
 
-## Why This Exists
+1.  **Atlas Construction (Initialization)**:
+    Performed during project startup or major architectural changes. It is highly recommended to use the **strongest model available** in your environment for this stage's deep scanning and logical reasoning, ensuring the resulting map has sufficient strategic depth and accuracy.
 
-Coding agents are good at searching code, but they often start each task with no
-shared project memory. That leads to repeated exploration, broad edits, weak
-module boundaries, and uncertainty about whether a change should be committed or
-pushed.
+2.  **Daily Navigation (Navigation)**:
+    Once the map is established, Codebase Atlas should not be run again for standard development tasks. Instead, AI agents are directed to read the generated `docs/` files and follow the workflows within. This allows lighter or more cost-effective models to perform precise code development aided by a high-quality map.
 
-Codebase Atlas turns the first deep scan of a repository into versionable docs:
+3.  **Full Rebuild**:
+    Codebase Atlas is only invoked again when the user explicitly requests to rescan, refresh, or rebuild the atlas.
 
-- a high-level module map
-- per-module ownership and dependency notes
-- known risks and common change entry points
-- follow-up workflows for bug, feature, optimization, investigation, refactor,
-  and validation work
-- a recorded delivery policy for whether future work should commit or push
+## Output Structure
 
-After the atlas exists, future work starts from the generated workflow docs
-instead of rerunning the skill.
+The generated atlas is stored in the `docs/` folder at the project root, following strict naming conventions:
 
-## What It Creates
+*   **Project Index (`_index.md`)**: Defines the project overview, delivery policy, module summaries, and workflow entry points.
+*   **Module Documentation (`docs/project/module.md`)**: Details the current state, scope, upstream dependencies, and downstream impact of each functional module.
+*   **Workflow Guides (`_workflow.md`)**: Specific guides for Bug Fix, Feature, Optimization, Investigation, Refactor, and Validation, including pre-change checklists and post-change validation standards.
 
-Standalone project:
+## Modes
 
-```text
-docs/
-  <project>_index.md
-  <project>/
-    <module>.md
-  <project>_bug_workflow.md
-  <project>_feature_workflow.md
-  <project>_optimization_workflow.md
-  <project>_investigation_workflow.md
-  <project>_refactor_workflow.md
-  <project>_validation_workflow.md
-```
+*   **Standalone Mode**: Uses the target codebase as the sole source of truth, building a pure description of the status quo.
+*   **Reference-Assisted Mode**: Used when the project needs to refer to another baseline repository, API specification, or design document. This mode emphasizes "learning" rather than "feature parity" unless explicitly requested.
 
-Reference-assisted project:
+## Installation and Getting Started
 
-```text
-docs/
-  <project>_<reference>_index.md
-  <project>_<reference>/
-    <module>.md
-  <project>_<reference>_bug_workflow.md
-  <project>_<reference>_optimization_workflow.md
-  <project>_<reference>_investigation_workflow.md
-  <project>_<reference>_refactor_workflow.md
-  <project>_<reference>_validation_workflow.md
-```
+### Installation
 
-Feature-parity workflow docs are not enabled by default. In reference-assisted
-mode, the agent should ask whether to enable them, and generate them only when
-you explicitly want parity, compatibility, migration equivalence, or
-reference-driven feature expansion.
+1.  Clone this repository to your development environment:
+    ```bash
+    git clone https://github.com/bennytsai1234/codebase-atlas.git
+    ```
 
-## Key Ideas
+2.  Ensure your AI agent (e.g., Cursor, Claude Code, Windsurf) has permission to read files.
 
-- **Run once, reuse often**: initialize the atlas once, then use the generated
-  workflow docs for normal development.
-- **Agent-neutral**: works with any coding agent that can read Markdown files.
-- **Standalone or reference-assisted**: map a project by itself, or compare it
-  with a reference repo, spec, API docs, or product artifact.
-- **No accidental feature creep**: reference material is treated as guidance for
-  boundaries and flows, not as an automatic feature backlog.
-- **Bilingual output**: generated docs can be written in English or Traditional
-  Chinese.
-- **Delivery policy built in**: future workflows can end with no commit, commit
-  only, or commit and push.
+### Initialization Guide
 
-## Installation
+Direct your AI agent to execute the following command (using the strongest model during the initialization phase):
 
-Clone the skill anywhere your agent can read:
+> Read `/path/to/codebase-atlas/SKILL.md` and use the Codebase Atlas protocol to build a map for this repository. Before scanning starts, resolve initial decisions regarding language (English or Traditional Chinese), mode, and delivery policy.
 
-```bash
-git clone https://github.com/bennytsai1234/codebase-atlas.git
-```
+### Daily Development
 
-Then point your coding agent at the cloned folder and ask it to read
-`SKILL.md` before working:
+Once the map is built, point the AI directly to the generated documents for specific tasks:
 
-```text
-Read /path/to/codebase-atlas/SKILL.md and use the Codebase Atlas skill for this repo.
-```
+> Read `docs/target_bug_workflow.md` and follow its specifications to fix the following issue: [Issue Description]
 
-## Quick Start
+## Technical Features
 
-Ask the agent to read the skill and process a repository:
-
-```text
-Use the Codebase Atlas skill to process the reader repository.
-```
-
-The skill should explain what it will create and ask for output language, atlas
-mode, delivery policy, and feature parity workflow preference before the full
-scan. For reference-assisted mode, provide the reference path, URL, or artifact
-before the agent starts the scan.
-
-## Choosing A Mode
-
-Use **standalone** when the repository is the only source of truth.
-
-Use **reference-assisted** when the repository should be understood alongside:
-
-- another codebase
-- a previous implementation
-- design or product docs
-- API documentation
-- screenshots or behavior notes
-- migration or compatibility material
-
-By default, reference-assisted mode uses the reference for architecture,
-responsibility boundaries, flow design, stability patterns, and diagnostics. It
-does not assume that missing features in the target project are bugs.
-
-## Normal Follow-Up Work
-
-After the atlas exists, do not run Codebase Atlas again for ordinary
-development. Use the generated workflow docs instead:
-
-```text
-Read docs/<project>_bug_workflow.md and follow it to fix this bug: ...
-Read docs/<project>_feature_workflow.md and follow it to implement this feature: ...
-Read docs/<project>_optimization_workflow.md and follow it to optimize this area: ...
-Read docs/<project>_investigation_workflow.md and follow it to investigate this behavior: ...
-Read docs/<project>_refactor_workflow.md and follow it to refactor this area: ...
-Read docs/<project>_validation_workflow.md and follow it to validate this change: ...
-```
-
-Run Codebase Atlas again only when you want a full rebuild:
-
-```text
-Use the Codebase Atlas skill to rescan the full repo and rebuild the atlas from current code.
-```
-
-## How It Is Different
-
-Codebase Atlas is not a live code search engine, IDE rule file, or one-off
-documentation prompt.
-
-It is designed to create durable project context:
-
-- Repo maps are usually temporary context for a model. Codebase Atlas writes
-  docs that can be committed and reused.
-- Project rules usually tell an agent how to behave. Codebase Atlas first maps
-  the actual repo, then creates workflows tied to that map.
-- Documentation prompts often stop after generating docs. Codebase Atlas also
-  creates the follow-up workflows future agents should use.
-
-## Package Contents
-
-- `SKILL.md`: main agent instructions.
-- `references/`: mode guides and output contract.
-- `assets/templates/`: Markdown templates for generated atlas docs.
-
-The package is not tied to a specific agent runtime. Any coding agent can use it
-by reading `SKILL.md`, the relevant reference files, and the templates.
+*   **Language Agnostic**: Not tied to specific programming languages or frameworks.
+*   **Text-Only Design**: Entirely Markdown-based, requiring no additional databases or runtimes.
+*   **Bilingual Support**: Supports Traditional Chinese and English output with a built-in glossary for consistency.
+*   **Delivery Policy Control**: Define `no commit`, `commit only`, or `commit and push` for automated workflows.
 
 ## License
 
