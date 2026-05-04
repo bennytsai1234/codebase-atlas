@@ -96,6 +96,11 @@ Output requirements:
 
 - Keep docs generic to the project; do not add framework assumptions that are not
   visible in the repo.
+- Describe only the target repository and its reference material. Do not write
+  the current agent, model, CLI, editor, shell, or chat runtime into generated
+  docs as an upstream dependency, integration, owner, or project fact. Avoid
+  runtime names such as Gemini, Claude, ChatGPT, Codex, or Cursor unless the repo
+  itself explicitly contains that integration.
 - Prefer relative links for new docs.
 - Use the selected output language and the target project's terminology.
 - In reference-assisted mode, state that the reference is guidance, not a feature
@@ -105,7 +110,11 @@ Output requirements:
   full codebase rescan and atlas rebuild.
 - Write routing-oriented module summaries in the index. Each module summary
   should help a future agent decide when to start there based on symptoms, task
-  types, or entry conditions.
+  types, or entry conditions. Do not use one-line file descriptions as module
+  summaries.
+- Fill each module document with concrete routing facts: owned responsibility,
+  representative files, common change entry points, known risks, and do-not-do
+  boundaries. A module doc is not complete if it only describes what a file is.
 - State the selected delivery policy in the generated index and every workflow
   doc.
 - In every generated code-changing workflow, make explicit workflow invocation
@@ -119,4 +128,7 @@ Output requirements:
   use the reference for guidance, but it must not treat the reference as a
   feature backlog unless `feature_parity` is true.
 - Apply the final validation checklist in `references/doc-output-contract.md`.
+- During final validation, search the generated docs for accidental runtime
+  leakage such as `Gemini`, `Claude`, `ChatGPT`, `Codex`, or `Cursor`; remove
+  these names unless they are real project facts found in source files.
 - After writing, summarize created and updated files plus any remaining TODOs.

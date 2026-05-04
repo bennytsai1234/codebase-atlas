@@ -2,11 +2,14 @@
 
 ## Target Current State
 
-- TODO: Summarize what the target project currently owns in this module.
+- TODO: Summarize what the target project currently owns in this module and when
+  future work should start here.
 
 ## Target Upstream/Downstream
 
-- TODO: List direct target dependencies and affected downstream areas.
+- TODO: List direct target dependencies and affected downstream areas. Do not
+  include the current agent, model, CLI, editor, shell, or chat runtime unless it
+  is explicitly part of the target repo.
 
 ## Reference Counterpart
 
@@ -24,7 +27,8 @@
 ## Known Risks
 
 - TODO: Note fragile assumptions, missing tests, complex state, migration risk,
-  or reference gaps that future work must account for.
+  stale docs, unclear ownership, or reference gaps that future work must account
+  for.
 
 ## Do Not Do
 

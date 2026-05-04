@@ -34,12 +34,23 @@ Avoid one module per folder when folders are implementation details. Avoid one
 giant module for all shared code if different shared areas change for different
 reasons.
 
+For small repositories, do not create artificial modules from incidental files
+just to make the list look fuller. Group related small files into meaningful
+change surfaces, such as public docs and metadata, templates, language resources,
+or contract rules. Every module should answer: "What future change would start
+here?"
+
 ## Documentation Rules
 
 - Keep each module doc focused on navigation, ownership, dependencies, and risk.
 - Mention representative files and entrypoints, not every file.
 - Make index summaries routing-oriented: include symptoms, task types, or entry
   conditions that should lead future work to each module.
+- Make each module summary 2-4 lines. A single sentence that only names files is
+  too thin.
+- Keep the atlas agent-neutral. Do not write the current AI runtime, CLI, model,
+  editor, or chat environment into upstream dependencies or module facts unless
+  it is explicitly present in the repository.
 - Record known uncertainty explicitly instead of inventing architecture.
 - Include test commands only when they are discoverable from the repo.
 - Use the selected output language and the target project's terminology.

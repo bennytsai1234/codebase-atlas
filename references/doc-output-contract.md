@@ -49,6 +49,19 @@ before the full scan and resolve whether `feature_parity` is enabled.
 - Replace `target` and `reference` labels in headings with the actual project or
   reference names when it improves readability.
 
+## Source Of Truth
+
+- Generated docs must describe the target repository, not the current chat
+  session, model, CLI, editor, shell, or agent runtime.
+- Do not name the executing tool or model as an upstream dependency,
+  integration, owner, or project fact. Avoid names such as Gemini, Claude,
+  ChatGPT, Codex, Cursor, or any other runtime unless the target repo itself
+  explicitly contains that integration and it matters to the module.
+- If a source file says "AI agent" generically, keep it generic. Do not replace
+  it with the current agent's name.
+- If unsure whether something is a project fact or only execution context, omit
+  it from the atlas.
+
 ## Language
 
 - Generated atlas docs and workflow docs may be written in English or
@@ -141,9 +154,11 @@ Include:
 - Delivery policy for future workflow runs.
 - Workflow document list with links.
 - Module list with links.
-- 2-4 line summary per module. Each summary should include routing hints: what
-  symptoms, task types, or entry conditions should make a future agent start
-  from that module.
+- 2-4 line summary per module. Each summary must be routing-oriented, not a
+  generic file description. It should answer:
+  - What this module owns.
+  - When a future agent should start here.
+  - Which symptoms, task types, or entry conditions point to it.
 - A clear statement of the reference boundary when in reference-assisted mode.
 
 ## Standalone Module Document
@@ -158,6 +173,18 @@ Use these sections:
 - Common Change Entry Points
 - Known Risks
 - Do Not Do
+
+Each module document must include inspected, concrete routing facts:
+
+- `Current State`: what responsibility the module owns now.
+- `Scope`: representative files, folders, commands, public APIs, or entrypoints.
+- `Common Change Entry Points`: the first files or symbols to inspect for likely
+  future tasks.
+- `Known Risks`: facts that affect future edits, such as stale docs, missing
+  tests, unclear ownership, brittle state, or contract/template drift.
+
+Avoid module docs that only say what a file is. The doc must help a future agent
+decide whether to start there.
 
 ## Reference-Assisted Module Document
 
@@ -223,8 +250,12 @@ Before finishing an atlas initialization or rebuild, check the Markdown directly
 
 - No unreplaced template placeholders remain, such as `{{ATLAS_TITLE}}`.
 - Relative links point to generated files that exist.
+- No generated doc treats the current agent, model, CLI, editor, shell, or chat
+  runtime as a project dependency or module fact.
 - The index records one-time usage guidance, rebuild semantics, module links,
   workflow links, routing-oriented module summaries, and delivery policy.
+- Index module summaries are 2-4 lines each and tell future agents when to start
+  from that module.
 - Each workflow records the same delivery policy as the index.
 - Each code-changing workflow requires a plain-language Before / After summary
   and explicit user confirmation before edits.

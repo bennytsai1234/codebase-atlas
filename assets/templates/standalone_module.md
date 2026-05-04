@@ -2,15 +2,19 @@
 
 ## Current State
 
-- TODO: Summarize what this module currently owns.
+- TODO: Summarize the responsibility this module currently owns and when future
+  work should start here.
 
 ## Scope
 
-- TODO: List primary folders, files, public APIs, entrypoints, or commands.
+- TODO: List representative folders, files, public APIs, entrypoints, or
+  commands. Do not list every file.
 
 ## Upstream Dependencies
 
-- TODO: List inputs, dependencies, callers, data sources, and external systems.
+- TODO: List project facts only: inputs, dependencies, callers, data sources, and
+  external systems. Do not include the current agent, model, CLI, editor, shell,
+  or chat runtime unless it is explicitly part of the repo.
 
 ## Downstream Impact
 
@@ -22,11 +26,13 @@
 
 ## Common Change Entry Points
 
-- TODO: Name the first files or symbols to inspect for typical changes.
+- TODO: Name the first files, symbols, templates, docs, or commands to inspect
+  for typical future tasks in this module.
 
 ## Known Risks
 
-- TODO: Note fragile assumptions, missing tests, complex state, or migration risk.
+- TODO: Note fragile assumptions, missing tests, stale docs, unclear ownership,
+  contract/template drift, complex state, or migration risk.
 
 ## Do Not Do
 

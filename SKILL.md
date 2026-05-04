@@ -20,6 +20,11 @@ This skill is intentionally text-only and generic. Do not add helper scripts,
 runtime-specific agent metadata, or product-specific assumptions to the skill
 itself. Create and update atlas files by editing Markdown directly.
 
+Generated atlas docs must also stay agent-neutral. Do not describe the current
+model, CLI, editor, shell, chat runtime, or executing agent as a project
+dependency or module fact unless the target repository explicitly documents that
+integration.
+
 ## Opening Briefing
 
 Before scanning the whole repo, briefly explain what this skill does in the
@@ -121,6 +126,9 @@ parity should be enabled.
 1. Add usage guidance to the index and workflow docs: future work should use the
    generated workflows, while running this skill again is reserved for a full atlas
    rebuild.
+1. Validate that generated docs describe the target project only. Remove current
+   runtime names or assumptions, thin one-line module summaries, stale links, and
+   any workflow that misses the Before / After gate or atlas-update rule.
 
 ## Skeleton Prompt
 

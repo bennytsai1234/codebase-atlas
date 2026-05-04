@@ -51,6 +51,11 @@ as guidance, not as a backlog.
 - Record useful reference patterns as possible guidance, not required changes.
 - Include representative target change entry points and known risks so future
   work can move from the atlas into code without rediscovering the module.
+- Keep the atlas agent-neutral. Do not write the current AI runtime, CLI, model,
+  editor, or chat environment into target or reference dependencies unless it is
+  explicitly present in the source material.
+- Make index summaries 2-4 lines and routing-oriented. They should explain when
+  to start from the module, not just which files it contains.
 - Include `Do Not Do` sections to prevent accidental feature creep.
 
 ## Workflows
