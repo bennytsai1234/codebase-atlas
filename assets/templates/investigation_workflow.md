@@ -25,16 +25,18 @@
 1. Finish according to this delivery policy when files changed; otherwise
    summarize findings and state that no commit is needed: {{DELIVERY_POLICY}}
 
-## Findings Summary
+## Investigation Summary (The Trust Bridge)
 
-Summarize:
+Before finalizing findings, provide a summary for human review. Use plain
+language to build a bridge of trust:
 
-- Original question or symptom
-- Owning module or boundary
-- Confirmed facts
-- Remaining unknowns
-- Risks or fragile assumptions
-- Recommended next step
+- **Inquiry**: What specific question or behavior were we investigating?
+- **The Map**: Which modules were traced?
+- **Discoveries**:
+    - **Knowns**: Confirmed facts about the current behavior.
+    - **Hypotheses**: What we suspect but haven't proven yet.
+    - **Unknowns**: What remains unclear.
+- **Next Steps**: Recommended implementation workflow (Bug, Feature, etc.).
 
 ## Delivery Policy
 

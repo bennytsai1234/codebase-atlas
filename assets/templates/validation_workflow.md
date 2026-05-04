@@ -24,16 +24,17 @@
    summarize validation status and state that no commit is needed:
    {{DELIVERY_POLICY}}
 
-## Validation Summary
+## Validation Summary (The Trust Bridge)
 
-Summarize:
+Before finalizing the assessment, provide a summary for human review. Use plain
+language to build a bridge of trust:
 
-- Validation target
-- Affected module or boundary
-- Checks performed
-- Results
-- Blockers or skipped checks
-- Recommended next step
+- **Scope**: What specific change, fix, or risk are we validating?
+- **The Map**: Which modules are affected?
+- **Assessment**:
+    - **Evidence**: What did the tests, logs, or code review show?
+    - **Confidence**: How certain are we of the result?
+- **Conclusion**: Pass/Fail or Risk Level (Low/Medium/High).
 
 ## Delivery Policy
 
