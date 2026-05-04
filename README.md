@@ -23,6 +23,23 @@ Current AI tools typically rediscover the codebase in every session, causing sig
 *   **The Architect (Strong Model Initialization)**: Use the strongest model available to perform a deep, one-time scan. This model acts as a senior architect, identifying hidden patterns, module boundaries, and cross-module impacts to create the Atlas.
 *   **The Worker (Standard Model Execution)**: Once the Atlas exists, daily development tasks can be handled by more cost-effective models. These models follow the "architect's" pre-defined maps and workflows, achieving high-quality results with minimal context overhead.
 
+## Design Philosophy & System Architecture
+
+Codebase Atlas is built on the principle of **"Structural Persistence"**. Unlike RAG (Retrieval-Augmented Generation) which slices code into fragmented chunks, Codebase Atlas distills the repository into a hierarchical, semantically meaningful map.
+
+### 1. The Four-Phase Lifecycle
+The system operates through a structured "Decision-Scan-Distill-Govern" lifecycle:
+*   **Decision Phase**: Explicitly resolves project-specific constraints (Mode, Language, Policy) before any analysis, preventing the AI from making assumptions that drift from the developer's intent.
+*   **Scanning Phase**: A high-speed grounding process that ignores noise (dependencies, caches) and focuses on architectural entry points, manifests, and boundary-defining files.
+*   **Distillation Phase**: Collapses thousands of files into 6-20 stable modules. This "Information Density Control" ensures that the AI's context window is spent on high-level relationships rather than redundant file-level details.
+*   **Governance Phase**: Generates stateful workflow documents that act as "execution locks," forcing future AI agents to follow a pre-validated engineering path.
+
+### 2. Why Zero-Dependency Markdown?
+We intentionally avoided databases and heavy parsing engines. The reasoning is three-fold:
+*   **Auditability**: Humans can read and verify the Atlas. If the AI hallucinates a module boundary, a developer can fix it with a simple text edit.
+*   **Versionability**: The Atlas lives inside the Git repo. It evolves with the code, providing a historical record of architectural intent.
+*   **Agent Handover**: One agent can build the Atlas, and a completely different agent (even on a different platform) can immediately use it without any synchronized state or shared database.
+
 ## Operating Model
 
 ### 1. Initialization and Decision Making
