@@ -22,19 +22,21 @@
    changed.
 1. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
-## Pre-Edit Summary (The Trust Bridge)
+## Before / After Gate
 
-Before editing any code, you **must** provide a summary for human confirmation.
-Use plain language to build a bridge of trust. Do not proceed until the plan is
-verified:
+When this workflow is invoked, do not edit code first. Analyze the requested
+feature using the atlas and code inspection, then provide an analysis report for
+human confirmation.
 
-- **Goal**: Summarize the new behavior in plain language.
-- **The Map**: Name the primary owning module and boundary modules.
-- **Design (Before vs. After)**:
-    - **Before**: Current state of the system without this feature.
-    - **After**: How the system will behave and feel once implemented.
-- **Impact**: How this feature interacts with existing module responsibilities.
-- **Verification**: How we will prove the feature is complete and correct.
+The upper part of the report may include engineering details such as owning
+module, boundary modules, likely files, risks, and checks. The final part must
+be only a plain-language Before / After summary:
+
+- **Before**: Explain what the system currently does or cannot do.
+- **After**: Explain what behavior the feature will add or change.
+
+Wait for explicit user confirmation after the Before / After summary before
+editing files for the feature.
 
 ## Delivery Policy
 

@@ -48,7 +48,7 @@ When the protocol is first activated, the AI agent will not scan immediately. It
 1.  **Output Language**: Traditional Chinese or English.
 2.  **Atlas Mode**: Standalone (sole source of truth) or Reference-Assisted (learning from an external repository or spec).
 3.  **Delivery Policy**: Recorded rule for future tasks (No commit, Commit only, or Commit and Push).
-4.  **Feature Parity Workflow**: (Reference-Assisted mode only) Whether to enable specific workflows for migration equivalence or feature expansion.
+4.  **Feature Parity**: (Reference-Assisted mode only) Whether the reference can drive migration equivalence or feature expansion. The feature workflow is generated either way.
 
 ### 2. Atlas Construction
 The AI agent performs a deep scan of the repository, ignoring non-source directories (e.g., node_modules, dist, .git), and organizes the codebase into 6-20 stable modules based on product or architectural boundaries.
@@ -66,6 +66,7 @@ docs/
   <project>_index.md
   <project>/
     <module_slug>.md
+  <project>_introduction_workflow.md
   <project>_bug_workflow.md
   <project>_feature_workflow.md
   <project>_optimization_workflow.md
@@ -80,12 +81,13 @@ docs/
   <project>_<reference>_index.md
   <project>_<reference>/
     <module_slug>.md
+  <project>_<reference>_introduction_workflow.md
   <project>_<reference>_bug_workflow.md
+  <project>_<reference>_feature_workflow.md
   <project>_<reference>_optimization_workflow.md
   <project>_<reference>_investigation_workflow.md
   <project>_<reference>_refactor_workflow.md
   <project>_<reference>_validation_workflow.md
-  <project>_<reference>_feature_workflow.md (Optional: for parity)
 ```
 
 ## Detailed Mode Selection
@@ -108,6 +110,7 @@ Once the Atlas is established, **do not run Codebase Atlas again for daily devel
 *   **Investigation**: `Read docs/<project>_investigation_workflow.md to understand: [description]`
 *   **Refactor**: `Read docs/<project>_refactor_workflow.md to restructure: [description]`
 *   **Validation**: `Read docs/<project>_validation_workflow.md to verify: [description]`
+*   **Introduction**: `Read docs/<project>_introduction_workflow.md to explain what this project does`
 
 ### Why These Workflows Work: Reasoning Over Hallucination
 

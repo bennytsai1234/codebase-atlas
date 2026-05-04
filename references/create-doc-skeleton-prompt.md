@@ -46,6 +46,7 @@ Follow this process:
    - Standalone:
      - `docs/<project>_index.md`
      - `docs/<project>/<module>.md`
+     - `docs/<project>_introduction_workflow.md`
      - `docs/<project>_bug_workflow.md`
      - `docs/<project>_feature_workflow.md`
      - `docs/<project>_optimization_workflow.md`
@@ -55,17 +56,18 @@ Follow this process:
    - Reference-assisted:
      - `docs/<project>_<reference>_index.md`
      - `docs/<project>_<reference>/<module>.md`
+     - `docs/<project>_<reference>_introduction_workflow.md`
      - `docs/<project>_<reference>_bug_workflow.md`
+     - `docs/<project>_<reference>_feature_workflow.md`
      - `docs/<project>_<reference>_optimization_workflow.md`
      - `docs/<project>_<reference>_investigation_workflow.md`
      - `docs/<project>_<reference>_refactor_workflow.md`
      - `docs/<project>_<reference>_validation_workflow.md`
-     - Add `docs/<project>_<reference>_feature_workflow.md` only when
-       `feature_parity` is true.
 6. Use the bundled templates in `assets/templates/` as starting shapes:
    - `index.md`
    - `standalone_module.md`
    - `reference_module.md`
+   - `introduction_workflow.md`
    - `bug_workflow.md`
    - `feature_workflow.md`
    - `optimization_workflow.md`
@@ -106,8 +108,15 @@ Output requirements:
   types, or entry conditions.
 - State the selected delivery policy in the generated index and every workflow
   doc.
-- In reference-assisted mode, generate investigation, refactor, validation, bug,
-  and optimization workflows by default. Generate the feature workflow only when
-  `feature_parity` is true.
+- In every generated code-changing workflow, make explicit workflow invocation
+  mean an analysis gate before edits. The workflow may include engineering
+  reasoning, but the required user-facing summary must end with only two
+  plain-language parts: `Before` and `After`. The agent must wait for explicit
+  confirmation after that summary before editing files for the requested change.
+- Generate the introduction, bug, feature, optimization, investigation,
+  refactor, and validation workflows by default in both standalone and
+  reference-assisted mode. In reference-assisted mode, the feature workflow may
+  use the reference for guidance, but it must not treat the reference as a
+  feature backlog unless `feature_parity` is true.
 - Apply the final validation checklist in `references/doc-output-contract.md`.
 - After writing, summarize created and updated files plus any remaining TODOs.

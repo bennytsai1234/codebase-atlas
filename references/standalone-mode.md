@@ -46,6 +46,8 @@ reasons.
 
 ## Workflows
 
-Generate bug, feature, optimization, investigation, refactor, and validation
-workflows. Each workflow must require future work to locate the owning module or
-boundary in the atlas before editing code or reporting findings.
+Generate introduction, bug, feature, optimization, investigation, refactor, and
+validation workflows. Each workflow must require future work to start from the
+atlas before editing code or reporting findings. The introduction workflow
+should explain what the project does in plain language, not produce a full
+architecture report.

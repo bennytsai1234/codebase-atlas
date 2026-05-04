@@ -28,19 +28,23 @@
 1. Update atlas docs if structure, ownership, APIs, or flows changed.
 1. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
-## Pre-Edit Summary (The Trust Bridge)
+## Before / After Gate
 
-Before editing any code, you **must** provide a summary for human confirmation.
-Use plain language to build a bridge of trust. Do not proceed until the plan is
-verified:
+When this workflow is invoked, do not edit code first. Analyze the refactor
+using the atlas and code inspection, then provide an analysis report for human
+confirmation.
 
-- **Intent**: Why is this refactor necessary?
-- **The Map**: Which modules are changing ownership or boundaries?
-- **Structural Shift (Before vs. After)**:
-    - **Before**: Current ownership, API shape, or structure.
-    - **After**: The new intended structure.
-- **Preservation**: Explicitly state that behavior will remain identical.
-- **Verification**: Tests or checks to run to ensure zero regression.
+The upper part of the report may include engineering details such as ownership,
+boundaries, likely files, risks, and checks. The final part must be only a
+plain-language Before / After summary:
+
+- **Before**: Explain the current structure or ownership and what makes it hard
+  to work with.
+- **After**: Explain what structure or ownership the refactor will create while
+  preserving behavior.
+
+Wait for explicit user confirmation after the Before / After summary before
+editing files for the refactor.
 
 ## Delivery Policy
 

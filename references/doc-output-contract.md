@@ -33,7 +33,7 @@ and says to use Codebase Atlas, ask all initial decisions before the full scan:
    reference-assisted, get the reference path, URL, or artifact.
 1. After each generated workflow finishes, should it do no commit, commit only,
    or commit and push?
-1. In reference-assisted mode, should feature parity workflow docs be enabled?
+1. In reference-assisted mode, should feature parity be enabled?
    Default to disabled unless the user explicitly wants parity, compatibility,
    migration equivalence, or reference-driven feature expansion.
 
@@ -100,6 +100,7 @@ docs/
   <project>_index.md
   <project>/
     <module_slug>.md
+  <project>_introduction_workflow.md
   <project>_bug_workflow.md
   <project>_feature_workflow.md
   <project>_optimization_workflow.md
@@ -115,16 +116,18 @@ docs/
   <project>_<reference>_index.md
   <project>_<reference>/
     <module_slug>.md
+  <project>_<reference>_introduction_workflow.md
   <project>_<reference>_bug_workflow.md
+  <project>_<reference>_feature_workflow.md
   <project>_<reference>_optimization_workflow.md
   <project>_<reference>_investigation_workflow.md
   <project>_<reference>_refactor_workflow.md
   <project>_<reference>_validation_workflow.md
 ```
 
-Add `<project>_<reference>_feature_workflow.md` only when `feature_parity` is
-enabled because the user explicitly asks for feature parity, compatibility,
-migration equivalence, or reference-driven feature expansion.
+In reference-assisted mode, always generate the feature workflow for new target
+project behavior. When `feature_parity` is disabled, the feature workflow must
+state that the reference is guidance, not a feature backlog.
 
 ## Index Document
 
@@ -175,25 +178,36 @@ Each workflow must tell future agents how to:
 - Start from the index.
 - Choose the module or boundary.
 - Inspect code after reading atlas context.
+- Treat explicit invocation of the workflow as an analysis gate before edits.
+  The agent may inspect code, read docs, run non-destructive checks, and reason
+  through engineering details, but it must not edit files for the requested
+  change until the user confirms.
 - When a task crosses modules, choose one primary owning module based on where
   responsibility, state, data, or behavior first belongs or first becomes wrong.
   Treat other modules as boundary modules and keep those changes minimal unless
   the user explicitly asks for a broader refactor.
 - Continue development from the generated workflow docs, not by running
   Codebase Atlas, unless the user explicitly asks for a full rebuild.
-- Summarize planned changes before broad edits when user confirmation is
-  expected, including before/after behavior, user-visible behavior, internal
-  responsibility split, primary module, boundary modules, and checks to run. If
-  user or project rules require confirmation, wait after the summary.
+- The analysis report may include engineering details such as module ownership,
+  affected files, risks, and validation notes, but its final user-facing section
+  must be a short plain-language Before / After summary:
+  - `Before`: current behavior or state, and what is wrong, confusing, missing,
+    or risky.
+  - `After`: what the agent will change the behavior or state into.
+- Wait for explicit user confirmation after the Before / After summary before
+  editing files for bug, feature, optimization, or refactor work.
 - Update affected atlas docs if structure or ownership changes.
 - Finish according to the recorded delivery policy: no commit, commit only, or
   commit and push.
 
 Generate these workflow types:
 
+- Introduction: explain what the project does in plain language without editing
+  files or turning the explanation into an architecture report.
 - Bug: defects, regressions, crashes, failing tests, or unstable behavior.
-- Feature: new target-project behavior. In reference-assisted mode, generate
-  only for explicit feature parity or reference-driven expansion.
+- Feature: new target-project behavior. In reference-assisted mode, the
+  reference may guide boundaries and patterns, but it is not a feature backlog
+  unless feature parity was explicitly enabled.
 - Optimization: improve existing behavior, reliability, clarity,
   maintainability, or performance without unrelated features.
 - Investigation: understand unclear behavior, ownership, feasibility, or root
@@ -212,9 +226,12 @@ Before finishing an atlas initialization or rebuild, check the Markdown directly
 - The index records one-time usage guidance, rebuild semantics, module links,
   workflow links, routing-oriented module summaries, and delivery policy.
 - Each workflow records the same delivery policy as the index.
-- Reference-assisted output includes investigation, refactor, validation, bug,
-  and optimization workflows by default, and includes a feature workflow only
-  when `feature_parity` was explicitly enabled.
+- Each code-changing workflow requires a plain-language Before / After summary
+  and explicit user confirmation before edits.
+- Reference-assisted output includes introduction, bug, feature, optimization,
+  investigation, refactor, and validation workflows by default. Feature parity
+  changes only whether the feature workflow may treat the reference as a parity
+  source.
 - Module docs use the required sections for the selected mode.
 - Reference-assisted module docs include target change entry points and known
   risks in addition to reference counterparts and useful patterns.

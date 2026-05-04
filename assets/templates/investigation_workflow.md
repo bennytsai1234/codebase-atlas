@@ -25,10 +25,9 @@
 1. Finish according to this delivery policy when files changed; otherwise
    summarize findings and state that no commit is needed: {{DELIVERY_POLICY}}
 
-## Investigation Summary (The Trust Bridge)
+## Investigation Summary
 
-Before finalizing findings, provide a summary for human review. Use plain
-language to build a bridge of trust:
+Before finalizing findings, provide a plain-language summary for human review:
 
 - **Inquiry**: What specific question or behavior were we investigating?
 - **The Map**: Which modules were traced?
@@ -37,6 +36,10 @@ language to build a bridge of trust:
     - **Hypotheses**: What we suspect but haven't proven yet.
     - **Unknowns**: What remains unclear.
 - **Next Steps**: Recommended implementation workflow (Bug, Feature, etc.).
+
+If the next step would edit files, include a plain-language Before / After
+summary for that proposed change and wait for explicit user confirmation before
+starting follow-up edits.
 
 ## Delivery Policy
 

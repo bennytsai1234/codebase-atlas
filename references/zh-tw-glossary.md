@@ -25,13 +25,16 @@ and product names unchanged.
 - Reference Counterpart: 參考對應
 - Useful Patterns: 可參考模式
 - Target Change Entry Points: 目標專案變更入口
+- Introduction Workflow: 介紹工作流程
 - Bug Workflow: Bug 工作流程
 - Feature Workflow: 功能工作流程
 - Optimization Workflow: 優化工作流程
 - Investigation Workflow: 調查工作流程
 - Refactor Workflow: 重構工作流程
 - Validation Workflow: 驗證工作流程
-- Pre-Edit Summary: 編輯前摘要
+- Before / After Gate: 修改前／修改後閘門
+- Before: 修改前
+- After: 修改後
 - Findings Summary: 調查摘要
 - Validation Summary: 驗證摘要
 - Delivery Policy: 交付政策

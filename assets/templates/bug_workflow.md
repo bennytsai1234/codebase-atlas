@@ -21,20 +21,21 @@
 1. Verify the bug is fixed and update atlas docs if ownership or flows changed.
 1. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
-## Pre-Edit Summary (The Trust Bridge)
+## Before / After Gate
 
-Before editing any code, you **must** provide a summary for human confirmation.
-Use plain language to build a bridge of trust. Do not proceed until the plan is
-verified:
+When this workflow is invoked, do not edit code first. Analyze the bug using the
+atlas and code inspection, then provide an analysis report for human
+confirmation.
 
-- **Symptom**: Describe what is happening in user-visible terms.
-- **Root Cause**: Explain why it is happening (the logical flaw).
-- **The Map**: Name the primary owning module and any affected boundary modules.
-- **The Plan (Before vs. After)**:
-    - **Before**: Current incorrect behavior or logic state.
-    - **After**: Expected correct behavior or logic state after the fix.
-- **Risk Assessment**: Any side effects or risks to boundary modules.
-- **Verification**: Tests or checks that will prove the fix works.
+The upper part of the report may include engineering details such as likely
+module ownership, root cause, affected files, risks, and checks. The final part
+must be only a plain-language Before / After summary:
+
+- **Before**: Explain how the current behavior works and what is wrong.
+- **After**: Explain what behavior the fix will produce.
+
+Wait for explicit user confirmation after the Before / After summary before
+editing files for the fix.
 
 ## Delivery Policy
 

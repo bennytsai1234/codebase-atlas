@@ -34,9 +34,11 @@ Do not use the reference to:
 - Expand scope beyond the user's stated goal.
 - Treat missing target features as bugs.
 
-Only produce feature-parity docs when the user explicitly enables feature
-parity, or asks for parity, compatibility, migration equivalence,
-reference-driven feature expansion, or feature alignment.
+Always produce the feature workflow for new target-project behavior. Enable
+feature parity only when the user explicitly asks for parity, compatibility,
+migration equivalence, reference-driven feature expansion, or feature alignment.
+When feature parity is disabled, the feature workflow must treat the reference
+as guidance, not as a backlog.
 
 ## Documentation Rules
 
@@ -53,7 +55,6 @@ reference-driven feature expansion, or feature alignment.
 
 ## Workflows
 
-Generate bug, optimization, investigation, refactor, and validation workflows by
-default. Add a feature workflow only when feature parity was explicitly enabled
-or the user asked for feature parity, compatibility, migration equivalence, or
-reference-driven feature expansion.
+Generate introduction, bug, feature, optimization, investigation, refactor, and
+validation workflows by default. Feature parity changes only whether the feature
+workflow may treat the reference as a parity source.

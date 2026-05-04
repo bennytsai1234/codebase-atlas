@@ -20,19 +20,21 @@
 1. Update atlas docs if structure, ownership, or risk changed.
 1. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
-## Pre-Edit Summary (The Trust Bridge)
+## Before / After Gate
 
-Before editing any code, you **must** provide a summary for human confirmation.
-Use plain language to build a bridge of trust. Do not proceed until the plan is
-verified:
+When this workflow is invoked, do not edit code first. Analyze the optimization
+target using the atlas and code inspection, then provide an analysis report for
+human confirmation.
 
-- **Target**: What specific behavior, performance, or clarity is being improved?
-- **The Map**: Name the affected module and why it is the right place for this change.
-- **Refinement (Before vs. After)**:
-    - **Before**: The current suboptimal state (be specific about the pain point).
-    - **After**: The expected improved state (be specific about the gain).
-- **Safety**: Confirm that external behavior remains unchanged (regression check).
-- **Verification**: How we will measure or verify the improvement.
+The upper part of the report may include engineering details such as affected
+module, improvement direction, likely files, risks, and checks. The final part
+must be only a plain-language Before / After summary:
+
+- **Before**: Explain the current behavior or structure and why it is suboptimal.
+- **After**: Explain what will be clearer, faster, safer, or easier to maintain.
+
+Wait for explicit user confirmation after the Before / After summary before
+editing files for the optimization.
 
 ## Delivery Policy
 

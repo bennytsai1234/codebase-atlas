@@ -24,10 +24,10 @@
    summarize validation status and state that no commit is needed:
    {{DELIVERY_POLICY}}
 
-## Validation Summary (The Trust Bridge)
+## Validation Summary
 
-Before finalizing the assessment, provide a summary for human review. Use plain
-language to build a bridge of trust:
+Before finalizing the assessment, provide a plain-language summary for human
+review:
 
 - **Scope**: What specific change, fix, or risk are we validating?
 - **The Map**: Which modules are affected?
@@ -35,6 +35,10 @@ language to build a bridge of trust:
     - **Evidence**: What did the tests, logs, or code review show?
     - **Confidence**: How certain are we of the result?
 - **Conclusion**: Pass/Fail or Risk Level (Low/Medium/High).
+
+If the validation recommends a file edit, include a plain-language Before /
+After summary for that proposed change and wait for explicit user confirmation
+before starting follow-up edits.
 
 ## Delivery Policy
 

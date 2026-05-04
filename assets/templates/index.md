@@ -6,9 +6,9 @@
 - Keep this document high level; put details in the module documents.
 - Codebase Atlas is normally run once to initialize this map after the
   development environment is ready.
-- For later bug fixes, features, optimizations, investigations, refactors, or
-  validations, use the generated workflow docs instead of running Codebase Atlas
-  again.
+- For later project introductions, bug fixes, features, optimizations,
+  investigations, refactors, or validations, use the generated workflow docs
+  instead of running Codebase Atlas again.
 - Run Codebase Atlas again only for an explicit rebuild/refresh/rescan; that
   means scanning the full codebase again and rebuilding this index from current
   project reality.

@@ -48,7 +48,7 @@ Codebase Atlas 建立在**「結構化持久性 (Structural Persistence)」**的
 1.  **輸出語言**：繁體中文或英文。
 2.  **Atlas 模式**：獨立模式（以現有代碼為唯一事實）或參考輔助模式（借鏡外部儲存庫或規格書）。
 3.  **交付規則**：為未來任務紀錄規範（不提交、僅提交、或提交並推送）。
-4.  **功能對齊工作流**：（僅限參考輔助模式）是否需要啟用用於遷移對齊或功能擴張的特定工作流。
+4.  **功能對齊**：（僅限參考輔助模式）是否允許參考資料驅動遷移對齊或功能擴張。功能工作流程本身一律產生。
 
 ### 2. Atlas 構建流程
 AI 代理人會深度掃描儲存庫，忽略非原始碼目錄（如 node_modules, dist, .git），並根據產品或架構邊界將程式碼劃分為 6-20 個穩定模組。
@@ -66,6 +66,7 @@ docs/
   <project>_index.md
   <project>/
     <module_slug>.md
+  <project>_introduction_workflow.md
   <project>_bug_workflow.md
   <project>_feature_workflow.md
   <project>_optimization_workflow.md
@@ -80,12 +81,13 @@ docs/
   <project>_<reference>_index.md
   <project>_<reference>/
     <module_slug>.md
+  <project>_<reference>_introduction_workflow.md
   <project>_<reference>_bug_workflow.md
+  <project>_<reference>_feature_workflow.md
   <project>_<reference>_optimization_workflow.md
   <project>_<reference>_investigation_workflow.md
   <project>_<reference>_refactor_workflow.md
   <project>_<reference>_validation_workflow.md
-  <project>_<reference>_feature_workflow.md (選配：用於功能對齊)
 ```
 
 ## 詳細模式選擇
@@ -108,6 +110,7 @@ docs/
 *   **調查行為**：`請讀取 docs/<project>_investigation_workflow.md，調查此邏輯：[描述]`
 *   **系統重構**：`請讀取 docs/<project>_refactor_workflow.md，重構此結構：[描述]`
 *   **變更驗證**：`請讀取 docs/<project>_validation_workflow.md，驗證此改動：[描述]`
+*   **專案介紹**：`請讀取 docs/<project>_introduction_workflow.md，用白話介紹這個專案在做什麼`
 
 ### 為什麼這些工作流有效：以推理取代幻覺
 
