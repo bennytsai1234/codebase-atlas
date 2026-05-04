@@ -48,9 +48,13 @@ here?"
   conditions that should lead future work to each module.
 - Make each module summary 2-4 lines. A single sentence that only names files is
   too thin.
-- Keep the atlas agent-neutral. Do not write the current AI runtime, CLI, model,
-  editor, or chat environment into upstream dependencies or module facts unless
-  it is explicitly present in the repository.
+- Keep the atlas focused on repository-persistent facts. Invocation-local facts,
+  such as the current agent, model, CLI, editor, shell, chat session, temporary
+  workspace state, or session-only tools, must not become module dependencies,
+  flows, risks, or ownership unless committed repo files prove them.
+- Include change routes in module docs. Explain common multi-file update paths:
+  where to start, what must stay synchronized, and which docs/templates/contracts
+  need matching updates.
 - Record known uncertainty explicitly instead of inventing architecture.
 - Include test commands only when they are discoverable from the repo.
 - Use the selected output language and the target project's terminology.

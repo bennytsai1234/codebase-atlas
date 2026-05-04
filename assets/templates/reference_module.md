@@ -8,8 +8,9 @@
 ## Target Upstream/Downstream
 
 - TODO: List direct target dependencies and affected downstream areas. Do not
-  include the current agent, model, CLI, editor, shell, or chat runtime unless it
-  is explicitly part of the target repo.
+  include invocation-local facts such as the current agent, model, CLI, editor,
+  shell, chat session, temporary workspace state, or session-only tools unless
+  committed target files prove them.
 
 ## Reference Counterpart
 
@@ -23,6 +24,12 @@
 
 - TODO: Name the first target files, symbols, routes, commands, or tests to
   inspect for typical changes in this module.
+
+## Target Change Routes
+
+- TODO: Describe common multi-file update paths for this target module. Name
+  where to start and what target/reference docs, templates, contracts,
+  workflows, or module docs must stay synchronized.
 
 ## Known Risks
 

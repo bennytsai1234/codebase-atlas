@@ -96,11 +96,14 @@ Output requirements:
 
 - Keep docs generic to the project; do not add framework assumptions that are not
   visible in the repo.
-- Describe only the target repository and its reference material. Do not write
-  the current agent, model, CLI, editor, shell, or chat runtime into generated
-  docs as an upstream dependency, integration, owner, or project fact. Avoid
-  runtime names such as Gemini, Claude, ChatGPT, Codex, or Cursor unless the repo
-  itself explicitly contains that integration.
+- Describe only repository-persistent facts: facts supported by committed
+  target-repo files, project docs, config, templates, references, commands,
+  public APIs, package metadata, or explicit integrations represented in the
+  repo. Invocation-local facts, such as who ran the skill this time, the current
+  agent, model, CLI, editor, shell, chat session, temporary workspace state, or
+  session-only tools, may guide the scan but must not become atlas content.
+- For every dependency or upstream/downstream note, ask whether a committed file
+  or project doc proves it. If not, remove it or rewrite it generically.
 - Prefer relative links for new docs.
 - Use the selected output language and the target project's terminology.
 - In reference-assisted mode, state that the reference is guidance, not a feature
@@ -115,6 +118,12 @@ Output requirements:
 - Fill each module document with concrete routing facts: owned responsibility,
   representative files, common change entry points, known risks, and do-not-do
   boundaries. A module doc is not complete if it only describes what a file is.
+- Include change routes in each module doc. A change route explains common
+  multi-file update paths, including where to start and what must stay
+  synchronized. For example: "When changing feature parity behavior, start in
+  `references/doc-output-contract.md`, then update
+  `references/reference-assisted-mode.md`, relevant workflow templates, and
+  README text if user-facing behavior changed."
 - State the selected delivery policy in the generated index and every workflow
   doc.
 - In every generated code-changing workflow, make explicit workflow invocation
@@ -128,7 +137,7 @@ Output requirements:
   use the reference for guidance, but it must not treat the reference as a
   feature backlog unless `feature_parity` is true.
 - Apply the final validation checklist in `references/doc-output-contract.md`.
-- During final validation, search the generated docs for accidental runtime
-  leakage such as `Gemini`, `Claude`, `ChatGPT`, `Codex`, or `Cursor`; remove
-  these names unless they are real project facts found in source files.
+- During final validation, inspect each module dependency, flow, risk, and
+  change route. Remove invocation-local facts unless they are proven by committed
+  repo files or project docs.
 - After writing, summarize created and updated files plus any remaining TODOs.

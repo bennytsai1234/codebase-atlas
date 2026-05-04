@@ -13,8 +13,9 @@
 ## Upstream Dependencies
 
 - TODO: List project facts only: inputs, dependencies, callers, data sources, and
-  external systems. Do not include the current agent, model, CLI, editor, shell,
-  or chat runtime unless it is explicitly part of the repo.
+  external systems. Do not include invocation-local facts such as the current
+  agent, model, CLI, editor, shell, chat session, temporary workspace state, or
+  session-only tools unless committed repo files prove them.
 
 ## Downstream Impact
 
@@ -28,6 +29,12 @@
 
 - TODO: Name the first files, symbols, templates, docs, or commands to inspect
   for typical future tasks in this module.
+
+## Change Routes
+
+- TODO: Describe common multi-file update paths for this module. Name where to
+  start and what must stay synchronized, such as contracts, mode guides,
+  templates, README text, workflow docs, or module docs.
 
 ## Known Risks
 

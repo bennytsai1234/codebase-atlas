@@ -51,16 +51,22 @@ before the full scan and resolve whether `feature_parity` is enabled.
 
 ## Source Of Truth
 
-- Generated docs must describe the target repository, not the current chat
-  session, model, CLI, editor, shell, or agent runtime.
-- Do not name the executing tool or model as an upstream dependency,
-  integration, owner, or project fact. Avoid names such as Gemini, Claude,
-  ChatGPT, Codex, Cursor, or any other runtime unless the target repo itself
-  explicitly contains that integration and it matters to the module.
-- If a source file says "AI agent" generically, keep it generic. Do not replace
-  it with the current agent's name.
-- If unsure whether something is a project fact or only execution context, omit
-  it from the atlas.
+Generated docs must describe repository-persistent facts, not invocation-local
+facts.
+
+Repository-persistent facts are supported by committed target-repo files,
+project docs, config, templates, references, commands, public APIs, package
+metadata, or explicit integrations represented in the repo.
+
+Invocation-local facts depend on who ran Codebase Atlas this time, such as the
+current agent, model, CLI, editor, shell, chat session, temporary workspace
+state, or tools available only in this session.
+
+Use invocation-local facts to execute the scan when needed, but do not write
+them into module scope, upstream dependencies, downstream impact, ownership,
+risks, or key flows. For every dependency or upstream/downstream note, ask:
+"Can I point to a committed file or project doc that proves this?" If not,
+remove it or rewrite it generically.
 
 ## Language
 
@@ -171,6 +177,7 @@ Use these sections:
 - Downstream Impact
 - Key Flows
 - Common Change Entry Points
+- Change Routes
 - Known Risks
 - Do Not Do
 
@@ -180,6 +187,8 @@ Each module document must include inspected, concrete routing facts:
 - `Scope`: representative files, folders, commands, public APIs, or entrypoints.
 - `Common Change Entry Points`: the first files or symbols to inspect for likely
   future tasks.
+- `Change Routes`: common multi-file update paths, including what to edit first
+  and what must stay synchronized.
 - `Known Risks`: facts that affect future edits, such as stale docs, missing
   tests, unclear ownership, brittle state, or contract/template drift.
 
@@ -195,6 +204,7 @@ Use these sections:
 - Reference Counterpart
 - Useful Patterns
 - Target Change Entry Points
+- Target Change Routes
 - Known Risks
 - Do Not Do
 
@@ -250,8 +260,9 @@ Before finishing an atlas initialization or rebuild, check the Markdown directly
 
 - No unreplaced template placeholders remain, such as `{{ATLAS_TITLE}}`.
 - Relative links point to generated files that exist.
-- No generated doc treats the current agent, model, CLI, editor, shell, or chat
-  runtime as a project dependency or module fact.
+- Generated docs contain only repository-persistent facts in module scope,
+  dependencies, ownership, risks, and flows. Any invocation-local fact is omitted
+  or rewritten generically.
 - The index records one-time usage guidance, rebuild semantics, module links,
   workflow links, routing-oriented module summaries, and delivery policy.
 - Index module summaries are 2-4 lines each and tell future agents when to start

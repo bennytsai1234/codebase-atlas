@@ -23,6 +23,19 @@ Current AI tools typically rediscover the codebase in every session, causing sig
 *   **The Architect (Strong Model Initialization)**: Use the strongest model available to perform a deep, one-time scan. We strongly recommend GPT-5.5 or a comparable frontier-level model for atlas initialization and rebuilds, so module boundaries, workflow docs, and Before / After gates are generated coherently and followed consistently.
 *   **The Worker (Standard Model Execution)**: Once the Atlas exists, daily development tasks can be handled by more cost-effective models. These models follow the "architect's" pre-defined maps and workflows, achieving high-quality results with minimal context overhead.
 
+### Initialization Model Benchmark
+
+We tested Codebase Atlas by asking different models to bootstrap this repository's own atlas. Scores reflect the quality of the generated `docs/` for initialization and rebuild work, not the model's general usefulness for everyday coding.
+
+| Model | Score | Recommendation |
+| --- | ---: | --- |
+| GPT-5.5 | 95/100 | Recommended for atlas initialization and rebuilds. |
+| Mini Max M 2.7 | 88/100 | Not recommended for initialization; acceptable output, but weaker as the architecture-setting model. |
+| Gemini 3 Flash | 87/100 | Not recommended for initialization; output was usable but too thin for a durable engineering map. |
+| Gemini 3.1 Pro | 82/100 | Not recommended for initialization; it missed important atlas-quality constraints in testing. |
+
+For daily follow-up work after a strong atlas already exists, standard models may still be useful. For creating or rebuilding the atlas itself, prefer GPT-5.5 or a comparable frontier-level model.
+
 ## Design Philosophy & System Architecture
 
 Codebase Atlas is built on the principle of **"Structural Persistence"**. Unlike RAG (Retrieval-Augmented Generation) which slices code into fragmented chunks, Codebase Atlas distills the repository into a hierarchical, semantically meaningful map.
