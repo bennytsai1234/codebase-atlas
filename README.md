@@ -1,10 +1,10 @@
 # Codebase Atlas
 
-**A precise navigation protocol for AI agents and an engineering architecture governance system for human engineers.**
+**An AI navigation protocol focused on verifiable problem-solving. It uses durable maps and Human-in-the-Loop workflows to ensure AI agents truly understand and locate issues before execution.**
 
 ## Vision
 
-Codebase Atlas is a systematic protocol designed to solve the common issues of "context loss" and "architectural drift" encountered by AI agents when working with large and complex codebases. It is not merely a documentation generator, but an engineering solution that transforms project intelligence from volatile conversation context into durable, versionable assets.
+Codebase Atlas is an engineering protocol that ensures AI agents accurately identify and solve real problems. It replaces "blind editing" with "map-based reasoning" and human confirmation. By forcing agents to provide plain-language summaries of their intent and "before vs. after" plans, it allows human engineers to instinctively verify if the AI has truly grasped the bug or requirement, eliminating hallucinations through deliberate collaboration.
 
 Through this system, developers can establish a complete "navigation layer" for AI agents, enabling them to understand module boundaries, dependencies, potential risks, and mandatory engineering standards before they start modifying code.
 
