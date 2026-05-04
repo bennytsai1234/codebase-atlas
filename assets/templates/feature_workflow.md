@@ -22,18 +22,19 @@
    changed.
 1. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
-## Pre-Edit Summary
+## Pre-Edit Summary (The Trust Bridge)
 
-When user confirmation is expected, summarize this and wait if the user or
-project rules require confirmation before edits:
+Before editing any code, you **must** provide a summary for human confirmation.
+Use plain language to build a bridge of trust. Do not proceed until the plan is
+verified:
 
-- Original request
-- Primary owning module and boundary modules
-- Included and excluded scope
-- Implementation approach
-- Behavior before and after, including user-visible behavior and internal
-  responsibility split
-- Tests or checks to run
+- **Goal**: Summarize the new behavior in plain language.
+- **The Map**: Name the primary owning module and boundary modules.
+- **Design (Before vs. After)**:
+    - **Before**: Current state of the system without this feature.
+    - **After**: How the system will behave and feel once implemented.
+- **Impact**: How this feature interacts with existing module responsibilities.
+- **Verification**: How we will prove the feature is complete and correct.
 
 ## Delivery Policy
 

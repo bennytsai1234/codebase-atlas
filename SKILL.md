@@ -136,6 +136,18 @@ paths, command names, API names, and product names unchanged.
 Never blindly overwrite existing docs. If an atlas file already exists, inspect
 it and update it intentionally while preserving useful project-specific content.
 
+## Core Philosophy: Verifiable Problem-Solving
+
+This skill is governed by three pillars to ensure accuracy and trust:
+
+1.  **Map-Based Reasoning**: Never guess. Always use the Atlas index and module
+    docs to locate the context before inspecting code.
+2.  **The Trust Bridge**: AI must use plain language to explain its
+    understanding and intent. Complexity is a sign of poor understanding.
+3.  **Human-in-the-Loop (HITL)**: The AI proposes, the human confirms. No
+    significant code edit should occur without a verified plan that describes
+    the "before vs. after" state.
+
 ## Atlas Usage For Later Code Changes
 
 When an atlas exists, use it as the first navigation layer for future work:

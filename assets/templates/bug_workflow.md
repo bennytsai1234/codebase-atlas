@@ -21,19 +21,20 @@
 1. Verify the bug is fixed and update atlas docs if ownership or flows changed.
 1. Finish according to this delivery policy: {{DELIVERY_POLICY}}
 
-## Pre-Edit Summary
+## Pre-Edit Summary (The Trust Bridge)
 
-When user confirmation is expected, summarize this and wait if the user or
-project rules require confirmation before edits:
+Before editing any code, you **must** provide a summary for human confirmation.
+Use plain language to build a bridge of trust. Do not proceed until the plan is
+verified:
 
-- Symptom
-- Root cause hypothesis or confirmed root cause
-- Primary owning module and any boundary modules
-- Files likely to change
-- Behavior before and after, including user-visible behavior and internal
-  responsibility split
-- Reason for any cross-module or boundary change
-- Tests or checks to run
+- **Symptom**: Describe what is happening in user-visible terms.
+- **Root Cause**: Explain why it is happening (the logical flaw).
+- **The Map**: Name the primary owning module and any affected boundary modules.
+- **The Plan (Before vs. After)**:
+    - **Before**: Current incorrect behavior or logic state.
+    - **After**: Expected correct behavior or logic state after the fix.
+- **Risk Assessment**: Any side effects or risks to boundary modules.
+- **Verification**: Tests or checks that will prove the fix works.
 
 ## Delivery Policy
 
