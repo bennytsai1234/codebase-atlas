@@ -20,7 +20,7 @@ While heavy code intelligence systems (such as graph-based parsing engines or ex
 
 Current AI tools typically rediscover the codebase in every session, causing significant waste of computational resources and tokens. Codebase Atlas advocates a strategic separation of roles:
 
-*   **The Architect (Strong Model Initialization)**: Use the strongest model available to perform a deep, one-time scan. This model acts as a senior architect, identifying hidden patterns, module boundaries, and cross-module impacts to create the Atlas.
+*   **The Architect (Strong Model Initialization)**: Use the strongest model available to perform a deep, one-time scan. We strongly recommend GPT-5.5 or a comparable frontier-level model for atlas initialization and rebuilds, so module boundaries, workflow docs, and Before / After gates are generated coherently and followed consistently.
 *   **The Worker (Standard Model Execution)**: Once the Atlas exists, daily development tasks can be handled by more cost-effective models. These models follow the "architect's" pre-defined maps and workflows, achieving high-quality results with minimal context overhead.
 
 ## Design Philosophy & System Architecture
