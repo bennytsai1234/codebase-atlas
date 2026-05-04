@@ -8,72 +8,96 @@ Codebase Atlas is a systematic protocol designed to solve the common issues of "
 
 Through this system, developers can establish a complete "navigation layer" for AI agents, enabling them to understand module boundaries, dependencies, potential risks, and mandatory engineering standards before they start modifying code.
 
-## Core Value
+## Core Value: The "Initialize Once, Reuse Often" Strategy
 
-### 1. Reducing Architectural Hallucinations
-AI agents, when lacking a global perspective, often make changes that break module encapsulation or introduce circular dependencies. Codebase Atlas forces the AI to read a defined "map" before starting a task, ensuring all changes align with the intended design.
+Current AI tools typically rediscover the codebase in every session, causing significant waste of computational resources and tokens. Codebase Atlas advocates a strategic separation of roles:
 
-### 2. Intelligence Persistence and Leverage
-Current AI tools typically rediscover the codebase in every session, causing significant waste of computational resources and tokens. Codebase Atlas advocates a "one-time deep initialization" strategy, solidifying the analysis results of the **strongest available model** so that subsequent daily tasks can receive high-quality guidance at a lower cost.
-
-### 3. Engineering Governance and Workflow Standardization
-The system produces not just static documentation, but dynamic workflow guides for different development scenarios (e.g., Bug Fix, Feature Expansion, System Refactoring), embedding the team's engineering standards directly into the AI's execution path.
+*   **The Architect (Strong Model Initialization)**: Use the strongest model available to perform a deep, one-time scan. This model acts as a senior architect, identifying hidden patterns, module boundaries, and cross-module impacts to create the Atlas.
+*   **The Worker (Standard Model Execution)**: Once the Atlas exists, daily development tasks can be handled by more cost-effective models. These models follow the "architect's" pre-defined maps and workflows, achieving high-quality results with minimal context overhead.
 
 ## Operating Model
 
-Codebase Atlas follows a "Initialize Once, Reuse Often" mechanism:
+### 1. Initialization and Decision Making
+When the protocol is first activated, the AI agent will not scan immediately. It must first resolve four critical decisions with the user to ensure the Atlas matches project requirements:
 
-1.  **Atlas Construction (Initialization)**:
-    Performed during project startup or major architectural changes. It is highly recommended to use the **strongest model available** in your environment for this stage's deep scanning and logical reasoning, ensuring the resulting map has sufficient strategic depth and accuracy.
+1.  **Output Language**: Traditional Chinese or English.
+2.  **Atlas Mode**: Standalone (sole source of truth) or Reference-Assisted (learning from an external repository or spec).
+3.  **Delivery Policy**: Recorded rule for future tasks (No commit, Commit only, or Commit and Push).
+4.  **Feature Parity Workflow**: (Reference-Assisted mode only) Whether to enable specific workflows for migration equivalence or feature expansion.
 
-2.  **Daily Navigation (Navigation)**:
-    Once the map is established, Codebase Atlas should not be run again for standard development tasks. Instead, AI agents are directed to read the generated `docs/` files and follow the workflows within. This allows lighter or more cost-effective models to perform precise code development aided by a high-quality map.
+### 2. Atlas Construction
+The AI agent performs a deep scan of the repository, ignoring non-source directories (e.g., node_modules, dist, .git), and organizes the codebase into 6-20 stable modules based on product or architectural boundaries.
 
-3.  **Full Rebuild**:
-    Codebase Atlas is only invoked again when the user explicitly requests to rescan, refresh, or rebuild the atlas.
+### 3. Workflow Implementation
+The system embeds specific engineering standards into the execution path of future AI tasks, ensuring every change is validated and documented according to the Atlas.
 
 ## Output Structure
 
-The generated atlas is stored in the `docs/` folder at the project root, following strict naming conventions:
+The generated atlas is stored in the `docs/` folder at the project root:
 
-*   **Project Index (`_index.md`)**: Defines the project overview, delivery policy, module summaries, and workflow entry points.
-*   **Module Documentation (`docs/project/module.md`)**: Details the current state, scope, upstream dependencies, and downstream impact of each functional module.
-*   **Workflow Guides (`_workflow.md`)**: Specific guides for Bug Fix, Feature, Optimization, Investigation, Refactor, and Validation, including pre-change checklists and post-change validation standards.
+### Standalone Output
+```text
+docs/
+  <project>_index.md
+  <project>/
+    <module_slug>.md
+  <project>_bug_workflow.md
+  <project>_feature_workflow.md
+  <project>_optimization_workflow.md
+  <project>_investigation_workflow.md
+  <project>_refactor_workflow.md
+  <project>_validation_workflow.md
+```
 
-## Modes
+### Reference-Assisted Output
+```text
+docs/
+  <project>_<reference>_index.md
+  <project>_<reference>/
+    <module_slug>.md
+  <project>_<reference>_bug_workflow.md
+  <project>_<reference>_optimization_workflow.md
+  <project>_<reference>_investigation_workflow.md
+  <project>_<reference>_refactor_workflow.md
+  <project>_<reference>_validation_workflow.md
+  <project>_<reference>_feature_workflow.md (Optional: for parity)
+```
 
-*   **Standalone Mode**: Uses the target codebase as the sole source of truth, building a pure description of the status quo.
-*   **Reference-Assisted Mode**: Used when the project needs to refer to another baseline repository, API specification, or design document. This mode emphasizes "learning" rather than "feature parity" unless explicitly requested.
+## Detailed Mode Selection
 
-## Installation and Getting Started
+### Standalone Mode
+Use this when the target project is its own primary source of truth. The AI focuses exclusively on the existing code to derive boundaries and flows.
 
-### Installation
+### Reference-Assisted Mode
+Use this when the target project should be understood alongside a reference repository, folder, API specification, or design document.
+*   **Guidance over Parity**: By default, the reference is used for architecture, boundaries, and stability patterns. It does not turn into a feature-parity backlog unless explicitly requested.
+*   **Ideal for**: Migrations, refactoring toward a standard, or implementing a specific API pattern.
 
-1.  Clone this repository to your development environment:
-    ```bash
-    git clone https://github.com/bennytsai1234/codebase-atlas.git
-    ```
+## Standard Development Workflows
 
-2.  Ensure your AI agent (e.g., Cursor, Claude Code, Windsurf) has permission to read files.
+After the atlas exists, do not run Codebase Atlas again for ordinary development. Use the generated workflow docs to guide the AI:
 
-### Initialization Guide
-
-Direct your AI agent to execute the following command (using the strongest model during the initialization phase):
-
-> Read `/path/to/codebase-atlas/SKILL.md` and use the Codebase Atlas protocol to build a map for this repository. Before scanning starts, resolve initial decisions regarding language (English or Traditional Chinese), mode, and delivery policy.
-
-### Daily Development
-
-Once the map is built, point the AI directly to the generated documents for specific tasks:
-
-> Read `docs/target_bug_workflow.md` and follow its specifications to fix the following issue: [Issue Description]
+*   **Bug Fix**: `Read docs/<project>_bug_workflow.md and follow it to fix this bug: [description]`
+*   **Feature Expansion**: `Read docs/<project>_feature_workflow.md and follow it to implement: [description]`
+*   **Optimization**: `Read docs/<project>_optimization_workflow.md to improve: [description]`
+*   **Investigation**: `Read docs/<project>_investigation_workflow.md to understand: [description]`
+*   **Refactor**: `Read docs/<project>_refactor_workflow.md to restructure: [description]`
+*   **Validation**: `Read docs/<project>_validation_workflow.md to verify: [description]`
 
 ## Technical Features
 
-*   **Language Agnostic**: Not tied to specific programming languages or frameworks.
-*   **Text-Only Design**: Entirely Markdown-based, requiring no additional databases or runtimes.
-*   **Bilingual Support**: Supports Traditional Chinese and English output with a built-in glossary for consistency.
-*   **Delivery Policy Control**: Define `no commit`, `commit only`, or `commit and push` for automated workflows.
+*   **Agent-Neutral Protocol**: Works with any AI agent capable of reading and editing Markdown files.
+*   **Text-Only Portability**: No dependencies on databases, scripts, or specific runtimes.
+*   **Bilingual Consistency**: Includes a Traditional Chinese glossary to maintain professional terminology.
+*   **Boundary Enforcement**: Explicitly identifies "Common Change Entry Points" and "Known Risks" per module.
+
+## Installation
+
+1.  Clone this repository:
+    ```bash
+    git clone https://github.com/bennytsai1234/codebase-atlas.git
+    ```
+2.  Point your AI agent to the `SKILL.md` file within the cloned directory.
 
 ## License
 
