@@ -129,14 +129,17 @@ parity should be enabled.
 1. Validate that generated docs describe the target project only. Remove current
    runtime names or assumptions, thin one-line module summaries, stale links, and
    any workflow that misses the Before / After gate or atlas-update rule.
+1. Run `references/atlas-quality-checklist.md` as the final human-readable
+   quality gate before reporting completion.
 
 ## Skeleton Prompt
 
 When creating a new atlas or adding missing atlas files, read
 `references/create-doc-skeleton-prompt.md` and use it as the generation
-checklist. Prefer direct file edits with the bundled templates. Do not generate
-automation for this task unless the user explicitly asks for automation outside
-the skill itself.
+checklist, then finish with `references/atlas-quality-checklist.md`. Prefer
+direct file edits with the bundled templates. Do not generate automation for
+this task unless the user explicitly asks for automation outside the skill
+itself.
 
 The bundled templates are English starting shapes. When the selected output
 language is Traditional Chinese, translate headings and prose and optionally read

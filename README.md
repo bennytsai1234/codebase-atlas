@@ -4,7 +4,7 @@
 
 ## Vision
 
-Codebase Atlas is an engineering protocol that ensures AI agents accurately identify and solve real problems. It replaces "blind editing" with "map-based reasoning" and human confirmation. By forcing agents to provide plain-language summaries of their intent and "before vs. after" plans, it allows human engineers to instinctively verify if the AI has truly grasped the bug or requirement, eliminating hallucinations through deliberate collaboration.
+Codebase Atlas is an engineering protocol that ensures AI agents accurately identify and solve real problems. It replaces "blind editing" with "map-based reasoning" and human confirmation. By forcing agents to provide plain-language summaries of their intent and "before vs. after" plans, it allows human engineers to instinctively verify if the AI has truly grasped the bug or requirement, making possible hallucinations visible and catchable before execution.
 
 Through this system, developers can establish a complete "navigation layer" for AI agents, enabling them to understand module boundaries, dependencies, potential risks, and mandatory engineering standards before they start modifying code.
 
@@ -23,18 +23,11 @@ Current AI tools typically rediscover the codebase in every session, causing sig
 *   **The Architect (Strong Model Initialization)**: Use the strongest model available to perform a deep, one-time scan. We strongly recommend GPT-5.5 or a comparable frontier-level model for atlas initialization and rebuilds, so module boundaries, workflow docs, and Before / After gates are generated coherently and followed consistently.
 *   **The Worker (Standard Model Execution)**: Once the Atlas exists, daily development tasks can be handled by more cost-effective models. These models follow the "architect's" pre-defined maps and workflows, achieving high-quality results with minimal context overhead.
 
-### Initialization Model Benchmark
+### Recommended Initialization Model
 
-We tested Codebase Atlas by asking different models to bootstrap this repository's own atlas. Scores reflect the quality of the generated `docs/` for initialization and rebuild work, not the model's general usefulness for everyday coding.
+Codebase Atlas initialization is an architecture-setting task: the model must hold cross-file constraints, preserve workflow gates, and write consistent module boundaries. For atlas initialization and rebuilds, prefer GPT-5.5 or a comparable frontier-level model.
 
-| Model | Score | Recommendation |
-| --- | ---: | --- |
-| GPT-5.5 | 95/100 | Recommended for atlas initialization and rebuilds. |
-| Mini Max M 2.7 | 88/100 | Not recommended for initialization; acceptable output, but weaker as the architecture-setting model. |
-| Gemini 3 Flash | 87/100 | Not recommended for initialization; output was usable but too thin for a durable engineering map. |
-| Gemini 3.1 Pro | 82/100 | Not recommended for initialization; it missed important atlas-quality constraints in testing. |
-
-For daily follow-up work after a strong atlas already exists, standard models may still be useful. For creating or rebuilding the atlas itself, prefer GPT-5.5 or a comparable frontier-level model.
+Smaller or faster models may still be useful for daily follow-up work after a strong atlas exists, because they can follow the generated workflow docs. They are not recommended as the primary initializer unless a human reviews the generated module split, workflow gates, delivery policy, and known-risk notes carefully.
 
 ## Design Philosophy & System Architecture
 
@@ -103,6 +96,15 @@ docs/
   <project>_<reference>_validation_workflow.md
 ```
 
+### Self-Bootstrap Example
+
+This repository includes a self-bootstrap atlas under `docs/`. It is both a usable navigation layer for this project and a concrete example of the expected output shape:
+
+*   Start with `docs/codebase_atlas_index.md`.
+*   Module notes live under `docs/codebase_atlas/`.
+*   Workflow docs live beside the index, such as `docs/codebase_atlas_bug_workflow.md`.
+*   The initialization quality checklist is stored in `references/atlas-quality-checklist.md`.
+
 ## Detailed Mode Selection
 
 ### Standalone Mode
@@ -129,7 +131,7 @@ Once the Atlas is established, **do not run Codebase Atlas again for daily devel
 
 The effectiveness of Codebase Atlas lies in its **Map-Based Reasoning** and **Human-in-the-Loop (HITL)** design:
 
-1.  **Precision Localization**: Instead of guessing where a bug might be, the AI uses the Atlas index and module notes to identify the exact "Change Entry Points" and "Downstream Impacts." The map provides the context that eliminates generic hallucinations.
+1.  **Precision Localization**: Instead of guessing where a bug might be, the AI uses the Atlas index and module notes to identify the exact "Change Entry Points" and "Downstream Impacts." The map provides the context that makes generic hallucinations easier to detect before edits begin.
 2.  **Deliberate Analysis**: Every workflow requires the AI to first summarize its understanding, identify the relevant modules, and propose a specific plan. This forces the AI to "think" and "trace" before it ever touches a line of code.
 3.  **Human as the Final Gatekeeper**: The protocol is designed so that the AI presents its analysis and plan to the human user for confirmation. This HITL approach ensures that the AI's logic is sound and that it truly understands the problem before execution begins.
 4.  **Verification of Intent**: By requiring a summary-first approach, the user can immediately detect if the AI has misinterpreted the bug or the requirements, preventing costly rework and ensuring the final solution is both accurate and safe.
@@ -148,6 +150,9 @@ The effectiveness of Codebase Atlas lies in its **Map-Based Reasoning** and **Hu
     git clone https://github.com/bennytsai1234/codebase-atlas.git
     ```
 2.  Point your AI agent to the `SKILL.md` file within the cloned directory.
+3.  For a first run, ask the agent to initialize Codebase Atlas for the target repository. The agent should resolve output language, atlas mode, delivery policy, and reference-assisted feature parity before scanning.
+4.  After the atlas exists, use the generated workflow docs directly. For example: `Read docs/<project>_bug_workflow.md and follow it to fix this bug: [description]`.
+5.  Re-run Codebase Atlas only when you explicitly want a full rebuild, refresh, regenerate, or rescan of the atlas.
 
 ## License
 

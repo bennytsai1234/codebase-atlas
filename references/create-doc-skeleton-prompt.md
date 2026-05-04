@@ -137,6 +137,8 @@ Output requirements:
   use the reference for guidance, but it must not treat the reference as a
   feature backlog unless `feature_parity` is true.
 - Apply the final validation checklist in `references/doc-output-contract.md`.
+- Run `references/atlas-quality-checklist.md` as the final human-readable
+  quality gate for the generated atlas.
 - During final validation, inspect each module dependency, flow, risk, and
   change route. Remove invocation-local facts unless they are proven by committed
   repo files or project docs.

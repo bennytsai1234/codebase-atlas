@@ -258,6 +258,8 @@ Generate these workflow types:
 
 Before finishing an atlas initialization or rebuild, check the Markdown directly:
 
+- Run `references/atlas-quality-checklist.md` as the final human-readable
+  quality gate after creating or updating the atlas.
 - No unreplaced template placeholders remain, such as `{{ATLAS_TITLE}}`.
 - Relative links point to generated files that exist.
 - Generated docs contain only repository-persistent facts in module scope,
