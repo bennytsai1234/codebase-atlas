@@ -100,7 +100,7 @@ Use this when the target project should be understood alongside a reference repo
 
 ## Standard Development Workflows
 
-After the atlas exists, do not run Codebase Atlas again for ordinary development. Use the generated workflow docs to guide the AI:
+Once the Atlas is established, **do not run Codebase Atlas again for daily development.** Rerunning the full scan is a waste of resources. Instead, use the generated workflow documents to guide the AI. These workflows are designed to turn the AI into a thoughtful collaborator rather than a reckless editor.
 
 *   **Bug Fix**: `Read docs/<project>_bug_workflow.md and follow it to fix this bug: [description]`
 *   **Feature Expansion**: `Read docs/<project>_feature_workflow.md and follow it to implement: [description]`
@@ -108,6 +108,15 @@ After the atlas exists, do not run Codebase Atlas again for ordinary development
 *   **Investigation**: `Read docs/<project>_investigation_workflow.md to understand: [description]`
 *   **Refactor**: `Read docs/<project>_refactor_workflow.md to restructure: [description]`
 *   **Validation**: `Read docs/<project>_validation_workflow.md to verify: [description]`
+
+### Why These Workflows Work: Reasoning Over Hallucination
+
+The effectiveness of Codebase Atlas lies in its **Map-Based Reasoning** and **Human-in-the-Loop (HITL)** design:
+
+1.  **Precision Localization**: Instead of guessing where a bug might be, the AI uses the Atlas index and module notes to identify the exact "Change Entry Points" and "Downstream Impacts." The map provides the context that eliminates generic hallucinations.
+2.  **Deliberate Analysis**: Every workflow requires the AI to first summarize its understanding, identify the relevant modules, and propose a specific plan. This forces the AI to "think" and "trace" before it ever touches a line of code.
+3.  **Human as the Final Gatekeeper**: The protocol is designed so that the AI presents its analysis and plan to the human user for confirmation. This HITL approach ensures that the AI's logic is sound and that it truly understands the problem before execution begins.
+4.  **Verification of Intent**: By requiring a summary-first approach, the user can immediately detect if the AI has misinterpreted the bug or the requirements, preventing costly rework and ensuring the final solution is both accurate and safe.
 
 ## Technical Features
 
