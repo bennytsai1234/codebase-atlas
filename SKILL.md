@@ -1,217 +1,84 @@
 ---
 name: codebase-atlas
-description: Use only when the user asks to initialize, create, rebuild, refresh, regenerate, or rescan a compact repository atlas and workflow docs under docs/ for future code navigation. Supports standalone and reference-assisted scans plus optional thin workflow entrypoints for Codex skills or prompt files. Before a full scan, explain what Codebase Atlas will create and resolve output language, atlas mode, workflow delivery policy, workflow entrypoints, and feature parity preference.
+description: "Use only when the user asks to initialize, create, rebuild, refresh, regenerate, or rescan a compact repository atlas under docs/ for future code navigation. Creates a module index, module notes, and three reusable workflows: understand, change, and validate. Supports standalone and reference-assisted scans, plus optional thin workflow entrypoints when explicitly requested."
 ---
 
 # Codebase Atlas
 
-Turn a repository into a compact engineering map that future work can navigate
-before editing code. Keep the skill generic: do not assume a language,
-framework, product type, app architecture, or reference material format.
+Codebase Atlas turns a repository into a compact engineering map. Use it for
+atlas initialization or a deliberate full rebuild, not for ordinary follow-up
+development.
 
-Use this skill as a one-time initializer, or as an explicit full rebuild
-workflow, for project docs, module maps, dependency and impact summaries, and
-introduction, bug, feature, optimization, investigation, refactor, and
-validation workflows.
-After an atlas exists, ordinary development should use the generated workflow
-docs instead of running this skill again.
+Keep this skill simple:
 
-This skill is intentionally text-only and generic. Do not add helper scripts or
-product-specific assumptions to the skill itself. Create and update atlas files
-by editing Markdown directly.
+- Generated Markdown under `docs/` is the canonical atlas.
+- References define the rules; templates define the output shape.
+- Do not add runtime assumptions, helper scripts, or product-specific behavior
+  to this skill.
+- Write atlas content in English unless the target repository has an explicit
+  language rule.
 
-The canonical atlas is always the generated Markdown under `docs/`. When the
-user explicitly wants command/menu access, the atlas may also generate thin
-tool-specific workflow entrypoints, such as Codex skills or prompt files, that
-point back to the canonical `docs/` workflows. These adapters must not replace
-the `docs/` workflows or duplicate the full workflow body.
+## Before Scanning
 
-Generated atlas docs must also stay agent-neutral. Do not describe the current
-model, CLI, editor, shell, chat runtime, or executing agent as a project
-dependency or module fact unless the target repository explicitly documents that
-integration.
+If the user only asks to run Codebase Atlas on a target repository, pause before
+the full scan and resolve:
 
-## Opening Briefing
+1. **Mode**: standalone, or reference-assisted with a reference path, URL, or
+   artifact.
+2. **Delivery policy** for future workflow runs: no commit, commit only, or
+   commit and push.
+3. **Workflow entrypoints**: docs only by default; generate Codex skills,
+   prompt files, or a custom prompt directory only when explicitly requested.
+4. **Feature parity** only in reference-assisted mode: disabled by default;
+   enabled only for explicit parity, compatibility, migration equivalence, or
+   reference-driven expansion.
 
-Before scanning the whole repo, briefly explain what this skill does in the
-user's language:
+Briefly explain that the skill will scan the repository, create durable
+Markdown docs under `docs/`, and generate workflows for future understanding,
+changes, and validation. After the atlas exists, ordinary work should use those
+generated workflows instead of rerunning this skill.
 
-- It scans the target repository and creates durable Markdown docs under
-  `docs/`.
-- It produces a module index, per-module ownership/dependency notes, known
-  risks, common change entry points, and workflow docs for future work.
-- After the atlas exists, ordinary introduction, bug, feature, optimization,
-  investigation, refactor, and validation work should use the generated workflow
-  docs instead of rerunning Codebase Atlas.
-- If the user wants menu or command access, it can optionally create thin
-  entrypoints for tools such as Codex skills or IDE prompt files. The `docs/`
-  workflows remain the source of truth.
-- In reference-assisted mode, the reference is guidance for boundaries, flows,
-  failure handling, and stabilization. It is not a feature backlog unless the
-  user explicitly asks for feature parity.
+## Main Workflow
 
-If the user's request only says to use Codebase Atlas for a target repo, for
-example "use Codebase Atlas to process reader", do not start the full scan yet.
-Ask for the missing initial decisions first:
+1. Read `references/atlas-contract.md`.
+2. Resolve the initial decisions above.
+3. Inspect the target repository: manifests, entrypoints, source roots, tests,
+   build/config files, existing docs, and major package or domain boundaries.
+4. Read `references/modes.md` and follow either standalone or
+   reference-assisted guidance.
+5. Split the project into 6-20 stable modules, unless the repository is too
+   small for that to be honest.
+6. Create or update the canonical atlas under `docs/` using templates from
+   `assets/templates/`.
+7. Generate exactly three canonical workflow docs:
+   - `understand`: introductions and investigations.
+   - `change`: bugs, features, optimizations, and refactors.
+   - `validate`: checks, reviews, reproductions, and risk assessments.
+8. Generate thin entrypoint adapters only if requested. Adapters must point back
+   to the canonical `docs/` workflow files.
+9. Run `references/quality-checklist.md` before reporting completion.
 
-1. Output language: English or Traditional Chinese.
-1. Atlas mode: standalone, or reference-assisted with the reference path, URL,
-   or artifact.
-1. Workflow delivery policy: no commit, commit only, or commit and push.
-1. Workflow entrypoints: docs only by default, or Codex skills / VS Code prompt
-   files / custom prompt directory when the user explicitly asks for command or
-   menu access.
-1. In reference-assisted mode, whether feature parity is enabled.
-   Default to no unless the user explicitly wants parity, compatibility,
-   migration equivalence, or reference-driven feature expansion.
+## Core Rules
 
-## Usage Model
+- Do not blindly overwrite existing atlas docs. Preserve useful project-specific
+  notes and remove stale boundaries during rebuilds.
+- Generated docs must describe repository-persistent facts, not facts about the
+  current agent, model, editor, shell, chat session, or temporary workspace.
+- Code-changing workflows must require a plain Before / After gate before
+  edits. This gate is the user-facing checkpoint; do not replace it with
+  secondary engineering reports:
+  - **Before**: current state and what is wrong, missing, confusing, or risky.
+  - **After**: what the change will make true.
+- Before proposing a change, calibrate scope: owning module, boundary modules,
+  contracts, shared state, generated artifacts, tests, downstream users, and
+  uncertain surfaces. Use this to reason, not as a substitute for the
+  Before / After gate.
+- Prefer complete, bounded plans over shortcut-oriented local patches.
+- Update affected atlas docs when ownership, APIs, flows, risks, or module
+  boundaries change.
 
-Use this skill to set up the development navigation layer once after the project
-environment is ready.
+## When Not To Use This Skill
 
-- First run: scan the target codebase, create the atlas, and generate the
-  workflow docs under `docs/`.
-- Later introduction, bug, feature, optimization, investigation, refactor, and
-  validation work: do not run this skill again. Open the generated workflow docs
-  and follow them.
-- Run this skill again only when the user explicitly asks to rebuild, refresh,
-  regenerate, or rescan the atlas. Running it again means performing a full codebase
-  scan again and rebuilding the index/module docs from current project reality.
-- When rebuilding, inspect existing atlas docs first, then update them to match
-  the current codebase. Preserve still-accurate project-specific notes, but do
-  not keep stale module boundaries just because they already exist.
-
-## First Decisions
-
-Before scanning the whole repo, read `references/doc-output-contract.md` and
-resolve the initial decisions it defines:
-
-- atlas mode: standalone or reference-assisted
-- output language: English or Traditional Chinese
-- workflow delivery policy: no commit, commit only, or commit and push
-- workflow entrypoints: docs only by default; generate Codex skills, VS Code
-  prompt files, or a custom prompt directory only when explicitly requested
-- feature parity: disabled by default; enabled only for explicit parity,
-  compatibility, migration-equivalence, or reference-driven feature expansion
-  work. The feature workflow is still generated by default; this decision only
-  controls whether the reference can be treated as a parity source.
-
-Infer these from an explicit user request or project rules when they are clear.
-If the user only names the skill and target repo, treat these decisions as
-missing and ask before scanning. If reference-assisted mode is selected, get the
-reference path, URL, or artifact before the full scan and ask whether feature
-parity should be enabled.
-
-## Mode Decision
-
-- Use **standalone mode** when the target project is the only source of truth.
-- Use **reference-assisted mode** when the user provides a reference repo,
-  folder, docs, screenshots, product, API specification, or prior implementation.
-- In reference-assisted mode, treat the reference as guidance for boundaries,
-  flows, failure handling, and stabilization by default. Do not turn it into a
-  feature-parity backlog unless the user explicitly asks for feature parity.
-- Generate feature workflow docs in reference-assisted mode by default. If
-  feature parity is disabled, the feature workflow must treat the reference as
-  guidance, not a backlog.
-- If the user expects a reference but no path or artifact is available, ask for
-  that missing reference. Otherwise continue in standalone mode.
-
-## Core Workflow
-
-1. Read `references/doc-output-contract.md`, give the opening briefing, then
-   resolve the atlas mode, output language, workflow delivery policy, workflow
-   entrypoint preference, feature parity workflow preference, and any required
-   reference material.
-1. Ground in the target project. Inspect manifests,
-   entrypoints, source roots, tests, build/config files, existing docs, and
-   major package boundaries with fast search tools. Apply the scan boundaries in
-   the output contract so generated, vendored, and cache directories do not
-   shape the atlas.
-1. Read exactly one mode guide:
-   - `references/standalone-mode.md`
-   - `references/reference-assisted-mode.md`
-1. Split the project into 6-20 stable modules. Prefer product/domain boundaries
-   when visible; otherwise use architectural or package boundaries.
-1. Create or update the atlas under the target project's `docs/` directory.
-   Preserve existing docs style when updating an existing atlas.
-1. Generate workflow docs that make future project introductions, bug fixes,
-   features, optimizations, investigations, refactors, and validations start from
-   the atlas before code edits.
-1. If workflow entrypoints were requested, generate thin adapters only after the
-   canonical workflow docs exist. Each adapter must point back to its `docs/`
-   workflow and preserve the delivery policy and Before / After gate by
-   reference.
-1. Add usage guidance to the index and workflow docs: future work should use the
-   generated workflows, while running this skill again is reserved for a full atlas
-   rebuild.
-1. Validate that generated docs describe the target project only. Remove current
-   runtime names or assumptions, thin one-line module summaries, stale links, and
-   any workflow that misses the Before / After gate or atlas-update rule.
-1. Run `references/atlas-quality-checklist.md` as the final human-readable
-   quality gate before reporting completion.
-
-## Skeleton Prompt
-
-When creating a new atlas or adding missing atlas files, read
-`references/create-doc-skeleton-prompt.md` and use it as the generation
-checklist, then finish with `references/atlas-quality-checklist.md`. Prefer
-direct file edits with the bundled templates. Do not generate automation for
-this task unless the user explicitly asks for automation outside the skill
-itself.
-
-The bundled templates are English starting shapes. When the selected output
-language is Traditional Chinese, translate headings and prose and optionally read
-`references/zh-tw-glossary.md` for consistent terms. Keep code identifiers, file
-paths, command names, API names, and product names unchanged.
-
-Never blindly overwrite existing docs. If an atlas file already exists, inspect
-it and update it intentionally while preserving useful project-specific content.
-
-## Core Philosophy: Plain Before / After
-
-This skill is governed by one trust rule: when a generated workflow is invoked
-for work that may edit code, the first user-facing result is analysis, not code.
-
-The agent may read atlas docs, inspect code, run non-destructive checks, and use
-engineering details to reason through the task. Before editing source files,
-tests, configuration, or docs for the requested change, it must end the analysis
-with a plain-language Before / After summary and wait for explicit user
-confirmation:
-
-- **Before**: describe the current behavior or state and what is wrong,
-  confusing, missing, or risky.
-- **After**: describe what the agent will change the behavior or state into.
-
-Keep the Before / After summary short and understandable to the user. Module
-names, file paths, risks, validation plans, and other engineering details may be
-included above it when useful, but they are supporting context, not the main
-thing the user must review.
-
-## Atlas Usage For Later Code Changes
-
-When an atlas exists, use it as the first navigation layer for future work:
-
-- For bugs, locate the likely module, read upstream/downstream dependencies, then
-  inspect the failing path in code.
-- For introductions, use the index and only the necessary module docs to explain
-  what the project does in plain language. Do not turn it into an architecture
-  report unless the user asks for that.
-- For features, find the natural owning module and any boundary modules before
-  proposing interfaces or behavior.
-- For optimizations, choose one module and one layer of change at a time unless
-  the user's request explicitly requires a wider refactor.
-- For investigations, read atlas context before tracing code and separate facts,
-  hypotheses, and unknowns.
-- For refactors, identify owning and boundary modules, preserve behavior, and
-  update atlas docs when ownership, APIs, or flows changed.
-- For validations, choose the affected module first, then run or inspect only
-  the checks needed for the requested confidence level.
-- If code structure changes, update the affected atlas documents before closing
-  the task.
-- Do not use this skill for ordinary follow-up work unless the user asks for a
-  full rescan/rebuild. The atlas workflows are the normal continuation path.
-
-When implementation is requested through a generated workflow, still use the
-atlas to scope the work before editing. Do not start edits until the user has
-confirmed the plain-language Before / After summary.
+Do not run Codebase Atlas for ordinary bug fixes, feature work, optimization,
+investigation, refactor, or validation after an atlas exists. Open the generated
+workflow docs and follow them.
