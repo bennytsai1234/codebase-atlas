@@ -54,13 +54,17 @@ Codebase Atlas 建立在**「結構化持久性 (Structural Persistence)」**的
 1.  **輸出語言**：繁體中文或英文。
 2.  **Atlas 模式**：獨立模式（以現有代碼為唯一事實）或參考輔助模式（借鏡外部儲存庫或規格書）。
 3.  **交付規則**：為未來任務紀錄規範（不提交、僅提交、或提交並推送）。
-4.  **功能對齊**：（僅限參考輔助模式）是否允許參考資料驅動遷移對齊或功能擴張。功能工作流程本身一律產生。
+4.  **工作流程入口**：預設只產生 docs；若需要命令或選單呼叫，才選擇性產生 Codex skills 或 prompt files。
+5.  **功能對齊**：（僅限參考輔助模式）是否允許參考資料驅動遷移對齊或功能擴張。功能工作流程本身一律產生。
 
 ### 2. Atlas 構建流程
 AI 代理人會深度掃描儲存庫，忽略非原始碼目錄（如 node_modules, dist, .git），並根據產品或架構邊界將程式碼劃分為 6-20 個穩定模組。
 
 ### 3. 工作流嵌入
 系統會將具體的工程標準嵌入到未來 AI 任務的執行路徑中，確保每一次變更都經過 Atlas 的驗證並產出文檔紀錄。
+
+### 4. 可選工具入口
+產生的 `docs/` workflow 永遠是唯一事實來源。當需要直接從工具選單或命令呼叫時，Codebase Atlas 可以選擇性產生薄 wrapper，例如 Codex skills 或 VS Code prompt files。這些 wrapper 只負責把工具導回正式 workflow 文件，避免同一套規則在多個地方重複維護。
 
 ## 產出物結構
 
@@ -105,6 +109,15 @@ docs/
 *   工作流程文檔與索引同層，例如 `docs/codebase_atlas_bug_workflow.md`。
 *   初始化品質檢查清單位於 `references/atlas-quality-checklist.md`。
 
+### 可選 workflow 入口
+```text
+.agents/skills/<project>-bug/SKILL.md
+.github/prompts/<project>-bug.prompt.md
+.workflow/<project>-bug.prompt.md
+```
+
+這些檔案只是可選 adapter，應該導回 `docs/` 底下的正式 workflow 文件，而不是複製一份 workflow 規則。Prompt files 可以放在 `.github/prompts/`，也可以放在工具已設定的資料夾，例如 `.workflow/`。
+
 ## 詳細模式選擇
 
 ### 獨立模式 (Standalone Mode)
@@ -126,6 +139,8 @@ docs/
 *   **系統重構**：`請讀取 docs/<project>_refactor_workflow.md，重構此結構：[描述]`
 *   **變更驗證**：`請讀取 docs/<project>_validation_workflow.md，驗證此改動：[描述]`
 *   **專案介紹**：`請讀取 docs/<project>_introduction_workflow.md，用白話介紹這個專案在做什麼`
+
+如果初始化時有產生工具入口，可以改用工具自己的呼叫方式，例如在 Codex 用 `$<project>-bug`，或在支援 prompt files 的 IDE 裡用 `/<project>-bug`。工具入口仍應導回對應的 `docs/<project>_*_workflow.md`，不要成為第二份 workflow 規則。
 
 ### 為什麼這些工作流有效：以推理取代幻覺
 

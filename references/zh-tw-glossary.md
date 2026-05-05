@@ -12,6 +12,8 @@ and product names unchanged.
 - Module List: 模組列表
 - Module Summaries: 模組摘要
 - Workflow Docs: 工作流程文檔
+- Workflow Entry Adapters: 工作流程入口適配器
+- Workflow Entrypoints: 工作流程入口
 - Current State: 目前狀態
 - Scope: 範圍
 - Upstream Dependencies: 上游依賴

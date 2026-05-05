@@ -67,3 +67,7 @@ as guidance, not as a backlog.
 Generate introduction, bug, feature, optimization, investigation, refactor, and
 validation workflows by default. Feature parity changes only whether the feature
 workflow may treat the reference as a parity source.
+
+If workflow entrypoints were requested, generate them only as thin adapters to
+the canonical workflow docs. Do not let tool-specific files replace the `docs/`
+workflow files or turn reference guidance into a tool-specific backlog.

@@ -14,6 +14,7 @@
   project reality.
 - Workflow delivery policy: {{DELIVERY_POLICY}}
 {{REFERENCE_BOUNDARY}}
+{{WORKFLOW_ENTRYPOINTS}}
 
 ## Workflow Docs
 

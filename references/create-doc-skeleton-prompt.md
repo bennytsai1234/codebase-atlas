@@ -27,15 +27,19 @@ Inputs to resolve from the user request and repo context:
   regenerate, or rescan the atlas.
 - `output_language`: `English` or `Traditional Chinese`.
 - `delivery_policy`: `no commit`, `commit only`, or `commit and push`.
+- `workflow_entrypoints`: `docs only` by default. Generate Codex skills, VS Code
+  prompt files, or a custom prompt-file directory only when the user explicitly
+  asks for command/menu workflow access.
 
-Resolve `mode`, `output_language`, `delivery_policy`, and `feature_parity` using
-`references/doc-output-contract.md`. If `mode` is `reference-assisted`, get the
-reference path, URL, or artifact before scanning the full repo.
+Resolve `mode`, `output_language`, `delivery_policy`, `workflow_entrypoints`,
+and `feature_parity` using `references/doc-output-contract.md`. If `mode` is
+`reference-assisted`, get the reference path, URL, or artifact before scanning
+the full repo.
 
 Follow this process:
 
-1. Resolve the atlas mode, output language, delivery policy, and any required
-   reference material.
+1. Resolve the atlas mode, output language, delivery policy, workflow
+   entrypoint preference, and any required reference material.
 2. Inspect the target repo before creating files. Use manifests, entrypoints,
    source roots, tests, build/config files, and existing docs to infer modules.
    Apply the scan boundaries in `references/doc-output-contract.md`.
@@ -74,22 +78,39 @@ Follow this process:
    - `investigation_workflow.md`
    - `refactor_workflow.md`
    - `validation_workflow.md`
+   - `codex_skill_workflow.md` only when Codex skill entrypoints were requested
+   - `vscode_prompt_workflow.prompt.md` only when prompt-file entrypoints were
+     requested
 7. Replace template placeholders with concrete names, module links, module
    summaries, workflow links, workflow filenames, and reference-boundary
-   language. Translate template headings and prose when `output_language` is
-   Traditional Chinese. Replace `{{DELIVERY_POLICY}}` with the selected
-   completion rule. For optimization workflow docs, replace `{{REFERENCE_STEP}}`
+   language. If workflow entrypoints were requested, replace
+   `{{WORKFLOW_ENTRYPOINTS}}` in the index with a concise entrypoint list;
+   otherwise replace it with a short docs-only invocation note. Translate
+   template headings and prose when `output_language` is Traditional Chinese.
+   Replace `{{DELIVERY_POLICY}}` with the selected completion rule. For
+   optimization workflow docs, replace `{{REFERENCE_STEP}}`
    with either a Markdown numbered step that compares useful reference patterns
    before choosing an optimization direction, including its trailing newline, or
    an empty string.
-8. Before writing each file, check whether it already exists:
+8. If workflow entrypoints were requested, generate thin adapters after the
+   canonical `docs/` workflow files exist:
+   - Codex skills: `.agents/skills/<workflow-entrypoint>/SKILL.md`
+   - VS Code prompt files: `.github/prompts/<workflow-entrypoint>.prompt.md`, or
+     the user-specified prompt directory such as `.workflow/`
+   - Custom prompt directory: use the requested directory and file naming
+     convention
+   Adapters must link back to the canonical workflow file and must not copy the
+   full workflow body. Replace `{{WORKFLOW_ENTRYPOINT_NAME}}`,
+   `{{WORKFLOW_ENTRYPOINT_TITLE}}`, `{{WORKFLOW_ENTRYPOINT_DESCRIPTION}}`, and
+   `{{WORKFLOW_FILE}}` with concrete workflow-specific values.
+9. Before writing each file, check whether it already exists:
    - If missing, create it.
    - If present, preserve useful content and update only what the atlas needs.
    - Do not erase existing project-specific notes just to match the template.
    - If `rebuild` is true, perform a full repo scan and rebuild module
      boundaries from current code reality. Keep accurate existing notes, remove
      stale boundaries, and clearly update the index.
-9. Fill docs with concise, inspected facts. Use TODO only where the repo or
+10. Fill docs with concise, inspected facts. Use TODO only where the repo or
    reference genuinely does not contain enough information.
 
 Output requirements:
@@ -125,7 +146,9 @@ Output requirements:
   `references/reference-assisted-mode.md`, relevant workflow templates, and
   README text if user-facing behavior changed."
 - State the selected delivery policy in the generated index and every workflow
-  doc.
+  doc, plus any generated workflow entrypoint.
+- Keep generated workflow entrypoints thin. They should route the tool to the
+  canonical `docs/` workflow instead of duplicating the rules.
 - In every generated code-changing workflow, make explicit workflow invocation
   mean an analysis gate before edits. The workflow may include engineering
   reasoning, but the required user-facing summary must end with only two

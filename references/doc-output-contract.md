@@ -14,6 +14,10 @@ Resolve these before scanning the whole repo:
 - `mode`: `standalone` or `reference-assisted`.
 - `output_language`: `English` or `Traditional Chinese`.
 - `delivery_policy`: `no commit`, `commit only`, or `commit and push`.
+- `workflow_entrypoints`: `docs only` by default. Enable tool-specific
+  entrypoints only when the user explicitly asks for command/menu access, slash
+  commands, IDE workflow files, Codex skills, prompt files, or a custom prompt
+  directory.
 - `feature_parity`: `disabled` by default, or `enabled` only when the user
   explicitly wants parity, compatibility, migration equivalence, or
   reference-driven feature expansion.
@@ -33,6 +37,9 @@ and says to use Codebase Atlas, ask all initial decisions before the full scan:
    reference-assisted, get the reference path, URL, or artifact.
 1. After each generated workflow finishes, should it do no commit, commit only,
    or commit and push?
+1. If they asked for command/menu access, which workflow entrypoints should be
+   generated: Codex skills, VS Code prompt files, a custom prompt directory, or
+   docs only?
 1. In reference-assisted mode, should feature parity be enabled?
    Default to disabled unless the user explicitly wants parity, compatibility,
    migration equivalence, or reference-driven feature expansion.
@@ -48,6 +55,13 @@ before the full scan and resolve whether `feature_parity` is enabled.
   existing atlas that already uses them.
 - Replace `target` and `reference` labels in headings with the actual project or
   reference names when it improves readability.
+- Canonical workflow files always remain under `docs/`. Any generated
+  tool-specific entrypoint must use a stable command-like slug, point back to the
+  canonical workflow file, and avoid duplicating the full workflow body.
+- Use a consistent entrypoint slug per workflow, such as
+  `<project>-bug`, `<project>-feature`, `<project>-refactor`, or
+  `<project>-validation`. If the tool requires a different naming convention,
+  adapt the slug without changing the canonical workflow filename.
 
 ## Source Of Truth
 
@@ -87,7 +101,8 @@ remove it or rewrite it generically.
 
 - During atlas initialization, ask what future workflow runs should do after
   work is complete: no commit, commit only, or commit and push.
-- Record the selected policy in the index and every workflow document.
+- Record the selected policy in the index, every workflow document, and any
+  generated workflow entrypoint.
 - For commit-only workflows, require a focused commit after validation.
 - For commit-and-push workflows, require validation, a focused commit, and a push
   to the confirmed target remote/branch.
@@ -111,6 +126,42 @@ module boundaries unless the user explicitly asks to document those assets:
 
 Generated code may be mentioned as downstream impact, but it should not create a
 module boundary unless engineers normally edit or review it directly.
+
+## Workflow Entry Adapters
+
+The canonical workflow system is the generated Markdown under `docs/`. Tool
+entrypoints are optional thin adapters that make those workflows easier to call
+from a specific interface.
+
+Generate adapters only when requested or clearly implied by the user's tool
+goal:
+
+- `docs only`: generate no adapters. This is the default and remains the most
+  portable output.
+- `codex skills`: generate one skill per workflow under
+  `.agents/skills/<workflow-entrypoint>/SKILL.md`.
+- `vscode prompt files`: generate one prompt file per workflow under
+  `.github/prompts/<workflow-entrypoint>.prompt.md`, unless the user or repo
+  rules specify another prompt-file directory such as `.workflow/`.
+- `custom prompt directory`: generate prompt files in the user-specified
+  directory using the naming convention required by that tool.
+
+Adapters must:
+
+- Preserve `docs/` workflow files as the source of truth.
+- Link to the canonical workflow file with a relative path.
+- Include the selected delivery policy.
+- Remind the agent to start from the atlas index.
+- Preserve the Before / After gate for code-changing workflows by referring to
+  the canonical workflow.
+- Stay thin. Do not copy the full workflow body into each adapter.
+
+Adapters must not:
+
+- Replace the canonical `docs/` workflow files.
+- Become module docs or repository facts.
+- Claim support for a tool unless the adapter path and format are intentionally
+  generated for that tool.
 
 ## Standalone Output
 
@@ -158,6 +209,8 @@ Include:
 - Rebuild semantics: running Codebase Atlas again means a full codebase rescan
   and index/module-doc rebuild from current project reality.
 - Delivery policy for future workflow runs.
+- Workflow entrypoint list when adapters were generated; otherwise state that
+  workflows are invoked by reading the docs.
 - Workflow document list with links.
 - Module list with links.
 - 2-4 line summary per module. Each summary must be routing-oriented, not a
@@ -237,6 +290,10 @@ Each workflow must tell future agents how to:
 - Finish according to the recorded delivery policy: no commit, commit only, or
   commit and push.
 
+When tool-specific entrypoints are generated, each adapter must point back to
+the matching workflow document and must not become a second copy of the workflow
+rules.
+
 Generate these workflow types:
 
 - Introduction: explain what the project does in plain language without editing
@@ -270,6 +327,8 @@ Before finishing an atlas initialization or rebuild, check the Markdown directly
 - Index module summaries are 2-4 lines each and tell future agents when to start
   from that module.
 - Each workflow records the same delivery policy as the index.
+- If workflow entrypoints were generated, each entrypoint points to an existing
+  canonical workflow, stays thin, and records the same delivery policy.
 - Each code-changing workflow requires a plain-language Before / After summary
   and explicit user confirmation before edits.
 - Reference-assisted output includes introduction, bug, feature, optimization,

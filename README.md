@@ -54,13 +54,21 @@ When the protocol is first activated, the AI agent will not scan immediately. It
 1.  **Output Language**: Traditional Chinese or English.
 2.  **Atlas Mode**: Standalone (sole source of truth) or Reference-Assisted (learning from an external repository or spec).
 3.  **Delivery Policy**: Recorded rule for future tasks (No commit, Commit only, or Commit and Push).
-4.  **Feature Parity**: (Reference-Assisted mode only) Whether the reference can drive migration equivalence or feature expansion. The feature workflow is generated either way.
+4.  **Workflow Entrypoints**: Docs only by default, or optional Codex skills / prompt files when command or menu access is requested.
+5.  **Feature Parity**: (Reference-Assisted mode only) Whether the reference can drive migration equivalence or feature expansion. The feature workflow is generated either way.
 
 ### 2. Atlas Construction
 The AI agent performs a deep scan of the repository, ignoring non-source directories (e.g., node_modules, dist, .git), and organizes the codebase into 6-20 stable modules based on product or architectural boundaries.
 
 ### 3. Workflow Implementation
 The system embeds specific engineering standards into the execution path of future AI tasks, ensuring every change is validated and documented according to the Atlas.
+
+### 4. Optional Tool Entrypoints
+The generated `docs/` workflows are the source of truth. When direct command or
+menu access is needed, Codebase Atlas can optionally generate thin adapters for a
+specific tool, such as Codex skills or VS Code prompt files. These adapters only
+route the tool to the canonical workflow document, so the workflow rules stay in
+one place.
 
 ## Output Structure
 
@@ -105,6 +113,17 @@ This repository includes a self-bootstrap atlas under `docs/`. It is both a usab
 *   Workflow docs live beside the index, such as `docs/codebase_atlas_bug_workflow.md`.
 *   The initialization quality checklist is stored in `references/atlas-quality-checklist.md`.
 
+### Optional Workflow Entrypoints
+```text
+.agents/skills/<project>-bug/SKILL.md
+.github/prompts/<project>-bug.prompt.md
+.workflow/<project>-bug.prompt.md
+```
+
+These files are optional adapters. They should point back to the canonical
+workflow document under `docs/` instead of copying the workflow rules. Prompt
+files may use `.github/prompts/` or a configured directory such as `.workflow/`.
+
 ## Detailed Mode Selection
 
 ### Standalone Mode
@@ -126,6 +145,11 @@ Once the Atlas is established, **do not run Codebase Atlas again for daily devel
 *   **Refactor**: `Read docs/<project>_refactor_workflow.md to restructure: [description]`
 *   **Validation**: `Read docs/<project>_validation_workflow.md to verify: [description]`
 *   **Introduction**: `Read docs/<project>_introduction_workflow.md to explain what this project does`
+
+If workflow entrypoints were generated, use the tool-specific entrypoint instead
+of typing the full document path, for example `$<project>-bug` in Codex or
+`/<project>-bug` in an IDE prompt-file interface. The entrypoint should still
+lead back to the matching `docs/<project>_*_workflow.md` file.
 
 ### Why These Workflows Work: Reasoning Over Hallucination
 

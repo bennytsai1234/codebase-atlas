@@ -8,6 +8,7 @@
 - 本次 Atlas 模式：獨立模式。
 - 輸出語言：繁體中文。
 - 後續工作流程交付政策：commit and push。
+- 工作流程入口：`docs/` 是 canonical workflow 來源；本 repo 另提供 Codex skills 與 `.workflow/*.prompt.md` 薄入口，入口只導回對應 workflow 文檔。
 
 ## 工作流程文檔
 
@@ -18,6 +19,25 @@
 - [調查工作流程](codebase_atlas_investigation_workflow.md)
 - [重構工作流程](codebase_atlas_refactor_workflow.md)
 - [驗證工作流程](codebase_atlas_validation_workflow.md)
+
+## 工作流程入口
+
+- Codex skills：
+  [codebase-atlas-introduction](../.agents/skills/codebase-atlas-introduction/SKILL.md)、
+  [codebase-atlas-bug](../.agents/skills/codebase-atlas-bug/SKILL.md)、
+  [codebase-atlas-feature](../.agents/skills/codebase-atlas-feature/SKILL.md)、
+  [codebase-atlas-optimization](../.agents/skills/codebase-atlas-optimization/SKILL.md)、
+  [codebase-atlas-investigation](../.agents/skills/codebase-atlas-investigation/SKILL.md)、
+  [codebase-atlas-refactor](../.agents/skills/codebase-atlas-refactor/SKILL.md)、
+  [codebase-atlas-validation](../.agents/skills/codebase-atlas-validation/SKILL.md)
+- IDE prompt files：
+  [codebase-atlas-introduction](../.workflow/codebase-atlas-introduction.prompt.md)、
+  [codebase-atlas-bug](../.workflow/codebase-atlas-bug.prompt.md)、
+  [codebase-atlas-feature](../.workflow/codebase-atlas-feature.prompt.md)、
+  [codebase-atlas-optimization](../.workflow/codebase-atlas-optimization.prompt.md)、
+  [codebase-atlas-investigation](../.workflow/codebase-atlas-investigation.prompt.md)、
+  [codebase-atlas-refactor](../.workflow/codebase-atlas-refactor.prompt.md)、
+  [codebase-atlas-validation](../.workflow/codebase-atlas-validation.prompt.md)
 
 ## 模組列表
 
@@ -34,12 +54,12 @@
 ### Skill 入口與啟動規則
 
 此模組擁有 `SKILL.md`，定義 Codebase Atlas 何時啟動、初始化前要問哪些決策，以及後續任務如何使用已生成的 workflow docs。
-當任務涉及 skill 觸發條件、初始化流程、Before / After gate、或 agent-neutral 約束時，應先從這裡開始。
+當任務涉及 skill 觸發條件、初始化流程、workflow entrypoints、Before / After gate、或 agent-neutral 約束時，應先從這裡開始。
 
 ### 輸出契約與骨架生成規則
 
 此模組擁有 `references/doc-output-contract.md` 與 `references/create-doc-skeleton-prompt.md`，是輸出形狀、命名、掃描邊界、最終驗證與 skeleton 生成流程的來源。
-當變更 docs 目錄結構、delivery policy 規則、placeholder 規則、或最終品質閘門時，應先從這裡開始。
+當變更 docs 目錄結構、delivery policy 規則、workflow entry adapters、placeholder 規則、或最終品質閘門時，應先從這裡開始。
 
 ### 模式指南
 
@@ -49,17 +69,17 @@
 ### 工作流程模板
 
 此模組擁有 introduction、bug、feature、optimization、investigation、refactor、validation 七種 workflow 模板。
-當使用者想調整日常任務如何從 Atlas 開始、何時等待人類確認、或每種任務的驗證/交付順序時，應先從這裡開始。
+當使用者想調整日常任務如何從 Atlas 開始、何時等待人類確認、工具入口如何導回 workflow、或每種任務的驗證/交付順序時，應先從這裡開始。
 
 ### 索引與模組模板
 
-此模組擁有 index、standalone module、reference-assisted module 三種結構模板，決定生成文檔的骨架與必填區段。
-當要新增 module section、改變 module doc 的資訊密度、或同步 index/module 的 placeholder 時，應先從這裡開始。
+此模組擁有 index、standalone module、reference-assisted module 與 workflow entrypoint adapter 結構模板，決定生成文檔與工具入口的骨架。
+當要新增 module section、改變 module doc 的資訊密度、或同步 index/module/adapter 的 placeholder 時，應先從這裡開始。
 
 ### 公開 README 與授權
 
-此模組擁有英文與繁體中文 README，以及 MIT 授權檔。它是使用者理解定位、安裝方式、模型建議與 example output 的第一入口。
-當任務涉及公開敘事、使用教學、對外主張、或授權說明時，應先從這裡開始。
+此模組擁有英文與繁體中文 README，以及 MIT 授權檔。它是使用者理解定位、安裝方式、模型建議、可選工具入口與 example output 的第一入口。
+當任務涉及公開敘事、使用教學、工具入口說明、對外主張、或授權說明時，應先從這裡開始。
 
 ### 語言資源與品質檢查
 

@@ -19,6 +19,7 @@
 ## 下游影響
 
 - 繁體中文 generated docs 的用語會依 `zh-tw-glossary.md` 一致化。
+- Workflow Entry Adapters / Workflow Entrypoints 的繁中術語會影響 README 與自舉 docs 如何描述工具入口。
 - `atlas-quality-checklist.md` 影響代理人最後報告哪些項目通過、跳過或仍不確定。
 - README 的自舉範例與安裝說明可引用 checklist 作為品質保證方式。
 
@@ -31,6 +32,7 @@
 ## 常見變更入口
 
 - 想改繁中術語：從 `references/zh-tw-glossary.md` 開始。
+- 想改工具入口的繁中譯名：先改 `references/zh-tw-glossary.md`，再同步 README.zh-TW 與自舉 docs。
 - 想改初始化完成後 AI 必查項目：從 `references/atlas-quality-checklist.md` 開始。
 - 想把新檢查納入正式契約：同步 `references/doc-output-contract.md` 的 Final Validation。
 

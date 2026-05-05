@@ -66,3 +66,7 @@ validation workflows. Each workflow must require future work to start from the
 atlas before editing code or reporting findings. The introduction workflow
 should explain what the project does in plain language, not produce a full
 architecture report.
+
+If workflow entrypoints were requested, generate them only as thin adapters to
+the canonical workflow docs. Do not let tool-specific files replace the `docs/`
+workflow files or introduce tool facts into module ownership.
