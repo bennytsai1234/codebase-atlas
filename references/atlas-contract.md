@@ -10,9 +10,11 @@ generated docs concise, navigable, and grounded in repository-persistent facts.
 Resolve these before the full scan:
 
 - `mode`: `standalone` or `reference-assisted`.
+- `working_language`: explicit repository language rule first, user's
+  initialization request language second, English third.
 - `delivery_policy`: `no commit`, `commit only`, or `commit and push`.
-- `workflow_entrypoints`: `docs only` by default; generate tool-specific
-  entrypoints only when explicitly requested.
+- `workflow_entrypoints`: a default thin adapter is always generated. Additional
+  tool-specific entrypoints may be generated when explicitly requested.
 - `feature_parity`: only relevant in reference-assisted mode. It is disabled by
   default and enabled only for explicit parity, compatibility, migration
   equivalence, or reference-driven expansion.
@@ -57,6 +59,8 @@ docs/
   <project>_understand_workflow.md
   <project>_change_workflow.md
   <project>_validate_workflow.md
+  <project>_main_workflow.md
+  <project>_adapter.md
 ```
 
 Reference-assisted output:
@@ -69,6 +73,8 @@ docs/
   <project>_<reference>_understand_workflow.md
   <project>_<reference>_change_workflow.md
   <project>_<reference>_validate_workflow.md
+  <project>_<reference>_main_workflow.md
+  <project>_<reference>_adapter.md
 ```
 
 Use lowercase snake_case slugs for generated files and folders. Use relative
@@ -83,7 +89,8 @@ Use the templates under `assets/templates/`:
 - `understand_workflow.md`
 - `change_workflow.md`
 - `validate_workflow.md`
-- `adapter.md` only when workflow entrypoints were requested
+- `main_workflow.md`
+- `adapter.md`
 
 Replace all placeholders with concrete project values. Do not leave template
 tokens such as `{{ATLAS_TITLE}}` or `{{DELIVERY_POLICY}}` in generated docs.
@@ -93,11 +100,11 @@ tokens such as `{{ATLAS_TITLE}}` or `{{DELIVERY_POLICY}}` in generated docs.
 The index must include:
 
 - Purpose and usage rules.
-- Initial decisions: mode, delivery policy, entrypoints, and feature parity when
-  relevant.
+- Initial decisions: mode, working language, delivery policy, entrypoints, and
+  feature parity when relevant.
 - Rebuild semantics: rerunning Codebase Atlas means a full rescan and atlas
   rebuild from current repository reality.
-- Links to the three workflow docs.
+- Links to the main workflow and three internal workflow docs.
 - Links to every module doc.
 - Routing-oriented summaries for each module: what it owns, when future work
   should start there, and what symptoms or task types point to it.
@@ -123,22 +130,44 @@ decide whether to start there.
 
 ## Workflow Requirements
 
-Generate exactly three canonical workflows:
+Generate four canonical workflows:
 
 - `understand`: introductions, explanations, feasibility questions, ownership
   questions, and investigations.
 - `change`: bugs, features, optimizations, and refactors.
 - `validate`: checks, reviews, reproductions, verification, and risk assessment.
+- `main`: the universal daily entrypoint that reads the index first, confirms
+  in plain language what the project does, and routes to understand, change,
+  validate, or a combination.
 
-Every workflow must:
+All workflows must:
 
-- Start from the index.
-- Choose the owning module and any boundary modules.
 - Inspect code only after reading relevant atlas context.
 - Use generated workflows for ordinary work instead of rerunning Codebase Atlas.
 - Record the same delivery policy as the index.
-- Require atlas updates when ownership, APIs, flows, risks, or module boundaries
-  change.
+- Keep technical details for internal reasoning and report to the user in plain
+  language.
+- Require atlas updates only when module boundaries, ownership, external APIs,
+  or documented repository facts change.
+
+Every internal workflow must choose the relevant module context and any
+necessary boundary context before inspecting code.
+
+The `main` workflow must:
+
+- Be the only entrypoint for daily operations.
+- Receive any request, read the index first, and confirm in one plain sentence
+  what the project does.
+- Route automatically to understand, change, validate, or a composed execution.
+- Pass conclusions forward during composed execution so later workflows do not
+  reread the index or module docs unless they need context that was not already
+  gathered.
+- After each completed task, ask whether anything else needs handling. If the
+  user continues, route the new request without rereading the index, while
+  preserving plain-language reporting and Before / After gates.
+- Use plain-language user reports and avoid exposing module names, file paths,
+  function names, or code snippets.
+- Treat Before / After as the only human confirmation interface.
 
 The `change` workflow must require a plain Before / After gate before file
 edits. `understand` and `validate` must require the same gate before any
@@ -153,13 +182,14 @@ reasoning support; the user-facing confirmation remains Before / After.
 
 ## Entrypoint Adapters
 
-Generate adapters only when requested. They may target Codex skills, prompt
-files, or a custom prompt directory.
+Generate the default adapter for every atlas initialization or rebuild.
+Additional adapters may target Codex skills, prompt files, or a custom prompt
+directory when requested.
 
 Adapters must:
 
-- Point back to the canonical workflow doc.
+- Point to `<project>_main_workflow.md`, not the three individual workflow
+  docs.
 - Include the delivery policy.
 - Remind the agent to start from the atlas index.
-- Preserve Before / After gates by reference.
-- Stay thin and avoid copying the full workflow body.
+- Stay extremely thin and avoid copying any workflow body.

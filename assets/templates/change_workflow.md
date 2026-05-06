@@ -1,49 +1,63 @@
 # {{ATLAS_TITLE}} Change Workflow
 
-## Purpose
+## Role
 
-Use this workflow for bugs, features, optimizations, and refactors.
+This is an internal agent module routed by the main workflow.
+The user does not need to know this workflow exists.
 
-Do not rerun Codebase Atlas for ordinary change work. Use this workflow and
-update affected atlas docs only when ownership, APIs, flows, risks, or module
-boundaries change.
+Use it internally for bugs, features, optimizations, and refactors.
 
-## Workflow
+## Internal Reasoning Layer
+
+Do not output this layer to the user.
 
 1. Preserve the user's original request.
-1. Open `{{INDEX_FILE}}`.
-1. Choose the primary owning module and any boundary modules.
-1. Read relevant module docs for scope, dependencies, impact, change routes, and
-   known risks.
-1. Inspect the relevant code, tests, docs, configs, runtime paths, or reference
-   material.
-1. Classify the task:
-   - **Bug**: current behavior is wrong or unstable.
-   - **Feature**: new target-project behavior is requested.
-   - **Optimization**: existing behavior, reliability, clarity,
-     maintainability, or performance should improve.
-   - **Refactor**: structure, ownership, API shape, naming, duplication, or
-     boundaries should change while intended behavior stays the same.
-1. Calibrate scope before proposing edits: owning module, boundary modules,
-   contracts, shared state, persistence, generated artifacts, tests, downstream
-   users, and uncertain surfaces.
-1. Use that analysis to write a plain Before / After gate. Do not turn the gate
-   into a secondary engineering report.
-1. Wait for explicit user confirmation.
+1. Receive the task and already-read index summary from the main workflow.
+1. Choose the most relevant module docs for the task.
+1. Internally classify the task:
+   - Bug: current behavior is wrong or unstable.
+   - Feature: new behavior is requested.
+   - Optimization: behavior stays the same while quality improves.
+   - Refactor: structure changes while intended behavior stays the same.
+1. Calibrate scope internally so Before / After is accurate:
+   - What will change.
+   - What may be affected downstream.
+   - Which boundaries remain uncertain.
+1. Inspect code, tests, docs, configs, runtime paths, or reference material only
+   when needed.
+
+## External Reporting Layer
+
+1. Confirm with the user using the Before / After format below.
+1. Wait for explicit user confirmation before editing any files.
 1. After confirmation, implement the change.
 1. Validate the affected behavior and boundaries.
-1. Update atlas docs if ownership, APIs, flows, risks, or module boundaries
-   changed.
-1. Finish according to this delivery policy: {{DELIVERY_POLICY}}
+1. Finish with one plain-language sentence describing what changed.
 
-## Before / After Gate
+## Reporting Rules
 
-Before editing files, provide only:
+- Use plain language for every user-facing report.
+- Do not expose module names, file paths, function names, or code snippets in
+  user-facing reports.
+- Before / After is the only human confirmation interface.
+- Keep technical details for internal reasoning only.
 
-- **Before**: Current behavior or structure, and what is wrong, missing,
-  confusing, or risky.
-- **After**: What the change will make true.
+## Before / After Format
 
-Do not edit files until the user explicitly confirms. Supporting engineering
-details may be kept for implementation, but they should not replace or dilute
-the Before / After checkpoint.
+**Before**: In one to three plain sentences, explain the current situation and
+what is wrong, missing, or risky.
+
+**After**: In one to three plain sentences, explain what will be true after the
+change is complete.
+
+Wait for explicit user confirmation before any file-editing operation.
+
+## Atlas Update Conditions
+
+Update affected atlas docs only when the change truly changes module
+boundaries, ownership, or external APIs. Ordinary bug fixes and small features
+do not require atlas updates.
+
+## Delivery Policy
+
+{{DELIVERY_POLICY}}

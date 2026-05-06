@@ -2,8 +2,8 @@
 
 Codebase Atlas is a small Markdown protocol for creating a durable navigation
 layer for a repository. It scans a project once, writes a compact atlas under
-`docs/`, and gives future agents three workflows to start from before editing
-code.
+`docs/`, and gives future agents a main workflow that routes ordinary work
+before editing code.
 
 ## Design Manifesto
 
@@ -34,19 +34,24 @@ docs/
   <project>_understand_workflow.md
   <project>_change_workflow.md
   <project>_validate_workflow.md
+  <project>_main_workflow.md
+  <project>_adapter.md
 ```
 
-Optional tool entrypoints can be generated only when requested. They should be
-thin adapters that point back to the canonical workflow files under `docs/`.
+The default adapter is always generated. It stays thin and points back to the
+canonical main workflow under `docs/`.
 
 ## How It Works
 
-1. Resolve the scan mode and delivery policy.
-2. Inspect repository structure, entrypoints, source roots, tests, configs, and
+1. Silently detect the working language and whether old atlas files exist.
+2. Explain what the skill creates, then handle old atlas files if needed.
+3. Pre-scan existing repository rules and confirm the initial decisions.
+4. Inspect repository structure, entrypoints, source roots, tests, configs, and
    existing docs.
-3. Split the project into stable modules.
-4. Write a module index, module notes, and three workflow docs.
-5. Run the quality checklist.
+5. Split the project into stable modules.
+6. Write a module index, module notes, four workflow docs, and the default
+   adapter.
+7. Run the quality checklist.
 
 ## Modes
 
@@ -59,6 +64,7 @@ thin adapters that point back to the canonical workflow files under `docs/`.
 
 Do not rerun Codebase Atlas for ordinary work. Use the generated workflow docs:
 
+- `docs/<project>_main_workflow.md` for daily routing across all task types.
 - `docs/<project>_understand_workflow.md` for explanations and investigations.
 - `docs/<project>_change_workflow.md` for bugs, features, optimizations, and
   refactors.

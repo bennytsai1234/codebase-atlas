@@ -1,6 +1,6 @@
 ---
 name: codebase-atlas
-description: "Use only when the user asks to initialize, create, rebuild, refresh, regenerate, or rescan a compact repository atlas under docs/ for future code navigation. Creates a module index, module notes, and three reusable workflows: understand, change, and validate. Supports standalone and reference-assisted scans, plus optional thin workflow entrypoints when explicitly requested."
+description: "Use only when the user asks to initialize, create, rebuild, refresh, regenerate, or rescan a compact repository atlas under docs/ for future code navigation. Creates a module index, module notes, four reusable workflows: main, understand, change, and validate, plus a default thin adapter. Supports standalone and reference-assisted scans."
 ---
 
 # Codebase Atlas
@@ -15,47 +15,139 @@ Keep this skill simple:
 - References define the rules; templates define the output shape.
 - Do not add runtime assumptions, helper scripts, or product-specific behavior
   to this skill.
-- Write atlas content in English unless the target repository has an explicit
-  language rule.
+- Determine the working language before any user-facing output. Prefer an
+  explicit repository language rule, then the user's initialization request
+  language, then English. Use the selected language for user-facing output and
+  generated atlas docs.
 
 ## Before Scanning
 
-If the user only asks to run Codebase Atlas on a target repository, pause before
-the full scan and resolve:
+If the user only asks to run Codebase Atlas on a target repository, silently
+detect the working language and whether old atlas files exist before any
+user-facing output. Then introduce the skill before any full scan or
+user-facing decision.
 
-1. **Mode**: standalone, or reference-assisted with a reference path, URL, or
-   artifact.
-2. **Delivery policy** for future workflow runs: no commit, commit only, or
-   commit and push.
-3. **Workflow entrypoints**: docs only by default; generate Codex skills,
-   prompt files, or a custom prompt directory only when explicitly requested.
-4. **Feature parity** only in reference-assisted mode: disabled by default;
-   enabled only for explicit parity, compatibility, migration equivalence, or
-   reference-driven expansion.
+### Step 0: Detect Language Silently
 
-Briefly explain that the skill will scan the repository, create durable
-Markdown docs under `docs/`, and generate workflows for future understanding,
-changes, and validation. After the atlas exists, ordinary work should use those
-generated workflows instead of rerunning this skill.
+Before outputting anything, determine the working language:
+
+1. Check the repository root for an explicit language rule in files such as
+   `.cursorrules`, `CONTRIBUTING.md`, `README`, or existing docs.
+2. If the repository has no explicit language rule, use the language of the
+   user's initialization request.
+3. If neither provides a clear signal, use English.
+
+Use this language for the introduction, confirmation dialog, and generated
+atlas documents. Keep this step silent; do not report the language decision
+until the confirmation dialog.
+
+### Step 1: Detect Old Atlas Silently
+
+Before outputting anything, scan `docs/` only to detect whether old atlas files
+exist:
+
+1. Detect existence only. Do not read old atlas content.
+2. If old atlas files exist, record that fact and tell the user after the skill
+   introduction.
+3. Wait for the user to decide whether to delete and rebuild before continuing.
+4. If the user wants to preserve any part, read the old atlas only after the
+   user gives preservation instructions.
+
+### Step 2: Introduce This Skill
+
+Before starting any full scan or question, explain what this skill will create
+for the user's project. Use the working language selected in Step 0. Render the
+following meaning in that language; do not output this English template verbatim
+unless English was selected:
+
+```markdown
+Before we start, let me explain what this skill will create for your project.
+
+**What it creates:**
+This skill scans your repo once and creates a durable engineering map under
+`docs/`.
+That map includes:
+- The project's module structure and boundaries.
+- A universal entrypoint skill that future work on this project should start
+  from.
+
+**How to use it later:**
+After the map exists, you do not need to run this skill again.
+For future requests in this project, the universal entrypoint skill will
+automatically identify what you want to do and choose the right workflow,
+whether the task is understanding the project, changing code, or validating
+behavior.
+
+**Why it works:**
+Before every operation, the agent reads the map instead of blindly searching the
+entire repo again. This helps the agent locate the right area precisely instead
+of guessing.
+
+More importantly, every file-editing operation first explains in plain language:
+- Before: what the current situation is and where the problem is.
+- After: what will become true after the change.
+
+This Before / After is the only thing you need to judge.
+You do not need to read code or understand technical details. If the Before
+description matches the real problem and the After description is the result you
+want, you can confirm. If the agent misunderstood, the Before will be wrong and
+you can catch it immediately.
+
+This initialization only needs to happen once.
+```
+
+If Step 1 detected old atlas files, add this message after the introduction in
+the working language:
+
+```markdown
+I found existing atlas files for this project. Should I delete them and rebuild
+the atlas from scratch? If you want to preserve any parts, tell me which parts.
+```
+
+If old atlas files were detected, wait for user confirmation before continuing
+to Step 3. If no old atlas files were detected, continue directly to Step 3.
+
+### Step 3: Pre-Scan Existing Rules
+
+After the introduction and any old-atlas handling, pre-scan existing rules
+before asking for configuration decisions:
+
+1. Scan the repository root and `docs/` for `CONTRIBUTING.md`, `README`,
+   `.cursorrules`, and any language or maintenance policy files.
+2. Scan for explicit language rules, such as Traditional Chinese, Simplified
+   Chinese, or English.
+3. Scan for maintenance policy signals, such as pure maintenance mode, feature
+   freeze, or active development.
+4. Bring those findings into a confirmation dialog that explains:
+   - Which existing rules were found.
+   - Which rules will be preserved.
+   - Which rules may need adjustment or removal.
+   - The selected working language and why it was selected.
+   - Recommended values for the four initial decisions: mode, delivery policy,
+     entrypoints, and feature parity.
+5. Wait for user confirmation before starting the full scan.
 
 ## Main Workflow
 
 1. Read `references/atlas-contract.md`.
-2. Resolve the initial decisions above.
+2. Run the language detection, old-atlas detection, introduction, and pre-scan
+   above, then resolve the initial decisions with the user.
 3. Inspect the target repository: manifests, entrypoints, source roots, tests,
    build/config files, existing docs, and major package or domain boundaries.
 4. Read `references/modes.md` and follow either standalone or
    reference-assisted guidance.
-5. Split the project into 6-20 stable modules, unless the repository is too
-   small for that to be honest.
+5. Split the project into stable modules using change-boundary quality, not a
+   hard module count.
 6. Create or update the canonical atlas under `docs/` using templates from
    `assets/templates/`.
-7. Generate exactly three canonical workflow docs:
+7. Generate four canonical workflow docs:
    - `understand`: introductions and investigations.
    - `change`: bugs, features, optimizations, and refactors.
    - `validate`: checks, reviews, reproductions, and risk assessments.
-8. Generate thin entrypoint adapters only if requested. Adapters must point back
-   to the canonical `docs/` workflow files.
+   - `main`: the universal daily entrypoint, automatic router, and default
+     generated workflow.
+8. Generate the default thin adapter. It must point to the canonical
+   `main` workflow, not the individual workflow modules.
 9. Run `references/quality-checklist.md` before reporting completion.
 
 ## Core Rules
@@ -74,8 +166,8 @@ generated workflows instead of rerunning this skill.
   uncertain surfaces. Use this to reason, not as a substitute for the
   Before / After gate.
 - Prefer complete, bounded plans over shortcut-oriented local patches.
-- Update affected atlas docs when ownership, APIs, flows, risks, or module
-  boundaries change.
+- Update affected atlas docs only when module boundaries, ownership, external
+  APIs, or documented repository facts change.
 
 ## When Not To Use This Skill
 

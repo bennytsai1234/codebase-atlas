@@ -13,13 +13,18 @@ Inspect in this order:
    tooling, and tests.
 5. Existing architecture or decision docs.
 
-Split the project into 6-20 stable modules when honest. Prefer product or
-domain boundaries. If those are not visible, use architectural, package,
-runtime, data, integration, or tooling boundaries that match how engineers
-change the system.
+Split the project into stable modules. Judge the split by quality:
 
-Small repositories should have fewer modules. Do not invent modules from
-incidental files.
+- Each module should be an independent change boundary, where future engineers
+  can work without heavy cross-module coordination.
+- Too many modules means the boundaries are too fragmented and most changes
+  still cross several modules.
+- Too few modules means the boundary is not meaningful and most work starts in
+  the same place.
+- Small repositories naturally have fewer modules. Do not split modules just to
+  create more files.
+- Large monorepos may have more modules, but prefer product or domain
+  boundaries over technical-layer boundaries.
 
 ## Reference-Assisted Mode
 

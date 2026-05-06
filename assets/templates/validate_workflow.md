@@ -1,33 +1,61 @@
 # {{ATLAS_TITLE}} Validate Workflow
 
-## Purpose
+## Role
 
-Use this workflow for checks, reviews, reproductions, verification, and risk
+This is an internal agent module routed by the main workflow.
+The user does not need to know this workflow exists.
+
+Use it internally for checks, reviews, reproductions, verification, and risk
 assessment when the user is not asking for immediate implementation.
 
-Do not edit files unless the user explicitly asks for a fix or implementation.
+## Internal Reasoning Layer
 
-## Workflow
+Do not output this layer to the user.
 
 1. Preserve the validation question, expected behavior, or risk.
-1. Open `{{INDEX_FILE}}`.
-1. Choose the affected module and any boundary modules.
-1. Read relevant module docs for scope, dependencies, downstream impact, key
-   flows, and known risks.
-1. Calibrate validation scope: contracts, generated artifacts, tests,
-   downstream users, and uncertain surfaces.
-1. Run or inspect evidence needed for the user's validation question.
-1. Report only what the evidence shows and what remains unresolved.
-1. If a fix is needed, recommend the change workflow instead of silently editing
-   files.
-1. Finish according to this delivery policy when files changed; otherwise state
-   that no commit is needed: {{DELIVERY_POLICY}}
+1. Receive the task and already-read index summary from the main workflow.
+1. Choose the most relevant module docs for the validation question.
+1. Internally confirm validation scope:
+   - The specific behavior or assumption being validated.
+   - Relevant boundaries and downstream impact.
+1. Collect evidence:
+   - Read relevant code, tests, configuration, or docs.
+   - Read only the minimum content needed to answer the validation question.
+1. Internally separate:
+   - Conclusions supported by evidence.
+   - Parts that still cannot be confirmed.
 
-## Summary Format
+## External Reporting Layer
 
-- **Before**: What was being checked, and what was uncertain or risky before
-  validation?
-- **After**: What the validation shows now, or what remains unresolved?
+1. Report using the Before / After format below.
+1. If validation shows a fix is needed, ask whether the user wants to continue
+   with a change. Do not start editing immediately.
 
-If validation recommends edits, provide a plain Before / After summary and wait
-for explicit user confirmation before editing.
+## Reporting Rules
+
+- Use plain language for every user-facing report.
+- Do not expose module names, file paths, function names, or code snippets in
+  user-facing reports.
+- Before / After is the only human confirmation interface.
+- Keep technical details for internal reasoning only.
+
+## Before / After Format
+
+**Before**: In one to three plain sentences, explain what is being validated and
+what was uncertain or risky before validation.
+
+**After**: In one to three plain sentences, explain the validation result or
+what still cannot be confirmed.
+
+Wait for explicit user confirmation before any file-editing operation.
+
+## Atlas Update Conditions
+
+Update the atlas only when this validation finds existing atlas facts are
+inaccurate, such as incorrect module boundary descriptions or changed
+ownership. Report newly discovered risks to the user; do not write them back to
+the atlas unless they make existing atlas facts inaccurate.
+
+## Delivery Policy
+
+{{DELIVERY_POLICY}}
