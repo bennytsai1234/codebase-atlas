@@ -16,6 +16,9 @@ Resolve these before the full scan:
   This user-facing decision determines whether the run is standalone or
   reference-assisted, and whether reference functionality is in scope.
 - `delivery_policy`: `no commit`, `commit only`, or `commit and push`.
+- `reporting_level`: `plain` or `technical`. Plain hides module names, file
+  paths, and code snippets from user-facing reports. Technical includes them
+  for developer-oriented workflows.
 - `workflow_entrypoints`: a default thin adapter is always generated. Additional
   tool-specific entrypoints may be generated when explicitly requested.
 
@@ -23,7 +26,8 @@ Internal decision keys are for atlas generation only. User-facing confirmation
 must present these decisions as plain-language questions in the working
 language, with the recommended value and reason. Do not expose internal setting
 names such as `mode`, `reference_template_mode`, `delivery_policy`,
-`workflow_entrypoints`, or `feature_parity` directly to the user.
+`reporting_level`, `workflow_entrypoints`, or `feature_parity` directly to the
+user.
 
 The reference-template decision must be presented as three plain-language
 choices:
@@ -125,7 +129,7 @@ The index must include:
 
 - Purpose and usage rules.
 - Initial decisions: mode, working language, reference template mode, delivery
-  policy, and entrypoints.
+  policy, reporting level, and entrypoints.
 - Project operating constraints inherited from existing guidance. This section
   must capture concrete rules that all workflows must follow, such as language,
   architecture, testing, release flow, maintenance state, CI, and work style.
@@ -135,6 +139,8 @@ The index must include:
 - Links to every module doc.
 - Routing-oriented summaries for each module: what it owns, when future work
   should start there, and what symptoms or task types point to it.
+- Architecture Decisions table for cross-module decisions recorded during
+  development. Starts empty at initialization.
 - Reference boundary when in reference-assisted mode.
 
 ## Module Requirements
@@ -172,8 +178,10 @@ All workflows must:
 - Inspect code only after reading relevant atlas context.
 - Use generated workflows for ordinary work instead of rerunning Codebase Atlas.
 - Record the same delivery policy as the index.
-- Keep technical details for internal reasoning and report to the user in plain
-  language.
+- Keep technical details for internal reasoning and report to the user
+  according to the selected reporting level.
+  - Plain: plain language only, no module names, file paths, or code snippets.
+  - Technical: include module names, file paths, and relevant code context.
 - Require atlas updates only when module boundaries, ownership, external APIs,
   or documented repository facts change.
 
@@ -192,8 +200,8 @@ The `main` workflow must:
 - After each completed task, ask whether anything else needs handling. If the
   user continues, route the new request without rereading the index, while
   preserving plain-language reporting and Before / After gates.
-- Use plain-language user reports and avoid exposing module names, file paths,
-  function names, or code snippets.
+- Use reporting-level-appropriate user reports and avoid exposing internal
+  reasoning as the user-facing summary.
 - Treat Before / After as the only human confirmation interface.
 
 The `change` workflow must require a plain Before / After gate before file
@@ -201,11 +209,39 @@ edits. `understand` and `validate` must require the same gate before any
 follow-up edit. The gate is the user-facing checkpoint; do not replace it with
 secondary engineering reports.
 
+The `change` workflow must escalate to a Decision Gate when the change alters
+module boundaries, affects external API contracts, involves irreversible
+operations, or has multiple viable approaches with different trade-offs. The
+Decision Gate presents options and trade-offs before the Before / After step.
+
 Before any proposed implementation route, workflows must calibrate scope:
 owning module, boundary modules, contracts, shared state, persistence, generated
 artifacts, tests, downstream users, and uncertain surfaces. Prefer complete,
 bounded plans over shortcut-oriented local patches. Scope calibration is
 reasoning support; the user-facing confirmation remains Before / After.
+
+## Incremental Atlas Updates
+
+During ordinary workflow operations, atlas updates are incremental:
+
+1. Update only the affected module doc or docs.
+2. If the module list or module summaries in the index changed, update the
+   index to match.
+3. Do not rescan unrelated modules or regenerate workflow docs.
+4. Note what changed and why in the report.
+
+A full rescan and rebuild requires the user to explicitly request it by running
+Codebase Atlas again.
+
+## Decision Recording
+
+When a Decision Gate is used during a workflow:
+
+- Cross-module decisions: add a row to the Architecture Decisions table in the
+  index with the decision title, chosen option, affected modules, and rationale.
+- Module-level decisions: add a note to the affected module's Known Risks or
+  Do Not Do section, referencing the index entry if cross-module.
+- Do not create separate decision log files.
 
 ## Entrypoint Adapters
 

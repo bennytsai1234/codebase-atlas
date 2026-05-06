@@ -37,11 +37,13 @@ workflow needs context that was not already gathered.
 
 ## Reporting Rules
 
-- Use plain language for every user-facing report.
-- Do not expose module names, file paths, function names, or code snippets in
-  user-facing reports.
-- Keep technical details for internal reasoning only.
 - Before / After is the only human confirmation interface.
+- Reporting level for this project: {{REPORTING_LEVEL}}
+  - Plain: do not expose module names, file paths, function names, or code
+    snippets in user-facing reports.
+  - Technical: include module names, file paths, and relevant code context in
+    user-facing reports to help the developer locate changes.
+- Keep internal reasoning separate from the user-facing summary.
 
 ## Before / After Format
 

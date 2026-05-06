@@ -1,6 +1,6 @@
 ---
 name: codebase-atlas
-description: "Use only when the user asks to initialize, create, rebuild, refresh, regenerate, or rescan a compact repository atlas under docs/ for future code navigation. Creates a module index, module notes, four reusable workflows: main, understand, change, and validate, plus a default thin adapter. Supports standalone and reference-assisted scans."
+description: "Initialize or rebuild a repository atlas under docs/ for AI-assisted code navigation."
 ---
 
 # Codebase Atlas
@@ -139,8 +139,8 @@ before asking for configuration decisions:
    - Recommended values for the initial decisions.
 5. Present the initial decisions as plain-language questions in the working
    language. Do not expose internal setting names such as `mode`,
-   `delivery_policy`, `workflow_entrypoints`, `reference_template_mode`, or
-   `feature_parity` to the user. For each decision, include the question the
+   `delivery_policy`, `reporting_level`, `workflow_entrypoints`,
+   `reference_template_mode`, or `feature_parity` to the user. For each decision, include the question the
    user needs to answer, the recommended value, and why that value is
    recommended.
 6. Present the reference-template decision in this plain-language shape,
@@ -161,7 +161,21 @@ before asking for configuration decisions:
 
    Do not use the term "feature parity" in user-facing explanations. Keep that
    term, if needed, for internal reasoning only.
-7. Use this confirmation shape for preserved rules:
+7. Present the reporting-level decision in this plain-language shape,
+   translated into the working language:
+
+   ```markdown
+   How detailed should the reports be?
+
+   A. Plain language only. Explain what changed without showing file names,
+      code paths, or technical identifiers.
+   B. Include technical details. Show file names, module names, and relevant
+      code context alongside the plain-language explanation.
+
+   Recommended: B for developer-maintained projects, A for projects managed
+   by non-developers.
+   ```
+8. Use this confirmation shape for preserved rules:
 
    ```text
    [Category]
@@ -171,7 +185,7 @@ before asking for configuration decisions:
 
    The user must be able to judge whether the agent correctly understood the
    existing project guidance.
-8. Wait for user confirmation before starting the full scan.
+9. Wait for user confirmation before starting the full scan.
 
 ## Main Workflow
 
@@ -214,6 +228,9 @@ before asking for configuration decisions:
 - Prefer complete, bounded plans over shortcut-oriented local patches.
 - Update affected atlas docs only when module boundaries, ownership, external
   APIs, or documented repository facts change.
+- Atlas updates during ordinary work are incremental: update only affected
+  module docs and index entries. A full rescan requires the user to explicitly
+  request a rebuild.
 
 ## When Not To Use This Skill
 

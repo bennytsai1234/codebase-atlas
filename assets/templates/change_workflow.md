@@ -23,11 +23,15 @@ Do not output this layer to the user.
    - What will change.
    - What may be affected downstream.
    - Which boundaries remain uncertain.
+1. Check whether the Decision Gate triggers apply (see below). If any trigger
+   matches, use the Decision Gate format instead of the plain Before / After.
 1. Inspect code, tests, docs, configs, runtime paths, or reference material only
    when needed.
 
 ## External Reporting Layer
 
+1. If Decision Gate triggers matched, present the Decision Gate format first.
+   Wait for the user to choose before continuing.
 1. Confirm with the user using the Before / After format below.
 1. Wait for explicit user confirmation before editing any files.
 1. After confirmation, implement the change.
@@ -36,11 +40,13 @@ Do not output this layer to the user.
 
 ## Reporting Rules
 
-- Use plain language for every user-facing report.
-- Do not expose module names, file paths, function names, or code snippets in
-  user-facing reports.
 - Before / After is the only human confirmation interface.
-- Keep technical details for internal reasoning only.
+- Reporting level for this project: {{REPORTING_LEVEL}}
+  - Plain: do not expose module names, file paths, function names, or code
+    snippets in user-facing reports.
+  - Technical: include module names, file paths, and relevant code context in
+    user-facing reports to help the developer locate changes.
+- Keep internal reasoning separate from the user-facing summary.
 
 ## Before / After Format
 
@@ -52,11 +58,56 @@ change is complete.
 
 Wait for explicit user confirmation before any file-editing operation.
 
+## Decision Gate
+
+The Decision Gate is an escalation from Before / After for changes with broader
+impact. Use it when any of these triggers match:
+
+- The change would alter module boundaries (create, remove, or merge modules).
+- The change affects an external API contract or public interface.
+- There are two or more viable approaches with different trade-offs.
+- The change involves an irreversible operation (large-scale deletion, database
+  migration, framework replacement).
+
+When triggered, present this format instead of the plain Before / After:
+
+```markdown
+## Decision: <one-sentence title>
+
+### Context
+Why this decision is needed.
+
+### Options
+A. <option A> — <advantages / costs>
+B. <option B> — <advantages / costs>
+
+### Impact
+Which areas are affected and how.
+
+### Recommendation
+Which option is recommended and why.
+```
+
+After the user chooses, continue with a Before / After that implements the
+chosen option. Record the decision:
+
+- Cross-module decisions: add a row to the Architecture Decisions table in the
+  index.
+- Module-level decisions: add a note to the affected module's Known Risks or
+  Do Not Do section.
+
 ## Atlas Update Conditions
 
 Update affected atlas docs only when the change truly changes module
 boundaries, ownership, or external APIs. Ordinary bug fixes and small features
 do not require atlas updates.
+
+When an update is needed, apply it incrementally:
+
+1. Update only the affected module doc or docs.
+2. If the module list or summaries in the index changed, update the index.
+3. Do not rescan unrelated modules or regenerate workflow docs.
+4. Note what changed and why in the report.
 
 ## Delivery Policy
 

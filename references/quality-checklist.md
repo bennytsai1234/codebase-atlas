@@ -11,6 +11,7 @@ complete.
 - Reference template mode is recorded as none, partial reference, or full
   alignment.
 - Delivery policy is recorded in the index and every workflow.
+- Reporting level is recorded in the index and every workflow.
 - The default adapter and any additional entrypoint choices are recorded.
 - Partial reference output records the selected reference scope.
 - Full alignment output records that reference functionality is in scope.
@@ -34,6 +35,7 @@ complete.
 - Main workflow exists.
 - Default adapter exists.
 - Index links to all module docs.
+- Index includes an Architecture Decisions section (empty at initialization).
 - Local Markdown links resolve.
 - No unreplaced placeholders remain.
 
@@ -50,14 +52,19 @@ complete.
 
 - Understand, change, validate, and main workflows exist.
 - Main workflow starts by reading the index.
-- Main workflow reports in plain language and does not expose module names, file
-  paths, function names, or code snippets.
+- Main workflow reports according to the selected reporting level.
+  - Plain: does not expose module names, file paths, function names, or code
+    snippets.
+  - Technical: includes module names, file paths, and relevant code context.
 - Main workflow uses Before / After as the only human confirmation interface.
 - Understand, change, and validate workflows are internal modules routed by the
   main workflow.
 - Internal workflows select relevant module context and any necessary boundary
   context before code inspection.
 - Change workflow requires a Before / After gate before edits.
+- Change workflow includes a Decision Gate that triggers for module boundary
+  changes, external API changes, irreversible operations, or multi-option
+  trade-offs.
 - Understand and validate workflows require a Before / After gate before
   follow-up edits.
 - Workflows use Before / After as the user-facing confirmation gate, not
@@ -65,6 +72,8 @@ complete.
 - Workflows reason through scope and prefer complete, bounded plans.
 - Workflows require atlas updates only when module boundaries, ownership,
   external APIs, or documented repository facts change.
+- Atlas update instructions are incremental: update only affected module docs
+  and index entries, not the full atlas.
 - Default adapter points to the main workflow, not the individual workflow
   modules.
 
@@ -83,8 +92,8 @@ Before the final report:
 
 1. Reread the index and confirm every module summary includes a situational
    description of when future work should start there.
-2. Reread the main workflow and confirm its user-facing report rules do not
-   expose module names, file paths, function names, or code snippets.
+2. Reread the main workflow and confirm its user-facing report rules respect
+   the selected reporting level.
 3. Confirm the adapter points to the main workflow, not any individual workflow
    module.
 4. Confirm all placeholders have been replaced with concrete project content.

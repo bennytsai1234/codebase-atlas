@@ -17,6 +17,7 @@
 - Working language: {{WORKING_LANGUAGE}}
 - Reference template mode: {{REFERENCE_TEMPLATE_MODE}}
 - Workflow delivery policy: {{DELIVERY_POLICY}}
+- Reporting level: {{REPORTING_LEVEL}}
 - Workflow entrypoints: {{WORKFLOW_ENTRYPOINT_POLICY}}
 {{REFERENCE_BOUNDARY}}
 {{WORKFLOW_ENTRYPOINTS}}
@@ -26,6 +27,13 @@
 Inherited rules from existing project guidance. All workflows must follow these:
 
 {{PROJECT_OPERATING_CONSTRAINTS}}
+
+## Architecture Decisions
+
+Cross-module decisions recorded during development. Module-level decisions are
+in each module's Known Risks or Do Not Do section.
+
+{{ARCHITECTURE_DECISIONS}}
 
 ## Workflow Docs
 

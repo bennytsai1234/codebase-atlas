@@ -32,11 +32,13 @@ Do not output this layer to the user.
 
 ## Reporting Rules
 
-- Use plain language for every user-facing report.
-- Do not expose module names, file paths, function names, or code snippets in
-  user-facing reports.
 - Before / After is the only human confirmation interface.
-- Keep technical details for internal reasoning only.
+- Reporting level for this project: {{REPORTING_LEVEL}}
+  - Plain: do not expose module names, file paths, function names, or code
+    snippets in user-facing reports.
+  - Technical: include module names, file paths, and relevant code context in
+    user-facing reports to help the developer locate changes.
+- Keep internal reasoning separate from the user-facing summary.
 
 ## Before / After Format
 
@@ -54,6 +56,13 @@ Update the atlas only when this investigation finds existing atlas facts are
 inaccurate, such as incorrect module boundary descriptions or changed
 ownership. Report newly discovered risks to the user; do not write them back to
 the atlas unless they make existing atlas facts inaccurate.
+
+When an update is needed, apply it incrementally:
+
+1. Update only the affected module doc or docs.
+2. If the module list or summaries in the index changed, update the index.
+3. Do not rescan unrelated modules or regenerate workflow docs.
+4. Note what changed and why in the report.
 
 ## Delivery Policy
 
