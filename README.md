@@ -43,8 +43,9 @@ canonical main workflow under `docs/`.
 
 ## How It Works
 
-1. Silently detect the working language and whether old atlas files exist.
-2. Explain what the skill creates, then handle old atlas files if needed.
+1. Silently detect the working language and whether old atlas docs or generated
+   entrypoints exist.
+2. Explain what the skill creates, then handle old atlas artifacts if needed.
 3. Pre-scan existing repository rules and confirm the initial decisions in
    plain language, including each inherited rule and how it will be handled.
 4. Inspect repository structure, entrypoints, source roots, tests, configs, and

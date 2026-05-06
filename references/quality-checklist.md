@@ -28,6 +28,9 @@ complete.
 - Index links to all workflow docs.
 - Index includes project operating constraints inherited from existing guidance.
 - Project operating constraints are concrete enough for all workflows to follow.
+- Old generated Codebase Atlas entrypoints were removed or preserved according
+  to the user's explicit choice.
+- No unrelated `.agents/` files were deleted.
 - Main workflow exists.
 - Default adapter exists.
 - Index links to all module docs.

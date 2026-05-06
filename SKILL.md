@@ -43,15 +43,23 @@ until the confirmation dialog.
 
 ### Step 1: Detect Old Atlas Silently
 
-Before outputting anything, scan `docs/` only to detect whether old atlas files
-exist:
+Before outputting anything, scan only for old Codebase Atlas artifacts:
 
-1. Detect existence only. Do not read old atlas content.
-2. If old atlas files exist, record that fact and tell the user after the skill
-   introduction.
-3. Wait for the user to decide whether to delete and rebuild before continuing.
-4. If the user wants to preserve any part, read the old atlas only after the
-   user gives preservation instructions.
+1. Detect whether old atlas docs exist under `docs/`.
+2. Detect whether generated Codebase Atlas entrypoints exist under `.agents/`
+   or other configured prompt or skill directories.
+3. Detect existence only. Do not deeply read old atlas content.
+4. If old atlas docs or generated entrypoints exist, record them and tell the
+   user after the skill introduction.
+5. After the introduction, wait for the user to decide whether to delete and
+   rebuild before continuing.
+6. If the user chooses delete and rebuild, delete both:
+   - Old atlas docs.
+   - Generated Codebase Atlas entrypoints that point to those old docs.
+7. Do not delete unrelated `.agents/` content or any file whose Codebase Atlas
+   origin cannot be confirmed.
+8. If the user wants to preserve any part, read only the parts the user asked
+   to preserve after the user gives preservation instructions.
 
 ### Step 2: Introduce This Skill
 
@@ -96,16 +104,18 @@ you can catch it immediately.
 This initialization only needs to happen once.
 ```
 
-If Step 1 detected old atlas files, add this message after the introduction in
-the working language:
+If Step 1 detected old atlas artifacts, add this message after the introduction
+in the working language:
 
 ```markdown
-I found existing atlas files for this project. Should I delete them and rebuild
-the atlas from scratch? If you want to preserve any parts, tell me which parts.
+I found existing atlas artifacts for this project, including old atlas docs or
+generated entrypoints. Should I delete them and rebuild the atlas from scratch?
+If you want to preserve any parts, tell me which parts.
 ```
 
-If old atlas files were detected, wait for user confirmation before continuing
-to Step 3. If no old atlas files were detected, continue directly to Step 3.
+If old atlas artifacts were detected, wait for user confirmation before
+continuing to Step 3. If no old atlas artifacts were detected, continue
+directly to Step 3.
 
 ### Step 3: Pre-Scan Existing Rules
 
