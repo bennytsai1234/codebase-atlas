@@ -119,13 +119,49 @@ before asking for configuration decisions:
 3. Scan for maintenance policy signals, such as pure maintenance mode, feature
    freeze, or active development.
 4. Bring those findings into a confirmation dialog that explains:
-   - Which existing rules were found.
-   - Which rules will be preserved.
+   - Each existing rule found, grouped by category.
+   - The concrete content of each rule, not a vague summary.
+   - How each rule will be handled in the atlas.
+   - Which rules will be written into the index as project operating
+     constraints.
    - Which rules may need adjustment or removal.
    - The selected working language and why it was selected.
-   - Recommended values for the four initial decisions: mode, delivery policy,
-     entrypoints, and feature parity.
-5. Wait for user confirmation before starting the full scan.
+   - Recommended values for the initial decisions.
+5. Present the initial decisions as plain-language questions in the working
+   language. Do not expose internal setting names such as `mode`,
+   `delivery_policy`, `workflow_entrypoints`, `reference_template_mode`, or
+   `feature_parity` to the user. For each decision, include the question the
+   user needs to answer, the recommended value, and why that value is
+   recommended.
+6. Present the reference-template decision in this plain-language shape,
+   translated into the working language:
+
+   ```markdown
+   Do you have a reference template or specification?
+
+   A. No. Build the atlas from this project only.
+   B. Yes, but only use selected parts of the reference. Full feature alignment
+      is not required.
+   C. Yes, and this project must fully match the reference's functionality.
+
+   If you choose B, what parts should I use as reference?
+   For example: only its data-flow design, only its UI structure, or only its
+   error-handling approach.
+   ```
+
+   Do not use the term "feature parity" in user-facing explanations. Keep that
+   term, if needed, for internal reasoning only.
+7. Use this confirmation shape for preserved rules:
+
+   ```text
+   [Category]
+   Rule: <specific inherited rule>
+   Handling: <how this rule will be recorded or applied>
+   ```
+
+   The user must be able to judge whether the agent correctly understood the
+   existing project guidance.
+8. Wait for user confirmation before starting the full scan.
 
 ## Main Workflow
 

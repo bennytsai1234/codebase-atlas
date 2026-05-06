@@ -45,20 +45,33 @@ canonical main workflow under `docs/`.
 
 1. Silently detect the working language and whether old atlas files exist.
 2. Explain what the skill creates, then handle old atlas files if needed.
-3. Pre-scan existing repository rules and confirm the initial decisions.
+3. Pre-scan existing repository rules and confirm the initial decisions in
+   plain language, including each inherited rule and how it will be handled.
 4. Inspect repository structure, entrypoints, source roots, tests, configs, and
    existing docs.
 5. Split the project into stable modules.
-6. Write a module index, module notes, four workflow docs, and the default
-   adapter.
+6. Write a module index with inherited operating constraints, module notes,
+   four workflow docs, and the default adapter.
 7. Run the quality checklist.
 
 ## Modes
 
 - **Standalone**: the target repository is the only source of truth.
 - **Reference-assisted**: a reference repository, spec, design, screenshot set,
-  or prior implementation guides boundaries and patterns. It is not a feature
-  backlog unless feature parity is explicitly enabled.
+  or prior implementation guides selected boundaries and patterns. It is not a
+  feature backlog unless the user explicitly chooses full alignment.
+
+Reference use is confirmed with three user-facing choices:
+
+- **No reference**: build the atlas from this project only.
+- **Partial reference**: use only the selected parts of the reference, such as
+  data flow, UI structure, error handling, diagnostics, or test patterns.
+- **Full alignment**: make the project fully match the reference's
+  functionality, only when explicitly requested.
+
+Initialization confirmations should avoid internal setting names. The agent
+should ask plain-language questions and show each inherited project rule with
+the concrete handling that will be written into the atlas.
 
 ## Daily Use After Initialization
 

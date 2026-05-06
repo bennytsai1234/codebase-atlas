@@ -8,15 +8,26 @@ complete.
 - Mode is recorded.
 - Working language is recorded and follows explicit repository rules first,
   user initialization language second, English third.
+- Reference template mode is recorded as none, partial reference, or full
+  alignment.
 - Delivery policy is recorded in the index and every workflow.
 - The default adapter and any additional entrypoint choices are recorded.
-- Reference-assisted output records whether feature parity is enabled.
+- Partial reference output records the selected reference scope.
+- Full alignment output records that reference functionality is in scope.
+- User-facing confirmation used plain-language questions instead of exposing
+  internal decision keys.
+- User-facing reference-template confirmation used no reference, partial
+  reference, and full alignment choices instead of the term "feature parity".
+- Preserved project rules were confirmed with concrete rule content and
+  handling, not vague "will preserve" statements.
 
 ## Output Shape
 
 - Output follows the standalone or reference-assisted tree from
   `references/atlas-contract.md`.
 - Index links to all workflow docs.
+- Index includes project operating constraints inherited from existing guidance.
+- Project operating constraints are concrete enough for all workflows to follow.
 - Main workflow exists.
 - Default adapter exists.
 - Index links to all module docs.
@@ -57,8 +68,11 @@ complete.
 ## Reference-Assisted Quality
 
 - Target project remains the primary subject.
-- Reference material is guidance unless feature parity was explicitly enabled.
-- Reference notes prevent feature creep.
+- Partial reference material is used only within the user-selected scope.
+- Full alignment is used only when the user explicitly requested full
+  alignment, parity, compatibility, migration equivalence, or reference-driven
+  expansion.
+- Reference notes prevent feature creep outside the selected mode.
 
 ## Self-Verification Actions
 

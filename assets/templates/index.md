@@ -15,11 +15,17 @@
 
 - Atlas mode: {{ATLAS_MODE}}
 - Working language: {{WORKING_LANGUAGE}}
+- Reference template mode: {{REFERENCE_TEMPLATE_MODE}}
 - Workflow delivery policy: {{DELIVERY_POLICY}}
 - Workflow entrypoints: {{WORKFLOW_ENTRYPOINT_POLICY}}
-- Feature parity: {{FEATURE_PARITY}}
 {{REFERENCE_BOUNDARY}}
 {{WORKFLOW_ENTRYPOINTS}}
+
+## Project Operating Constraints
+
+Inherited rules from existing project guidance. All workflows must follow these:
+
+{{PROJECT_OPERATING_CONSTRAINTS}}
 
 ## Workflow Docs
 

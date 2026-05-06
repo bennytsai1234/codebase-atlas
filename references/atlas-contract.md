@@ -12,12 +12,36 @@ Resolve these before the full scan:
 - `mode`: `standalone` or `reference-assisted`.
 - `working_language`: explicit repository language rule first, user's
   initialization request language second, English third.
+- `reference_template_mode`: `none`, `partial reference`, or `full alignment`.
+  This user-facing decision determines whether the run is standalone or
+  reference-assisted, and whether reference functionality is in scope.
 - `delivery_policy`: `no commit`, `commit only`, or `commit and push`.
 - `workflow_entrypoints`: a default thin adapter is always generated. Additional
   tool-specific entrypoints may be generated when explicitly requested.
-- `feature_parity`: only relevant in reference-assisted mode. It is disabled by
-  default and enabled only for explicit parity, compatibility, migration
+
+Internal decision keys are for atlas generation only. User-facing confirmation
+must present these decisions as plain-language questions in the working
+language, with the recommended value and reason. Do not expose internal setting
+names such as `mode`, `reference_template_mode`, `delivery_policy`,
+`workflow_entrypoints`, or `feature_parity` directly to the user.
+
+The reference-template decision must be presented as three plain-language
+choices:
+
+- No reference: build the atlas from the target project only.
+- Partial reference: use only the user-selected parts of the reference.
+- Full alignment: fully match the reference's functionality, only when the user
+  explicitly asks for full alignment, parity, compatibility, migration
   equivalence, or reference-driven expansion.
+
+When existing project guidance is found, the confirmation dialog must list each
+preserved rule with concrete content and handling:
+
+```text
+[Category]
+Rule: <specific inherited rule>
+Handling: <how this rule will be recorded or applied>
+```
 
 ## Source Of Truth
 
@@ -100,8 +124,11 @@ tokens such as `{{ATLAS_TITLE}}` or `{{DELIVERY_POLICY}}` in generated docs.
 The index must include:
 
 - Purpose and usage rules.
-- Initial decisions: mode, working language, delivery policy, entrypoints, and
-  feature parity when relevant.
+- Initial decisions: mode, working language, reference template mode, delivery
+  policy, and entrypoints.
+- Project operating constraints inherited from existing guidance. This section
+  must capture concrete rules that all workflows must follow, such as language,
+  architecture, testing, release flow, maintenance state, CI, and work style.
 - Rebuild semantics: rerunning Codebase Atlas means a full rescan and atlas
   rebuild from current repository reality.
 - Links to the main workflow and three internal workflow docs.

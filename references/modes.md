@@ -31,28 +31,44 @@ Split the project into stable modules. Judge the split by quality:
 Use reference-assisted mode when the user provides a reference repository,
 folder, docs, screenshots, product, API spec, or prior implementation.
 
-Rules:
+The reference-template decision has three modes:
+
+**A. No Reference**
+
+Use the target repository as the only source of truth. Do not inspect or apply
+external reference material.
+
+**B. Partial Reference**
+
+Use the reference only for the scope the user selected. Out-of-scope reference
+features, flows, UI, architecture, or behavior are not relevant and must not be
+treated as missing target functionality.
+
+Examples of partial reference scope:
+
+- Data-flow design only.
+- UI structure only.
+- Error-handling approach only.
+- Diagnostics or testing pattern only.
+
+**C. Full Alignment**
+
+The target project must fully align with the reference's functionality. Enable
+this only when the user explicitly asks for full alignment, parity,
+compatibility, migration equivalence, or reference-driven expansion.
+
+Rules for Partial Reference and Full Alignment:
 
 - Understand the target repository first.
 - Build the module split from target reality, not from the reference.
 - Inspect the reference only after likely target modules are known.
 - For each target module, record reference counterparts only when useful.
-- Keep the target project as the primary subject.
-
-By default, the reference is guidance for:
-
-- Responsibility boundaries.
-- Flow design and sequencing.
-- Failure handling and recovery points.
-- Diagnostics and testing patterns.
-- Naming or conceptual alignment when it reduces confusion.
+- Keep the target project as the primary subject unless Full Alignment
+  explicitly makes reference functionality part of the target goal.
 
 Do not use the reference to:
 
-- Add unrelated features.
-- Force the target into the reference architecture.
-- Treat missing target features as bugs.
-- Turn the reference into a backlog.
-
-Enable feature parity only when the user explicitly asks for parity,
-compatibility, migration equivalence, or reference-driven expansion.
+- Add unrelated features outside the selected mode.
+- Force the target into the reference architecture unless explicitly requested.
+- Treat out-of-scope reference features as bugs.
+- Turn the reference into an open-ended backlog.
