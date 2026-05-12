@@ -5,8 +5,9 @@
 This is an internal agent module routed by the main workflow.
 The user does not need to know this workflow exists.
 
-Use it internally for checks, reviews, reproductions, verification, and risk
-assessment when the user is not asking for immediate implementation.
+Use it internally for checks, reviews, reproductions, verification, profiling,
+CI or build failure investigation, and risk assessment when the user is not
+asking for immediate implementation.
 
 ## Internal Reasoning Layer
 
@@ -15,15 +16,54 @@ Do not output this layer to the user.
 1. Preserve the validation question, expected behavior, or risk.
 1. Receive the task and already-read index summary from the main workflow.
 1. Choose the most relevant module docs for the validation question.
+1. Internally classify the validation type and apply the type-specific
+   evidence approach listed under **Validation Types** below.
 1. Internally confirm validation scope:
    - The specific behavior or assumption being validated.
    - Relevant boundaries and downstream impact.
 1. Collect evidence:
    - Read relevant code, tests, configuration, or docs.
    - Read only the minimum content needed to answer the validation question.
+   - For performance and CI types, capture actual measurements or logs, not
+     guesses.
 1. Internally separate:
    - Conclusions supported by evidence.
    - Parts that still cannot be confirmed.
+
+## Validation Types
+
+Pick exactly one type. Each type names the kind of question and what evidence
+counts as sufficient.
+
+- **Behavior check**: does the code do what the user expects?
+  Evidence: trace the code path, confirm or refute against the expected
+  behavior.
+
+- **Review**: is the recent change correct, safe, and consistent?
+  Evidence: read the diff against the surrounding module and atlas context;
+  look for missing tests, contract drift, or hidden coupling.
+
+- **Reproduction**: can the reported symptom be reproduced?
+  Evidence: minimum reproduction case; record the exact steps and the
+  observed output.
+
+- **Profiling**: where is the time, memory, or query cost going?
+  Evidence: a real measurement (timing, query log, profiler output, bundle
+  analyzer, etc.) — not an inferred bottleneck. Capture a baseline before
+  recommending any fix.
+
+- **CI or build failure**: why did the pipeline break?
+  Evidence: the failing log lines, the changed surface that the pipeline
+  exercises, and the most recent commit that touched it. Distinguish flaky
+  failures from real regressions.
+
+- **Risk assessment**: what could go wrong if this change ships?
+  Evidence: callers, persistence, generated artifacts, downstream systems,
+  rollback path. State each risk with its likelihood and severity in plain
+  language.
+
+If the task does not cleanly match one type, pick the closest and note the
+deviation in internal reasoning.
 
 ## External Reporting Layer
 

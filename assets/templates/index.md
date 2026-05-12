@@ -28,6 +28,13 @@ Inherited rules from existing project guidance. All workflows must follow these:
 
 {{PROJECT_OPERATING_CONSTRAINTS}}
 
+## Upstream Decision Documents
+
+Decision documents produced by Project Genius under `docs/genius/`, treated by
+workflows as canonical context. Leave blank if `docs/genius/` does not exist.
+
+{{UPSTREAM_DECISION_DOCUMENTS}}
+
 ## Architecture Decisions
 
 Cross-module decisions recorded during development. Module-level decisions are

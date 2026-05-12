@@ -196,19 +196,31 @@ before asking for configuration decisions:
    build/config files, existing docs, and major package or domain boundaries.
 4. Read `references/modes.md` and follow either standalone or
    reference-assisted guidance.
-5. Split the project into stable modules using change-boundary quality, not a
+5. If `docs/genius/` exists, list every document found and decide what to
+   absorb:
+   - Inventory entries: list every document with a one-line description in the
+     index under **Upstream Decision Documents**.
+   - Hard rules: copy globally-applicable rules into **Project Operating
+     Constraints**.
+   - Do not duplicate full content into the index. Workflows read the source
+     document when they need details.
+6. Split the project into stable modules using change-boundary quality, not a
    hard module count.
-6. Create or update the canonical atlas under `docs/` using templates from
+7. Create or update the canonical atlas under `docs/` using templates from
    `assets/templates/`.
-7. Generate four canonical workflow docs:
+8. Generate four canonical workflow docs:
    - `understand`: introductions and investigations.
-   - `change`: bugs, features, optimizations, and refactors.
-   - `validate`: checks, reviews, reproductions, and risk assessments.
+   - `change`: all code-changing tasks, classified into ten internal task
+     types with type-specific verification (bug, feature, optimization,
+     refactor, release, dependency, migration, config, hotfix, cleanup).
+   - `validate`: checks, reviews, reproductions, profiling, CI failures, and
+     risk assessments, classified into six internal validation types.
    - `main`: the universal daily entrypoint, automatic router, and default
-     generated workflow.
-8. Generate the default thin adapter. It must point to the canonical
+     generated workflow. When `docs/genius/delivery_plan.md` exists with a 🔲
+     phase, it offers to continue the next phase before intent routing.
+9. Generate the default thin adapter. It must point to the canonical
    `main` workflow, not the individual workflow modules.
-9. Run `references/quality-checklist.md` before reporting completion.
+10. Run `references/quality-checklist.md` before reporting completion.
 
 ## Core Rules
 
@@ -234,6 +246,13 @@ before asking for configuration decisions:
 
 ## When Not To Use This Skill
 
-Do not run Codebase Atlas for ordinary bug fixes, feature work, optimization,
-investigation, refactor, or validation after an atlas exists. Open the generated
-workflow docs and follow them.
+Do not run Codebase Atlas for ordinary daily work after an atlas exists. The
+generated `main` workflow already routes ten kinds of change work (bug,
+feature, optimization, refactor, release, dependency, migration, config,
+hotfix, cleanup) and six kinds of validation work (behavior check, review,
+reproduction, profiling, CI failure, risk assessment). It also continues an
+existing `docs/genius/delivery_plan.md` phase by phase. Use the generated
+workflow docs for all of these instead of rerunning Codebase Atlas.
+
+Rerun Codebase Atlas only when the user explicitly asks for a rebuild,
+refresh, regenerate, or rescan of the atlas itself.

@@ -133,6 +133,11 @@ The index must include:
 - Project operating constraints inherited from existing guidance. This section
   must capture concrete rules that all workflows must follow, such as language,
   architecture, testing, release flow, maintenance state, CI, and work style.
+- Upstream decision documents inventory when `docs/genius/` exists. List each
+  Project Genius document found (product brief, tech decisions, design
+  direction, delivery plan, user stories, data model, API spec, NFR, risk
+  register, test strategy, open questions) with a one-line description of what
+  it covers. Workflows treat these as canonical context, not as decoration.
 - Rebuild semantics: rerunning Codebase Atlas means a full rescan and atlas
   rebuild from current repository reality.
 - Links to the main workflow and three internal workflow docs.
@@ -167,11 +172,20 @@ Generate four canonical workflows:
 
 - `understand`: introductions, explanations, feasibility questions, ownership
   questions, and investigations.
-- `change`: bugs, features, optimizations, and refactors.
-- `validate`: checks, reviews, reproductions, verification, and risk assessment.
+- `change`: all code-changing tasks. The change workflow internally
+  classifies the task into one of ten types — bug, feature, optimization,
+  refactor, release, dependency, migration, config, hotfix, cleanup — and
+  applies type-specific verification and rollback expectations.
+- `validate`: checks, reviews, reproductions, verification, profiling, CI or
+  build failure investigation, and risk assessment. The validate workflow
+  internally classifies the question into one of six types — behavior check,
+  review, reproduction, profiling, CI failure, risk assessment — and applies
+  type-specific evidence expectations.
 - `main`: the universal daily entrypoint that reads the index first, confirms
   in plain language what the project does, and routes to understand, change,
-  validate, or a combination.
+  validate, or a combination. When `docs/genius/delivery_plan.md` exists and
+  contains a 🔲 phase, the main workflow offers to continue with the next
+  phase before falling back to intent-based routing.
 
 All workflows must:
 
@@ -211,14 +225,46 @@ secondary engineering reports.
 
 The `change` workflow must escalate to a Decision Gate when the change alters
 module boundaries, affects external API contracts, involves irreversible
-operations, or has multiple viable approaches with different trade-offs. The
-Decision Gate presents options and trade-offs before the Before / After step.
+operations, has multiple viable approaches with different trade-offs, or is
+classified internally as a migration. The Decision Gate presents options and
+trade-offs before the Before / After step.
+
+The `change` workflow must run a minimum verification step after edits are
+applied — at least the type-appropriate subset of tests, build, lint, or
+manual reproduction described in its template. The verification result is
+included in the user-facing report regardless of reporting level. If
+verification fails, the workflow does not claim completion.
+
+For changes that touch more than three files or cross more than one module,
+the `change` workflow writes a short engineering plan to
+`docs/changes/<YYYY-MM-DD>-<slug>.md` before editing. This plan is internal
+scratch and does not replace the Before / After gate.
 
 Before any proposed implementation route, workflows must calibrate scope:
 owning module, boundary modules, contracts, shared state, persistence, generated
 artifacts, tests, downstream users, and uncertain surfaces. Prefer complete,
 bounded plans over shortcut-oriented local patches. Scope calibration is
 reasoning support; the user-facing confirmation remains Before / After.
+
+## Upstream Decision Documents
+
+When `docs/genius/` exists, the atlas treats those documents as canonical
+context for ongoing work:
+
+1. During scan, list every `docs/genius/*.md` found and record an inventory
+   entry in the index under **Upstream Decision Documents**.
+2. Copy hard rules from those documents into **Project Operating Constraints**
+   when they apply to all workflows (e.g., language, testing minimum,
+   deployment target, security must-haves).
+3. Do not duplicate the full content of `docs/genius/` into the atlas index.
+   Workflows read the source document when they need its details.
+4. `docs/genius/delivery_plan.md` drives the main workflow's delivery
+   continuation routing. The main workflow must offer to continue with the
+   next 🔲 phase before falling back to intent-based routing, unless the user
+   request already names a specific other task.
+5. When a change closes a phase, the change workflow updates the phase marker
+   to ✅ in `docs/genius/delivery_plan.md`. This is an incremental update and
+   does not require an atlas rebuild.
 
 ## Incremental Atlas Updates
 

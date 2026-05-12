@@ -5,7 +5,9 @@
 This is an internal agent module routed by the main workflow.
 The user does not need to know this workflow exists.
 
-Use it internally for bugs, features, optimizations, and refactors.
+Use it internally for all code-changing tasks: bugs, features, optimizations,
+refactors, releases, dependency upgrades, schema or data migrations,
+configuration changes, hotfixes, and cleanups.
 
 ## Internal Reasoning Layer
 
@@ -14,19 +16,92 @@ Do not output this layer to the user.
 1. Preserve the user's original request.
 1. Receive the task and already-read index summary from the main workflow.
 1. Choose the most relevant module docs for the task.
-1. Internally classify the task:
-   - Bug: current behavior is wrong or unstable.
-   - Feature: new behavior is requested.
-   - Optimization: behavior stays the same while quality improves.
-   - Refactor: structure changes while intended behavior stays the same.
+1. Internally classify the task into one of the supported task types and
+   apply the type-specific reasoning hints listed under
+   **Internal Task Types** below.
 1. Calibrate scope internally so Before / After is accurate:
    - What will change.
    - What may be affected downstream.
    - Which boundaries remain uncertain.
 1. Check whether the Decision Gate triggers apply (see below). If any trigger
    matches, use the Decision Gate format instead of the plain Before / After.
+1. If the change is non-trivial — touches more than three files or crosses
+   more than one module — write a short change plan to
+   `docs/changes/<YYYY-MM-DD>-<slug>.md` before editing. The plan lists scope,
+   chosen module entry points, expected file touches, validation steps, and
+   rollback notes. This plan is engineering scratch and is not the user-facing
+   confirmation.
 1. Inspect code, tests, docs, configs, runtime paths, or reference material only
    when needed.
+
+## Internal Task Types
+
+Pick exactly one type. Each type names the kind of work, the minimum
+verification expected before reporting completion, and what counts as a
+rollback path. Verification commands are repository-specific — pick the ones
+that exist in this project from `package.json`, `Makefile`, `CONTRIBUTING.md`,
+CI configuration, or equivalent.
+
+- **Bug**: current behavior is wrong or unstable.
+  Verify: reproduction is gone; relevant tests pass; nearest integration test
+  exercises the fixed path.
+  Rollback: revert the patch; the bug returns but no other behavior changes.
+
+- **Feature**: new behavior is requested.
+  Verify: new tests cover the happy path and at least one failure path; build
+  succeeds; type check passes.
+  Rollback: feature flag or revert; existing behavior is unaffected.
+
+- **Optimization**: behavior stays the same while quality improves.
+  Verify: existing tests still pass; the targeted metric (latency, memory,
+  bundle size, query count) is measured before and after.
+  Rollback: revert; quality regresses to the prior baseline.
+
+- **Refactor**: structure changes while intended behavior stays the same.
+  Verify: full test suite passes; public APIs unchanged unless explicitly
+  scoped in.
+  Rollback: revert; behavior unchanged either way.
+
+- **Release**: bump version, regenerate changelog, prepare tag.
+  Verify: version manifest matches changelog entry; build artifacts produce
+  cleanly; tag follows the project's existing convention.
+  Rollback: drop the tag and revert manifest bump; release is unpublished.
+
+- **Dependency**: upgrade, downgrade, replace, or remove a package.
+  Verify: install or lock-file regeneration succeeds; build succeeds; targeted
+  tests covering callers of the changed package pass; check changelog or
+  release notes for breaking changes.
+  Rollback: pin to the previous version and re-resolve.
+
+- **Migration**: database schema, data, or storage migration.
+  Verify: forward migration succeeds on a fresh copy of the data; reverse
+  migration script exists or the irreversibility is recorded; one read and one
+  write path are exercised after migration.
+  Rollback: reverse migration script or restore from snapshot. Always escalate
+  to Decision Gate.
+
+- **Config**: environment variables, feature flags, infrastructure
+  configuration, or runtime parameters.
+  Verify: configuration loads in the affected environment; the dependent code
+  path responds to the new value; secrets are not committed.
+  Rollback: revert to the prior config value; restart or reload affected
+  process.
+
+- **Hotfix**: emergency fix for a live incident.
+  Verify: minimum reproduction is gone; the rest of the test suite still
+  passes on the patched branch; a follow-up task is noted for proper fix or
+  post-mortem.
+  Rollback: revert hotfix; incident returns. Prefer the smallest possible
+  change surface.
+
+- **Cleanup**: dead code removal, file consolidation, comment pruning, or
+  unused asset deletion.
+  Verify: build succeeds; full test suite passes; no references remain to
+  removed symbols; user-facing behavior is unchanged.
+  Rollback: revert; nothing is lost because there are no behavior changes.
+
+If the task does not cleanly match one type, pick the closest and note the
+deviation in internal reasoning. Do not invent new types.
 
 ## External Reporting Layer
 
@@ -35,8 +110,13 @@ Do not output this layer to the user.
 1. Confirm with the user using the Before / After format below.
 1. Wait for explicit user confirmation before editing any files.
 1. After confirmation, implement the change.
+1. Run the minimum verification listed for the chosen task type. Include the
+   verification result in the user-facing report. If verification fails, do
+   not claim completion; either fix and re-verify, or report the failure
+   honestly and ask the user how to proceed.
 1. Validate the affected behavior and boundaries.
-1. Finish with one plain-language sentence describing what changed.
+1. Finish with one plain-language sentence describing what changed and how it
+   was verified.
 
 ## Reporting Rules
 
@@ -47,6 +127,9 @@ Do not output this layer to the user.
   - Technical: include module names, file paths, and relevant code context in
     user-facing reports to help the developer locate changes.
 - Keep internal reasoning separate from the user-facing summary.
+- Verification status is part of the user-facing report regardless of
+  reporting level: state plainly whether checks passed, were skipped, or
+  failed.
 
 ## Before / After Format
 
@@ -67,7 +150,8 @@ impact. Use it when any of these triggers match:
 - The change affects an external API contract or public interface.
 - There are two or more viable approaches with different trade-offs.
 - The change involves an irreversible operation (large-scale deletion, database
-  migration, framework replacement).
+  migration, framework replacement, package downgrade with data loss).
+- The internal task type is Migration or contains an irreversible step.
 
 When triggered, present this format instead of the plain Before / After:
 
@@ -95,6 +179,19 @@ chosen option. Record the decision:
   index.
 - Module-level decisions: add a note to the affected module's Known Risks or
   Do Not Do section.
+
+## Delivery Plan Awareness
+
+When the change scope came from a phase in `docs/genius/delivery_plan.md`:
+
+- Read the phase's deliverables and validation criteria as the success
+  definition.
+- After verification passes, update the phase marker from 🔲 (or ⏳) to ✅ in
+  `docs/genius/delivery_plan.md`. This update is incremental and does not
+  require an atlas rebuild.
+- If the phase's validation criteria reference other `docs/genius/` documents
+  (for example `user_stories.md` or `test_strategy.md`), read only the
+  relevant sections.
 
 ## Atlas Update Conditions
 

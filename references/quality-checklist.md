@@ -57,14 +57,25 @@ complete.
     snippets.
   - Technical: includes module names, file paths, and relevant code context.
 - Main workflow uses Before / After as the only human confirmation interface.
+- Main workflow offers delivery-plan continuation when
+  `docs/genius/delivery_plan.md` exists and has a 🔲 phase.
 - Understand, change, and validate workflows are internal modules routed by the
   main workflow.
 - Internal workflows select relevant module context and any necessary boundary
   context before code inspection.
 - Change workflow requires a Before / After gate before edits.
 - Change workflow includes a Decision Gate that triggers for module boundary
-  changes, external API changes, irreversible operations, or multi-option
-  trade-offs.
+  changes, external API changes, irreversible operations, multi-option
+  trade-offs, or any task internally classified as Migration.
+- Change workflow classifies every task into one of the ten internal task
+  types (bug, feature, optimization, refactor, release, dependency, migration,
+  config, hotfix, cleanup) and runs the type-specific minimum verification
+  after edits.
+- Change workflow writes a short engineering plan to `docs/changes/` before
+  editing when scope exceeds three files or one module.
+- Validate workflow classifies every task into one of the six validation
+  types (behavior check, review, reproduction, profiling, CI failure, risk
+  assessment) and captures real evidence for profiling and CI types.
 - Understand and validate workflows require a Before / After gate before
   follow-up edits.
 - Workflows use Before / After as the user-facing confirmation gate, not
@@ -76,6 +87,17 @@ complete.
   and index entries, not the full atlas.
 - Default adapter points to the main workflow, not the individual workflow
   modules.
+
+## Upstream Decision Documents
+
+- If `docs/genius/` exists, the index lists every found document under
+  Upstream Decision Documents with a one-line description.
+- Hard rules from `docs/genius/` are reflected in Project Operating Constraints
+  where they apply globally.
+- The atlas does not duplicate full content of `docs/genius/` into the index.
+- The main workflow respects `docs/genius/delivery_plan.md` as the build
+  backlog and updates phase markers (🔲 → ⏳ → ✅) incrementally as phases
+  progress.
 
 ## Reference-Assisted Quality
 
