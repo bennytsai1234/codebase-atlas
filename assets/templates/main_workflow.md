@@ -12,15 +12,7 @@ workflows when needed.
 1. Open `{{INDEX_FILE}}` before any other operation, while preserving the
    user's original request and intent.
 1. Confirm in one plain sentence what this project does.
-1. Delivery plan check. If `docs/genius/delivery_plan.md` exists and has at
-   least one phase marked 🔲, and the user's request does not point to a
-   specific other task, ask in plain language whether to continue with the
-   next unfinished phase. Treat the user's answer as the routing decision.
 1. Route by task intent:
-   - Delivery plan continuation: open `docs/genius/delivery_plan.md`, locate
-     the first 🔲 phase, read its deliverables and dependencies, then run the
-     change workflow with that phase as the change scope. After completion,
-     update the phase marker to ✅.
    - Understanding, explanation, investigation, or feasibility: use the
      understand workflow.
    - Modification, bug fix, feature, optimization, refactor, release,
@@ -47,23 +39,6 @@ workflow needs context that was not already gathered.
 
 Daily maintenance tasks route to the change workflow with an explicit internal
 task type. The change workflow has dedicated verification steps for each type.
-
-## Delivery Plan Continuation
-
-When `docs/genius/delivery_plan.md` exists, it represents the source-of-truth
-build order produced upstream by Project Genius. The main workflow respects it
-in these ways:
-
-- Treat each phase as a bounded unit of change scope.
-- Read the phase's `What to build`, `Dependencies`, and `Validation` sections
-  before routing into the change workflow.
-- Read other `docs/genius/` documents only when the phase references them or
-  when the change workflow's internal reasoning needs the context.
-- After the phase is delivered and validated, update its marker from 🔲 (or
-  ⏳) to ✅ in `docs/genius/delivery_plan.md`. This update is incremental and
-  does not require an atlas rebuild.
-- If the user explicitly asks for something off-plan, follow the off-plan
-  request and do not silently advance the delivery plan.
 
 ## Reporting Rules
 
@@ -98,8 +73,5 @@ If the user continues with another request:
 - Do not reread the index.
 - Continue from routing judgment.
 - Keep plain-language reporting and the Before / After mechanism.
-- If `docs/genius/delivery_plan.md` exists and the previous task closed a
-  phase, the next routing decision may again offer to continue with the next
-  🔲 phase.
 
 End only when the user says there is nothing else to handle.

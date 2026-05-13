@@ -57,8 +57,6 @@ complete.
     snippets.
   - Technical: includes module names, file paths, and relevant code context.
 - Main workflow uses Before / After as the only human confirmation interface.
-- Main workflow offers delivery-plan continuation when
-  `docs/genius/delivery_plan.md` exists and has a 🔲 phase.
 - Understand, change, and validate workflows are internal modules routed by the
   main workflow.
 - Internal workflows select relevant module context and any necessary boundary
@@ -88,16 +86,6 @@ complete.
 - Default adapter points to the main workflow, not the individual workflow
   modules.
 
-## Upstream Decision Documents
-
-- If `docs/genius/` exists, the index lists every found document under
-  Upstream Decision Documents with a one-line description.
-- Hard rules from `docs/genius/` are reflected in Project Operating Constraints
-  where they apply globally.
-- The atlas does not duplicate full content of `docs/genius/` into the index.
-- The main workflow respects `docs/genius/delivery_plan.md` as the build
-  backlog and updates phase markers (🔲 → ⏳ → ✅) incrementally as phases
-  progress.
 
 ## Reference-Assisted Quality
 
