@@ -180,19 +180,6 @@ chosen option. Record the decision:
 - Module-level decisions: add a note to the affected module's Known Risks or
   Do Not Do section.
 
-## Delivery Plan Awareness
-
-When the change scope came from a phase in `docs/genius/delivery_plan.md`:
-
-- Read the phase's deliverables and validation criteria as the success
-  definition.
-- After verification passes, update the phase marker from 🔲 (or ⏳) to ✅ in
-  `docs/genius/delivery_plan.md`. This update is incremental and does not
-  require an atlas rebuild.
-- If the phase's validation criteria reference other `docs/genius/` documents
-  (for example `user_stories.md` or `test_strategy.md`), read only the
-  relevant sections.
-
 ## Atlas Update Conditions
 
 Update affected atlas docs only when the change truly changes module
