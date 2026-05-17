@@ -109,7 +109,15 @@ deviation in internal reasoning. Do not invent new types.
    Wait for the user to choose before continuing.
 1. Confirm with the user using the Before / After format below.
 1. Wait for explicit user confirmation before editing any files.
-1. After confirmation, implement the change.
+1. Write the change plan and commit it before touching source files:
+   - Fill `assets/templates/change_plan.md` with the confirmed Before, After,
+     task type, expected file scope, validation steps, and rollback path.
+   - Save to `docs/changes/{{DATE}}-{{SLUG}}.md` (create `docs/changes/` if
+     it does not exist).
+   - Run `git add docs/changes/{{DATE}}-{{SLUG}}.md` and
+     `git commit -m "plan: {{SLUG}}"`.
+   - Do not edit any source files until this commit succeeds.
+1. After the plan is committed, implement the change.
 1. Run the minimum verification listed for the chosen task type. Include the
    verification result in the user-facing report. If verification fails, do
    not claim completion; either fix and re-verify, or report the failure
