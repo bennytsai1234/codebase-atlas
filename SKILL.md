@@ -60,6 +60,13 @@ Before outputting anything, scan only for old Codebase Atlas artifacts:
    origin cannot be confirmed.
 8. If the user wants to preserve any part, read only the parts the user asked
    to preserve after the user gives preservation instructions.
+9. Detect whether a `.claude/` directory exists at the project root. If found,
+   record Claude Code as a detected platform.
+10. Detect whether a `.agents/` directory exists at the project root. If found,
+    record Codex as a detected platform.
+11. If neither `.claude/` nor `.agents/` is found, record that platform
+    detection is inconclusive. The confirmation dialog in Step 3 must ask the
+    user which platform they use rather than pre-selecting.
 
 ### Step 2: Introduce This Skill
 
