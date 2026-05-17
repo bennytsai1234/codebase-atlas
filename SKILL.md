@@ -268,8 +268,26 @@ before asking for configuration decisions:
      risk assessments, classified into six internal validation types.
    - `main`: the universal daily entrypoint, automatic router, and default
      generated workflow.
-8. Generate the default thin adapter. It must point to the canonical
-   `main` workflow, not the individual workflow modules.
+8. Generate adapters for all platforms selected in the Step 3 confirmation:
+   - Always generate `docs/<project>_adapter.md` using
+     `assets/templates/adapter.md` (generic, no frontmatter).
+   - If Claude Code was selected: create `.claude/skills/` at the project
+     root if it does not exist, then generate
+     `.claude/skills/<project-slug>-atlas.md` using
+     `assets/templates/claude_code_adapter.md`. Set `{{PROJECT_SLUG}}` to the
+     kebab-case project name, `{{MAIN_WORKFLOW_FILE}}` to the relative path
+     from `.claude/skills/` to the main workflow file in `docs/` (e.g.,
+     `../../docs/<project>_main_workflow.md`), and `{{DELIVERY_POLICY}}` to
+     the chosen delivery policy.
+   - If Codex was selected: create `.agents/skills/<project-slug>/` if it
+     does not exist, then generate
+     `.agents/skills/<project-slug>/SKILL.md` using the same thin-adapter
+     pattern with name, description, and relative path to the main workflow
+     from that directory (e.g., `../../../docs/<project>_main_workflow.md`).
+   - All adapters must point to the canonical `main` workflow, not individual
+     workflow docs.
+   - If a rebuild detects existing adapter files, include them in the
+     delete-and-rebuild confirmation (Step 1) before overwriting.
 9. Run `references/quality-checklist.md` before reporting completion.
 
 ## Core Rules
