@@ -182,7 +182,59 @@ before asking for configuration decisions:
    Recommended: B for developer-maintained projects, A for projects managed
    by non-developers.
    ```
-8. Use this confirmation shape for preserved rules:
+8. Present the platform adapter decision in this plain-language shape,
+   translated into the working language. Show detected platforms pre-selected.
+
+   If both `.claude/` and `.agents/` were detected:
+
+   ```markdown
+   Which AI platforms should receive a project skill adapter?
+
+   Detected: Claude Code ✓  Codex ✓
+
+   A. Both (recommended)
+   B. Claude Code only
+   C. Codex only
+   D. None — skip adapter generation
+   ```
+
+   If only `.claude/` was detected:
+
+   ```markdown
+   Which AI platforms should receive a project skill adapter?
+
+   Detected: Claude Code ✓
+
+   A. Claude Code (recommended)
+   B. Also add Codex
+   C. None — skip adapter generation
+   ```
+
+   If only `.agents/` was detected:
+
+   ```markdown
+   Which AI platforms should receive a project skill adapter?
+
+   Detected: Codex ✓
+
+   A. Codex (recommended)
+   B. Also add Claude Code
+   C. None — skip adapter generation
+   ```
+
+   If neither was detected:
+
+   ```markdown
+   No AI platform directories were detected. Which AI assistant do you use
+   in this project?
+
+   A. Claude Code
+   B. Codex
+   C. Both
+   D. None — skip adapter generation
+   ```
+
+9. Use this confirmation shape for preserved rules:
 
    ```text
    [Category]
@@ -192,7 +244,7 @@ before asking for configuration decisions:
 
    The user must be able to judge whether the agent correctly understood the
    existing project guidance.
-9. Wait for user confirmation before starting the full scan.
+10. Wait for user confirmation before starting the full scan.
 
 ## Main Workflow
 
