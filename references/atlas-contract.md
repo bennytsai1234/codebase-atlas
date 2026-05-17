@@ -19,8 +19,11 @@ Resolve these before the full scan:
 - `reporting_level`: `plain` or `technical`. Plain hides module names, file
   paths, and code snippets from user-facing reports. Technical includes them
   for developer-oriented workflows.
-- `workflow_entrypoints`: a default thin adapter is always generated. Additional
-  tool-specific entrypoints may be generated when explicitly requested.
+- `workflow_entrypoints`: platform detection runs silently in Step 1 (`.claude/`
+  → Claude Code, `.agents/` → Codex). Detected platforms are pre-selected in
+  the Step 3 confirmation. The generic `docs/` adapter is always generated.
+  Platform-native adapters are generated only for platforms confirmed by the
+  user.
 
 Internal decision keys are for atlas generation only. User-facing confirmation
 must present these decisions as plain-language questions in the working
@@ -266,14 +269,39 @@ When a Decision Gate is used during a workflow:
 
 ## Entrypoint Adapters
 
-Generate the default adapter for every atlas initialization or rebuild.
-Additional adapters may target Codex skills, prompt files, or a custom prompt
-directory when requested.
+Generate adapters for every initialization or rebuild based on platform
+detection and user confirmation.
 
-Adapters must:
+### Generic Adapter (always generated)
 
-- Point to `<project>_main_workflow.md`, not the three individual workflow
-  docs.
+- **Path:** `docs/<project>_adapter.md`
+- **Template:** `assets/templates/adapter.md`
+- No frontmatter. Works as a plain reference doc.
+
+### Claude Code Adapter (when selected)
+
+- **Path:** `.claude/skills/<project-slug>-atlas.md`
+- **Template:** `assets/templates/claude_code_adapter.md`
+- **Frontmatter required:**
+  - `name: <project-slug>-atlas`
+  - `description: "Use this for every task in this project — reads the atlas before acting."`
+- `{{MAIN_WORKFLOW_FILE}}` is a relative path from `.claude/skills/` to `docs/`
+  (e.g., `../../docs/<project>_main_workflow.md`).
+- Create `.claude/skills/` at the project root if it does not exist.
+
+### Codex Adapter (when selected)
+
+- **Path:** `.agents/skills/<project-slug>/SKILL.md`
+- Uses the same thin-adapter pattern with frontmatter `name` and `description`.
+- `description` format: `使用 <PROJECT_NAME> Codebase Atlas main workflow；canonical workflow 是 <relative-path>。` (or English equivalent in the working language).
+- `{{MAIN_WORKFLOW_FILE}}` is a relative path from `.agents/skills/<project-slug>/` to `docs/`
+  (e.g., `../../../docs/<project>_main_workflow.md`).
+- Create `.agents/skills/<project-slug>/` if it does not exist.
+
+### All Adapters Must
+
+- Point to the canonical `main` workflow, not the individual workflow docs.
 - Include the delivery policy.
-- Remind the agent to start from the atlas index.
-- Stay extremely thin and avoid copying any workflow body.
+- Remind the agent to start from the atlas index before any operation.
+- Stay extremely thin — do not copy any workflow body.
+- Be included in delete-and-rebuild detection during Step 1 of a rebuild.
