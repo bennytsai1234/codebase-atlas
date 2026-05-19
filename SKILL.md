@@ -272,13 +272,14 @@ before asking for configuration decisions:
    - Always generate `docs/<project>_adapter.md` using
      `assets/templates/adapter.md` (generic, no frontmatter).
    - If Claude Code was selected: create `.claude/skills/` at the project
-     root if it does not exist, then generate
-     `.claude/skills/<project-slug>-atlas.md` using
+     root if it does not exist, then create
+     `.claude/skills/<project-slug>-atlas/` directory if it does not exist,
+     and generate `.claude/skills/<project-slug>-atlas/SKILL.md` using
      `assets/templates/claude_code_adapter.md`. Set `{{PROJECT_SLUG}}` to the
      kebab-case project name, `{{MAIN_WORKFLOW_FILE}}` to the relative path
-     from `.claude/skills/` to the main workflow file in `docs/` (e.g.,
-     `../../docs/<project>_main_workflow.md`), and `{{DELIVERY_POLICY}}` to
-     the chosen delivery policy.
+     from `.claude/skills/<project-slug>-atlas/` to the main workflow file in
+     `docs/` (e.g., `../../../docs/<project>_main_workflow.md`), and
+     `{{DELIVERY_POLICY}}` to the chosen delivery policy.
    - If Codex was selected: create `.agents/skills/<project-slug>/` if it
      does not exist, then generate
      `.agents/skills/<project-slug>/SKILL.md` using the same thin-adapter
