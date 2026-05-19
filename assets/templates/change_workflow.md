@@ -43,9 +43,67 @@ that exist in this project from `package.json`, `Makefile`, `CONTRIBUTING.md`,
 CI configuration, or equivalent.
 
 - **Bug**: current behavior is wrong or unstable.
+  Investigation: before proposing a root cause for non-trivial bugs, use the
+  structured bug investigation workflow below. This is required for
+  intermittent, stateful, async, UI, cache, persistence, lifecycle, or
+  race-condition issues.
   Verify: reproduction is gone; relevant tests pass; nearest integration test
   exercises the fixed path.
   Rollback: revert the patch; the bug returns but no other behavior changes.
+
+### Structured Bug Investigation Workflow
+
+Use this workflow before proposing a root cause for any non-trivial bug. The
+goal is to avoid early convergence on the nearest symptom layer.
+
+1. Classify the symptom:
+   - Determine whether it is deterministic or intermittent.
+   - Determine whether it is UI-only, state-related, persistence-related,
+     async/timing-related, cache-related, lifecycle-related, or external
+     dependency-related.
+   - Name the exact user action, system event, or data input that triggers the
+     bug, and the final state that is wrong.
+1. Trace the user-action chain:
+   - Start from the user-visible entry point.
+   - Follow callbacks, coordinators, services, repositories, state machines,
+     renderers, and persistence until the expected final state is reached.
+   - Record the main path in concrete terms, for example:
+     Entry -> Handler -> Coordinator -> State owner -> Renderer/Persistence.
+1. Identify the state owner and target state:
+   - Name the object or module that owns the affected state.
+   - Identify the exact fields, records, cache entries, DOM/widgets, files, or
+     network-visible outputs that should change.
+   - Identify the observable outcome that proves the state changed correctly.
+1. List all writers and restorers of the affected state:
+   - Search for every code path that writes, restores, invalidates, saves,
+     derives, or falls back to the same state.
+   - Include indirect writers through listeners, post-frame callbacks, timers,
+     animations, async completions, lifecycle hooks, observers, caches, and
+     persistence restore paths.
+1. List async boundaries and invalidators:
+   - Await points, futures, streams, post-frame callbacks, listeners/notifiers,
+     timers, animations, request ids, generation counters, stale-request
+     guards, cancellation checks, cache invalidation, retries, and fallback
+     logic.
+   - For intermittent bugs, explicitly identify which operations can interleave
+     and which stale operation can overwrite, cancel, or restore the wrong
+     state.
+1. Compare candidate root causes:
+   - Produce at least two plausible causes unless the evidence makes only one
+     possible.
+   - Explain what supports and weakens each candidate.
+   - Prefer the cause that explains the triggering timing, intermittency, and
+     observed final state with the fewest assumptions.
+1. Design the reproduction test:
+   - For deterministic bugs, exercise the direct failing path.
+   - For intermittent bugs, explicitly interleave the competing async
+     operations or lifecycle events.
+   - For UI/state bugs, assert both internal state and visible/rendered outcome
+     when possible.
+1. Only then propose the fix:
+   - State the minimal code change.
+   - Explain why it addresses the root cause instead of masking a symptom.
+   - Identify the rollback path and the relevant verification commands.
 
 - **Feature**: new behavior is requested.
   Verify: new tests cover the happy path and at least one failure path; build
